@@ -44,4 +44,21 @@ def image():
     out_boxes, out_scores, out_classes = yolo.detect_boxes(image)
 
     out_boxes = out_boxes.astype('float64', copy=False)
-    out_scores = out_scor
+    out_scores = out_scores.astype('float64', copy=False)
+    out_classes = out_classes.astype('int', copy=False)
+
+    result_boxes = [{ "Y1": out_boxes[box, 0], "X1": out_boxes[box, 1], "Y2": out_boxes[box, 2], "X2": out_boxes[box, 3] } for box in range(out_boxes.shape[0])]
+    result_scores = out_scores.tolist()
+    result_classes = out_classes.tolist()
+
+    end = time.perf_counter()
+    print(end - start)
+
+    return jsonify(boxes=result_boxes, scores=result_scores, classes=result_classes)
+
+@app.route("/bruh", methods=['GET'])
+def test():
+    return "working hard"
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=55665, threaded=False)
