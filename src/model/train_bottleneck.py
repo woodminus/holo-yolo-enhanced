@@ -42,4 +42,18 @@ def _main():
     num_val = int(len(lines)*val_split)
     num_train = len(lines) - num_val
 
+    # Train with frozen layers first, to get a stable loss.
+    # Adjust num epochs to your dataset. This step is enough to obtain a not bad model.
+    if True:
+        # perform bottleneck training
+        if not os.path.isfile("bottlenecks.npz"):
+            print("calculating bottlenecks")
+            batch_size=8
+            bottlenecks=bottleneck_model.predict_generator(data_generator_wrapper(lines, batch_size, input_shape, anchors, num_classes, random=False, verbose=True),
+             steps=(len(lines)//batch_size)+1, max_queue_size=1)
+            np.savez("bottlenecks.npz", bot0=bottlenecks[0], bot1=bottlenecks[1], bot2=bottlenecks[2])
     
+        # load bottleneck features from file
+        dict_bot=np.load("bottlenecks.npz")
+        bottlenecks_train=[dict_bot["bot0"][:num_train], dict_bot["bot1"][:num_train], dict_bot["bot2"][:num_train]]
+   
