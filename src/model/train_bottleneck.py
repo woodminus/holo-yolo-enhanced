@@ -67,3 +67,17 @@ def _main():
                 steps_per_epoch=max(1, num_train//batch_size),
                 validation_data=bottleneck_generator(lines[num_train:], batch_size, input_shape, anchors, num_classes, bottlenecks_val),
                 validation_steps=max(1, num_val//batch_size),
+                epochs=30,
+                initial_epoch=0, max_queue_size=1)
+        model.save_weights(log_dir + 'trained_weights_stage_0.h5')
+        
+        # train last layers with random augmented data
+        model.compile(optimizer=Adam(lr=1e-3), loss={
+            # use custom yolo_loss Lambda layer.
+            'yolo_loss': lambda y_true, y_pred: y_pred})
+        batch_size = 16
+        print('Train on {} samples, val on {} samples, with batch size {}.'.format(num_train, num_val, batch_size))
+        model.fit_generator(data_generator_wrapper(lines[:num_train], batch_size, input_shape, anchors, num_classes),
+                steps_per_epoch=max(1, num_train//batch_size),
+                validation_data=data_generator_wrapper(lines[num_train:], batch_size, input_shape, anchors, num_classes),
+                validati
