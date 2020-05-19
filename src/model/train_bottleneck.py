@@ -116,4 +116,26 @@ def get_classes(classes_path):
     return class_names
 
 def get_anchors(anchors_path):
-    '''loads the anchors f
+    '''loads the anchors from a file'''
+    with open(anchors_path) as f:
+        anchors = f.readline()
+    anchors = [float(x) for x in anchors.split(',')]
+    return np.array(anchors).reshape(-1, 2)
+
+
+def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
+            weights_path='model_data/yolo_weights.h5'):
+    '''create the training model'''
+    K.clear_session() # get a new session
+    image_input = Input(shape=(None, None, 3))
+    h, w = input_shape
+    num_anchors = len(anchors)
+
+    y_true = [Input(shape=(h//{0:32, 1:16, 2:8}[l], w//{0:32, 1:16, 2:8}[l], \
+        num_anchors//3, num_classes+5)) for l in range(3)]
+
+    model_body = yolo_body(image_input, num_anchors//3, num_classes)
+    print('Create YOLOv3 model with {} anchors and {} classes.'.format(num_anchors, num_classes))
+
+    if load_pretrained:
+        model_body.l
