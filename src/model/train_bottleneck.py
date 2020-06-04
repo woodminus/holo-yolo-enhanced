@@ -153,4 +153,19 @@ def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze
     bottleneck_model = Model([model_body.input, *y_true], [out1, out2, out3])
 
     # create last layer model of last layers from yolo model
-    in0 = Input(shape=bottleneck_model.output[0].shape[1:].as_list())
+    in0 = Input(shape=bottleneck_model.output[0].shape[1:].as_list()) 
+    in1 = Input(shape=bottleneck_model.output[1].shape[1:].as_list())
+    in2 = Input(shape=bottleneck_model.output[2].shape[1:].as_list())
+    last_out0=model_body.layers[249](in0)
+    last_out1=model_body.layers[250](in1)
+    last_out2=model_body.layers[251](in2)
+    model_last=Model(inputs=[in0, in1, in2], outputs=[last_out0, last_out1, last_out2])
+    model_loss_last =Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
+        arguments={'anchors': anchors, 'num_classes': num_classes, 'ignore_thresh': 0.5})(
+        [*model_last.output, *y_true])
+    last_layer_model = Model([in0,in1,in2, *y_true], model_loss_last)
+
+    
+    model_loss = Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
+        arguments={'anchors': anchors, 'num_classes': num_classes, 'ignore_thresh': 0.5})(
+        [*model_body.output, 
