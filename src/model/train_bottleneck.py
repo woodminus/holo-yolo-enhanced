@@ -168,4 +168,27 @@ def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze
     
     model_loss = Lambda(yolo_loss, output_shape=(1,), name='yolo_loss',
         arguments={'anchors': anchors, 'num_classes': num_classes, 'ignore_thresh': 0.5})(
-        [*model_body.output, 
+        [*model_body.output, *y_true])
+    model = Model([model_body.input, *y_true], model_loss)
+
+    return model, bottleneck_model, last_layer_model
+
+def data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes, random=True, verbose=False):
+    '''data generator for fit_generator'''
+    n = len(annotation_lines)
+    i = 0
+    while True:
+        image_data = []
+        box_data = []
+        for b in range(batch_size):
+            if i==0 and random:
+                np.random.shuffle(annotation_lines)
+            image, box = get_random_data(annotation_lines[i], input_shape, random=random)
+            image_data.append(image)
+            box_data.append(box)
+            i = (i+1) % n
+        image_data = np.array(image_data)
+        if verbose:
+            print("Progress: ",i,"/",n)
+        box_data = np.array(box_data)
+        y_true = preprocess_true_boxe
