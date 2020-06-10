@@ -191,4 +191,19 @@ def data_generator(annotation_lines, batch_size, input_shape, anchors, num_class
         if verbose:
             print("Progress: ",i,"/",n)
         box_data = np.array(box_data)
-        y_true = preprocess_true_boxe
+        y_true = preprocess_true_boxes(box_data, input_shape, anchors, num_classes)
+        yield [image_data, *y_true], np.zeros(batch_size)
+
+def data_generator_wrapper(annotation_lines, batch_size, input_shape, anchors, num_classes, random=True, verbose=False):
+    n = len(annotation_lines)
+    if n==0 or batch_size<=0: return None
+    return data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes, random, verbose)
+
+def bottleneck_generator(annotation_lines, batch_size, input_shape, anchors, num_classes, bottlenecks):
+    n = len(annotation_lines)
+    i = 0
+    while True:
+        box_data = []
+        b0=np.zeros((batch_size,bottlenecks[0].shape[1],bottlenecks[0].shape[2],bottlenecks[0].shape[3]))
+        b1=np.zeros((batch_size,bottlenecks[1].shape[1],bottlenecks[1].shape[2],bottlenecks[1].shape[3]))
+        b2=np.zeros((batch_size,bottlenecks[
