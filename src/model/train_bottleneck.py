@@ -206,4 +206,17 @@ def bottleneck_generator(annotation_lines, batch_size, input_shape, anchors, num
         box_data = []
         b0=np.zeros((batch_size,bottlenecks[0].shape[1],bottlenecks[0].shape[2],bottlenecks[0].shape[3]))
         b1=np.zeros((batch_size,bottlenecks[1].shape[1],bottlenecks[1].shape[2],bottlenecks[1].shape[3]))
-        b2=np.zeros((batch_size,bottlenecks[
+        b2=np.zeros((batch_size,bottlenecks[2].shape[1],bottlenecks[2].shape[2],bottlenecks[2].shape[3]))
+        for b in range(batch_size):
+            _, box = get_random_data(annotation_lines[i], input_shape, random=False, proc_img=False)
+            box_data.append(box)
+            b0[b]=bottlenecks[0][i]
+            b1[b]=bottlenecks[1][i]
+            b2[b]=bottlenecks[2][i]
+            i = (i+1) % n
+        box_data = np.array(box_data)
+        y_true = preprocess_true_boxes(box_data, input_shape, anchors, num_classes)
+        yield [b0, b1, b2, *y_true], np.zeros(batch_size)
+
+if __name__ == '__main__':
+    _main()
