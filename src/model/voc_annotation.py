@@ -24,4 +24,11 @@ def convert_annotation(year, image_id, list_file):
 wd = getcwd()
 
 for year, image_set in sets:
-    image_ids = open('VOCdevkit/VOC%s/ImageSets/Main/%s.txt'%(year, image_set)).re
+    image_ids = open('VOCdevkit/VOC%s/ImageSets/Main/%s.txt'%(year, image_set)).read().strip().split()
+    list_file = open('%s_%s.txt'%(year, image_set), 'w')
+    for image_id in image_ids:
+        list_file.write('%s/VOCdevkit/VOC%s/JPEGImages/%s.jpg'%(wd, year, image_id))
+        convert_annotation(year, image_id, list_file)
+        list_file.write('\n')
+    list_file.close()
+
