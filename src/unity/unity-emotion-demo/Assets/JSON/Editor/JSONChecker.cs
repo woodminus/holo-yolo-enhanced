@@ -3,4 +3,36 @@
 using UnityEngine;
 using UnityEditor;
 
-public class JSON
+public class JSONChecker : EditorWindow {
+	string JSON = @"{
+	""TestObject"": {
+		""SomeText"": ""Blah"",
+		""SomeObject"": {
+			""SomeNumber"": 42,
+			""SomeFloat"": 13.37,
+			""SomeBool"": true,
+			""SomeNull"": null
+		},
+		
+		""SomeEmptyObject"": { },
+		""SomeEmptyArray"": [ ],
+		""EmbeddedObject"": ""{\""field\"":\""Value with \\\""escaped quotes\\\""\""}""
+	}
+}";	  //dat string literal...
+	string URL = "";
+	JSONObject j;
+	[MenuItem("Window/JSONChecker")]
+	static void Init() {
+		GetWindow(typeof(JSONChecker));
+	}
+	void OnGUI() {
+		JSON = EditorGUILayout.TextArea(JSON);
+		GUI.enabled = !string.IsNullOrEmpty(JSON);
+		if(GUILayout.Button("Check JSON")) {
+#if PERFTEST
+            Profiler.BeginSample("JSONParse");
+			j = JSONObject.Create(JSON);
+            Profiler.EndSample();
+            Profiler.BeginSample("JSONStringify");
+            j.ToString(true);
+            Profiler.EndSample();
