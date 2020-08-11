@@ -21,4 +21,40 @@ using System.Text;
 public class JSONObject {
 #if POOLING
 	const int MAX_POOL_SIZE = 10000;
-	pub
+	public static Queue<JSONObject> releaseQueue = new Queue<JSONObject>();
+#endif
+
+	const int MAX_DEPTH = 100;
+	const string INFINITY = "\"INFINITY\"";
+	const string NEGINFINITY = "\"NEGINFINITY\"";
+	const string NaN = "\"NaN\"";
+	const string NEWLINE = "\r\n";
+	public static readonly char[] WHITESPACE = { ' ', '\r', '\n', '\t', '\uFEFF', '\u0009' };
+	public enum Type { NULL, STRING, NUMBER, OBJECT, ARRAY, BOOL, BAKED }
+	public bool isContainer { get { return (type == Type.ARRAY || type == Type.OBJECT); } }
+	public Type type = Type.NULL;
+	public int Count {
+		get {
+			if(list == null)
+				return -1;
+			return list.Count;
+		}
+	}
+	public List<JSONObject> list;
+	public List<string> keys;
+	public string str;
+#if USEFLOAT
+	public float n;
+	public float f {
+		get {
+			return n;
+		}
+	}
+#else
+	public double n;
+	public float f {
+		get {
+			return (float)n;
+		}
+	}
+#en
