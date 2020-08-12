@@ -57,4 +57,40 @@ public class JSONObject {
 			return (float)n;
 		}
 	}
-#en
+#endif
+	public bool useInt;
+	public long i;
+	public bool b;
+	public delegate void AddJSONContents(JSONObject self);
+
+	public static JSONObject nullJO { get { return Create(Type.NULL); } }	//an empty, null object
+	public static JSONObject obj { get { return Create(Type.OBJECT); } }		//an empty object
+	public static JSONObject arr { get { return Create(Type.ARRAY); } }		//an empty array
+
+	public JSONObject(Type t) {
+		type = t;
+		switch(t) {
+			case Type.ARRAY:
+				list = new List<JSONObject>();
+				break;
+			case Type.OBJECT:
+				list = new List<JSONObject>();
+				keys = new List<string>();
+				break;
+		}
+	}
+	public JSONObject(bool b) {
+		type = Type.BOOL;
+		this.b = b;
+	}
+#if USEFLOAT
+	public JSONObject(float f) {
+		type = Type.NUMBER;
+		n = f;
+	}
+#else
+	public JSONObject(double d) {
+		type = Type.NUMBER;
+		n = d;
+	}
+#endif
