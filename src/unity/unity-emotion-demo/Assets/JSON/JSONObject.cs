@@ -94,3 +94,36 @@ public class JSONObject {
 		n = d;
 	}
 #endif
+	public JSONObject(int i) {
+		type = Type.NUMBER;
+		this.i = i;
+		useInt = true;
+		n = i;
+	}
+	public JSONObject(long l) {
+		type = Type.NUMBER;
+		i = l;
+		useInt = true;
+		n = l;
+	}
+	public JSONObject(Dictionary<string, string> dic) {
+		type = Type.OBJECT;
+		keys = new List<string>();
+		list = new List<JSONObject>();
+		//Not sure if it's worth removing the foreach here
+		foreach(KeyValuePair<string, string> kvp in dic) {
+			keys.Add(kvp.Key);
+			list.Add(CreateStringObject(kvp.Value));
+		}
+	}
+	public JSONObject(Dictionary<string, JSONObject> dic) {
+		type = Type.OBJECT;
+		keys = new List<string>();
+		list = new List<JSONObject>();
+		//Not sure if it's worth removing the foreach here
+		foreach(KeyValuePair<string, JSONObject> kvp in dic) {
+			keys.Add(kvp.Key);
+			list.Add(kvp.Value);
+		}
+	}
+	public JSONObject(AddJSONContents co
