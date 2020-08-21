@@ -151,4 +151,44 @@ public class JSONObject {
 		while(result == null && releaseQueue.Count > 0) {
 			result = releaseQueue.Dequeue();
 #if DEV
-			//The following cases should NEVER HAPPEN (but they do.
+			//The following cases should NEVER HAPPEN (but they do...)
+			if(result == null)
+				Debug.WriteLine("wtf " + releaseQueue.Count);
+			else if(result.list != null)
+				Debug.WriteLine("wtflist " + result.list.Count);
+#endif
+		}
+		if(result != null)
+			return result;
+#endif
+		return new JSONObject();
+	}
+	public static JSONObject Create(Type t) {
+		JSONObject obj = Create();
+		obj.type = t;
+		switch(t) {
+			case Type.ARRAY:
+				obj.list = new List<JSONObject>();
+				break;
+			case Type.OBJECT:
+				obj.list = new List<JSONObject>();
+				obj.keys = new List<string>();
+				break;
+		}
+		return obj;
+	}
+	public static JSONObject Create(bool val) {
+		JSONObject obj = Create();
+		obj.type = Type.BOOL;
+		obj.b = val;
+		return obj;
+	}
+	public static JSONObject Create(float val) {
+		JSONObject obj = Create();
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		return obj;
+	}
+	public static JSONObject Create(int val) {
+		JSONObject obj = Create();
+		obj.
