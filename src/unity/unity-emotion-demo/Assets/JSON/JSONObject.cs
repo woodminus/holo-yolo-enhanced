@@ -191,4 +191,35 @@ public class JSONObject {
 	}
 	public static JSONObject Create(int val) {
 		JSONObject obj = Create();
-		obj.
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		obj.useInt = true;
+		obj.i = val;
+		return obj;
+	}
+	public static JSONObject Create(long val) {
+		JSONObject obj = Create();
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		obj.useInt = true;
+		obj.i = val;
+		return obj;
+	}
+	public static JSONObject CreateStringObject(string val) {
+		JSONObject obj = Create();
+		obj.type = Type.STRING;
+		obj.str = val;
+		return obj;
+	}
+	public static JSONObject CreateBakedObject(string val) {
+		JSONObject bakedObject = Create();
+		bakedObject.type = Type.BAKED;
+		bakedObject.str = val;
+		return bakedObject;
+	}
+	/// <summary>
+	/// Create a JSONObject by parsing string data
+	/// </summary>
+	/// <param name="val">The string to be parsed</param>
+	/// <param name="maxDepth">The maximum depth for the parser to search.  Set this to to 1 for the first level, 
+	/// 2 for the first 2 levels, etc.  It
