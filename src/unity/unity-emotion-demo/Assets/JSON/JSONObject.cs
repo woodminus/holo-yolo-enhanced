@@ -126,4 +126,29 @@ public class JSONObject {
 			list.Add(kvp.Value);
 		}
 	}
-	public JSONObject(AddJSONContents co
+	public JSONObject(AddJSONContents content) {
+		content.Invoke(this);
+	}
+	public JSONObject(JSONObject[] objs) {
+		type = Type.ARRAY;
+		list = new List<JSONObject>(objs);
+	}
+	//Convenience function for creating a JSONObject containing a string.  This is not part of the constructor so that malformed JSON data doesn't just turn into a string object
+	public static JSONObject StringObject(string val) { return CreateStringObject(val); }
+	public void Absorb(JSONObject obj) {
+		list.AddRange(obj.list);
+		keys.AddRange(obj.keys);
+		str = obj.str;
+		n = obj.n;
+		useInt = obj.useInt;
+		i = obj.i;
+		b = obj.b;
+		type = obj.type;
+	}
+	public static JSONObject Create() {
+#if POOLING
+		JSONObject result = null;
+		while(result == null && releaseQueue.Count > 0) {
+			result = releaseQueue.Dequeue();
+#if DEV
+			//The following cases should NEVER HAPPEN (but they do.
