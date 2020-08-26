@@ -222,4 +222,22 @@ public class JSONObject {
 	/// </summary>
 	/// <param name="val">The string to be parsed</param>
 	/// <param name="maxDepth">The maximum depth for the parser to search.  Set this to to 1 for the first level, 
-	/// 2 for the first 2 levels, etc.  It
+	/// 2 for the first 2 levels, etc.  It defaults to -2 because -1 is the depth value that is parsed (see below)</param>
+	/// <param name="storeExcessLevels">Whether to store levels beyond maxDepth in baked JSONObjects</param>
+	/// <param name="strict">Whether to be strict in the parsing. For example, non-strict parsing will successfully 
+	/// parse "a string" into a string-type </param>
+	/// <returns></returns>
+	public static JSONObject Create(string val, int maxDepth = -2, bool storeExcessLevels = false, bool strict = false) {
+		JSONObject obj = Create();
+		obj.Parse(val, maxDepth, storeExcessLevels, strict);
+		return obj;
+	}
+	public static JSONObject Create(AddJSONContents content) {
+		JSONObject obj = Create();
+		content.Invoke(obj);
+		return obj;
+	}
+	public static JSONObject Create(Dictionary<string, string> dic) {
+		JSONObject obj = Create();
+		obj.type = Type.OBJECT;
+		obj.keys = new List<s
