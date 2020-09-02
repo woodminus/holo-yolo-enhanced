@@ -259,4 +259,38 @@ public class JSONObject {
 			str = str.Trim(WHITESPACE);
 			if(strict) {
 				if(str[0] != '[' && str[0] != '{') {
-					type = Type
+					type = Type.NULL;
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+					Debug.LogWarning
+#else
+					Debug.WriteLine
+#endif
+						("Improper (strict) JSON formatting.  First character must be [ or {");
+					return;
+				}
+			}
+			if(str.Length > 0) {
+#if UNITY_WP8 || UNITY_WSA
+				if (str == "true") {
+					type = Type.BOOL;
+					b = true;
+				} else if (str == "false") {
+					type = Type.BOOL;
+					b = false;
+				} else if (str == "null") {
+					type = Type.NULL;
+#else
+				if(string.Compare(str, "true", true) == 0) {
+					type = Type.BOOL;
+					b = true;
+				} else if(string.Compare(str, "false", true) == 0) {
+					type = Type.BOOL;
+					b = false;
+				} else if(string.Compare(str, "null", true) == 0) {
+					type = Type.NULL;
+#endif
+#if USEFLOAT
+				} else if(str == INFINITY) {
+					type = Type.NUMBER;
+					n = float.PositiveInfinity;
+				} el
