@@ -240,4 +240,23 @@ public class JSONObject {
 	public static JSONObject Create(Dictionary<string, string> dic) {
 		JSONObject obj = Create();
 		obj.type = Type.OBJECT;
-		obj.keys = new List<s
+		obj.keys = new List<string>();
+		obj.list = new List<JSONObject>();
+		//Not sure if it's worth removing the foreach here
+		foreach(KeyValuePair<string, string> kvp in dic) {
+			obj.keys.Add(kvp.Key);
+			obj.list.Add(CreateStringObject(kvp.Value));
+		}
+		return obj;
+	}
+	public JSONObject() { }
+	#region PARSE
+	public JSONObject(string str, int maxDepth = -2, bool storeExcessLevels = false, bool strict = false) {	//create a new JSONObject from a string (this will also create any children, and parse the whole string)
+		Parse(str, maxDepth, storeExcessLevels, strict);
+	}
+	void Parse(string str, int maxDepth = -2, bool storeExcessLevels = false, bool strict = false) {
+		if(!string.IsNullOrEmpty(str)) {
+			str = str.Trim(WHITESPACE);
+			if(strict) {
+				if(str[0] != '[' && str[0] != '{') {
+					type = Type
