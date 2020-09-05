@@ -322,4 +322,41 @@ public class JSONObject {
 					 * value - string	- "string"
 					 *		 - number	- 0.0
 					 *		 - bool		- true -or- false
-					 *		 
+					 *		 - null		- null
+					 */
+					int offset = 0;
+					switch(str[offset]) {
+						case '{':
+							type = Type.OBJECT;
+							keys = new List<string>();
+							list = new List<JSONObject>();
+							break;
+						case '[':
+							type = Type.ARRAY;
+							list = new List<JSONObject>();
+							break;
+						default:
+							try {
+#if USEFLOAT
+								n = System.Convert.ToSingle(str);
+#else
+								n = System.Convert.ToDouble(str);				 
+#endif
+								if(!str.Contains(".")) {
+									i = System.Convert.ToInt64(str);
+									useInt = true;
+								}
+								type = Type.NUMBER;
+							} catch(System.FormatException) {
+								type = Type.NULL;
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+								Debug.LogWarning
+#else
+								Debug.WriteLine
+#endif
+								("improper JSON formatting:" + str);
+							}
+							return;
+					}
+					string propName = "";
+					boo
