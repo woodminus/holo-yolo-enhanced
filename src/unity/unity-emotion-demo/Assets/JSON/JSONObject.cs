@@ -359,4 +359,34 @@ public class JSONObject {
 							return;
 					}
 					string propName = "";
-					boo
+					bool openQuote = false;
+					bool inProp = false;
+					int depth = 0;
+					while(++offset < str.Length) {
+						if(System.Array.IndexOf(WHITESPACE, str[offset]) > -1)
+							continue;
+						if(str[offset] == '\\') {
+							offset += 1;
+							continue;
+						}
+						if(str[offset] == '"') {
+							if(openQuote) {
+								if(!inProp && depth == 0 && type == Type.OBJECT)
+									propName = str.Substring(tokenTmp + 1, offset - tokenTmp - 1);
+								openQuote = false;
+							} else {
+								if(depth == 0 && type == Type.OBJECT)
+									tokenTmp = offset;
+								openQuote = true;
+							}
+						}
+						if(openQuote)
+							continue;
+						if(type == Type.OBJECT && depth == 0) {
+							if(str[offset] == ':') {
+								tokenTmp = offset + 1;
+								inProp = true;
+							}
+						}
+
+	
