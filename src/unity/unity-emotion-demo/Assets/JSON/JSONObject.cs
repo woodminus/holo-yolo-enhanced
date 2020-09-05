@@ -389,4 +389,27 @@ public class JSONObject {
 							}
 						}
 
-	
+						if(str[offset] == '[' || str[offset] == '{') {
+							depth++;
+						} else if(str[offset] == ']' || str[offset] == '}') {
+							depth--;
+						}
+						//if  (encounter a ',' at top level)  || a closing ]/}
+						if((str[offset] == ',' && depth == 0) || depth < 0) {
+							inProp = false;
+							string inner = str.Substring(tokenTmp, offset - tokenTmp).Trim(WHITESPACE);
+							if(inner.Length > 0) {
+								if(type == Type.OBJECT)
+									keys.Add(propName);
+								if(maxDepth != -1)															//maxDepth of -1 is the end of the line
+									list.Add(Create(inner, (maxDepth < -1) ? -2 : maxDepth - 1));
+								else if(storeExcessLevels)
+									list.Add(CreateBakedObject(inner));
+
+							}
+							tokenTmp = offset + 1;
+						}
+					}
+				}
+			} else type = Type.NULL;
+		} else type = Type.NULL;	
