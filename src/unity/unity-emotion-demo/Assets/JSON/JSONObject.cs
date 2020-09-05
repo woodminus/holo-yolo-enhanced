@@ -293,4 +293,33 @@ public class JSONObject {
 				} else if(str == INFINITY) {
 					type = Type.NUMBER;
 					n = float.PositiveInfinity;
-				} el
+				} else if(str == NEGINFINITY) {
+					type = Type.NUMBER;
+					n = float.NegativeInfinity;
+				} else if(str == NaN) {
+					type = Type.NUMBER;
+					n = float.NaN;
+#else
+				} else if(str == INFINITY) {
+					type = Type.NUMBER;
+					n = double.PositiveInfinity;
+				} else if(str == NEGINFINITY) {
+					type = Type.NUMBER;
+					n = double.NegativeInfinity;
+				} else if(str == NaN) {
+					type = Type.NUMBER;
+					n = double.NaN;
+#endif
+				} else if(str[0] == '"') {
+					type = Type.STRING;
+					this.str = str.Substring(1, str.Length - 2);
+				} else {
+					int tokenTmp = 1;
+					/*
+					 * Checking for the following formatting (www.json.org)
+					 * object - {"field1":value,"field2":value}
+					 * array - [value,value,value]
+					 * value - string	- "string"
+					 *		 - number	- 0.0
+					 *		 - bool		- true -or- false
+					 *		 
