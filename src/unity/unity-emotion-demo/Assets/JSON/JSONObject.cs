@@ -412,4 +412,30 @@ public class JSONObject {
 					}
 				}
 			} else type = Type.NULL;
-		} else type = Type.NULL;	
+		} else type = Type.NULL;	//If the string is missing, this is a null
+		//Profiler.EndSample();
+	}
+	#endregion
+	public bool IsNumber { get { return type == Type.NUMBER; } }
+	public bool IsNull { get { return type == Type.NULL; } }
+	public bool IsString { get { return type == Type.STRING; } }
+	public bool IsBool { get { return type == Type.BOOL; } }
+	public bool IsArray { get { return type == Type.ARRAY; } }
+	public bool IsObject { get { return type == Type.OBJECT || type == Type.BAKED; } }
+	public void Add(bool val) {
+		Add(Create(val));
+	}
+	public void Add(float val) {
+		Add(Create(val));
+	}
+	public void Add(int val) {
+		Add(Create(val));
+	}
+	public void Add(string str) {
+		Add(CreateStringObject(str));
+	}
+	public void Add(AddJSONContents content) {
+		Add(Create(content));
+	}
+	public void Add(JSONObject obj) {
+		if(obj) {		//Don't do anythi
