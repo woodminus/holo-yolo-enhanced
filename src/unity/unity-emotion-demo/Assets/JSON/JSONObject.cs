@@ -467,4 +467,30 @@ public class JSONObject {
 	}
 	public void AddField(string name, JSONObject obj) {
 		if(obj) {		//Don't do anything if the object is null
-			if(type != Ty
+			if(type != Type.OBJECT) {
+				if(keys == null)
+					keys = new List<string>();
+				if(type == Type.ARRAY) {
+					for(int i = 0; i < list.Count; i++)
+						keys.Add(i + "");
+				} else
+					if(list == null)
+						list = new List<JSONObject>();
+				type = Type.OBJECT;		//Congratulations, son, you're an OBJECT now
+			}
+			keys.Add(name);
+			list.Add(obj);
+		}
+	}
+	public void SetField(string name, string val) { SetField(name, CreateStringObject(val)); }
+	public void SetField(string name, bool val) { SetField(name, Create(val)); }
+	public void SetField(string name, float val) { SetField(name, Create(val)); }
+	public void SetField(string name, int val) { SetField(name, Create(val)); }
+	public void SetField(string name, JSONObject obj) {
+		if(HasField(name)) {
+			list.Remove(this[name]);
+			keys.Remove(name);
+		}
+		AddField(name, obj);
+	}
+	public void RemoveField(str
