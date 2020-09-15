@@ -493,4 +493,35 @@ public class JSONObject {
 		}
 		AddField(name, obj);
 	}
-	public void RemoveField(str
+	public void RemoveField(string name) {
+		if(keys.IndexOf(name) > -1) {
+			list.RemoveAt(keys.IndexOf(name));
+			keys.Remove(name);
+		}
+	}
+	public delegate void FieldNotFound(string name);
+	public delegate void GetFieldResponse(JSONObject obj);
+	public bool GetField(out bool field, string name, bool fallback) {
+		field = fallback;
+		return GetField(ref field, name);
+	}
+	public bool GetField(ref bool field, string name, FieldNotFound fail = null) {
+		if(type == Type.OBJECT) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				field = list[index].b;
+				return true;
+			}
+		}
+		if(fail != null) fail.Invoke(name);
+		return false;
+	}
+#if USEFLOAT
+	public bool GetField(out float field, string name, float fallback) {
+#else
+	public bool GetField(out double field, string name, double fallback) {
+#endif
+		field = fallback;
+		return GetField(ref field, name);
+	}
+#if
