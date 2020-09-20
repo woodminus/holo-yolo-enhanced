@@ -524,4 +524,34 @@ public class JSONObject {
 		field = fallback;
 		return GetField(ref field, name);
 	}
-#if
+#if USEFLOAT
+	public bool GetField(ref float field, string name, FieldNotFound fail = null) {
+#else
+	public bool GetField(ref double field, string name, FieldNotFound fail = null) {
+#endif
+		if(type == Type.OBJECT) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				field = list[index].n;
+				return true;
+			}
+		}
+		if(fail != null) fail.Invoke(name);
+		return false;
+	}
+	public bool GetField(out int field, string name, int fallback) {
+		field = fallback;
+		return GetField(ref field, name);
+	}
+	public bool GetField(ref int field, string name, FieldNotFound fail = null) {
+		if(IsObject) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				field = (int)list[index].n;
+				return true;
+			}
+		}
+		if(fail != null) fail.Invoke(name);
+		return false;
+	}
+	public bool GetField(out long field, string na
