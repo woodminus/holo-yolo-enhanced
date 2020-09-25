@@ -616,4 +616,45 @@ public class JSONObject {
 					return list[i];
 		return null;
 	}
-	public
+	public bool HasFields(string[] names) {
+		if(!IsObject)
+			return false;
+		for(int i = 0; i < names.Length; i++)
+			if(!keys.Contains(names[i]))
+				return false;
+		return true;
+	}
+	public bool HasField(string name) {
+		if(!IsObject)
+			return false;
+		for(int i = 0; i < keys.Count; i++)
+			if(keys[i] == name)
+				return true;
+		return false;
+	}
+	public void Clear() {
+		type = Type.NULL;
+		if(list != null)
+			list.Clear();
+		if(keys != null)
+			keys.Clear();
+		str = "";
+		n = 0;
+		b = false;
+	}
+	/// <summary>
+	/// Copy a JSONObject. This could probably work better
+	/// </summary>
+	/// <returns></returns>
+	public JSONObject Copy() {
+		return Create(Print());
+	}
+	/*
+	 * The Merge function is experimental. Use at your own risk.
+	 */
+	public void Merge(JSONObject obj) {
+		MergeRecur(this, obj);
+	}
+	/// <summary>
+	/// Merge object right into left recursively
+	///
