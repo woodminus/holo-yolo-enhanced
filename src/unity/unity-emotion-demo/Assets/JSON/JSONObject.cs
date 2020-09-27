@@ -657,4 +657,29 @@ public class JSONObject {
 	}
 	/// <summary>
 	/// Merge object right into left recursively
-	///
+	/// </summary>
+	/// <param name="left">The left (base) object</param>
+	/// <param name="right">The right (new) object</param>
+	static void MergeRecur(JSONObject left, JSONObject right) {
+		if(left.type == Type.NULL)
+			left.Absorb(right);
+		else if(left.type == Type.OBJECT && right.type == Type.OBJECT) {
+			for(int i = 0; i < right.list.Count; i++) {
+				string key = right.keys[i];
+				if(right[i].isContainer) {
+					if(left.HasField(key))
+						MergeRecur(left[key], right[i]);
+					else
+						left.AddField(key, right[i]);
+				} else {
+					if(left.HasField(key))
+						left.SetField(key, right[i]);
+					else
+						left.AddField(key, right[i]);
+				}
+			}
+		} else if(left.type == Type.ARRAY && right.type == Type.ARRAY) {
+			if(right.Count > left.Count) {
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+				Debug.LogError
+#
