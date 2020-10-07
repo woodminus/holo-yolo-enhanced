@@ -682,4 +682,43 @@ public class JSONObject {
 			if(right.Count > left.Count) {
 #if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
 				Debug.LogError
-#
+#else
+				Debug.WriteLine
+#endif
+				("Cannot merge arrays when right object has more elements");
+				return;
+			}
+			for(int i = 0; i < right.list.Count; i++) {
+				if(left[i].type == right[i].type) {			//Only overwrite with the same type
+					if(left[i].isContainer)
+						MergeRecur(left[i], right[i]);
+					else {
+						left[i] = right[i];
+					}
+				}
+			}
+		}
+	}
+	public void Bake() {
+		if(type != Type.BAKED) {
+			str = Print();
+			type = Type.BAKED;
+		}
+	}
+	public IEnumerable BakeAsync() {
+		if(type != Type.BAKED) {
+			foreach(string s in PrintAsync()) {
+				if(s == null)
+					yield return s;
+				else {
+					str = s;
+				}
+			}
+			type = Type.BAKED;
+		}
+	}
+#pragma warning disable 219
+	public string Print(bool pretty = false) {
+		StringBuilder builder = new StringBuilder();
+		Stringify(0, builder, pretty);
+		retu
