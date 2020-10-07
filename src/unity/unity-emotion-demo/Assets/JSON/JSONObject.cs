@@ -749,4 +749,40 @@ public class JSONObject {
 		}
 		if(printWatch.Elapsed.TotalSeconds > maxFrameTime) {
 			printWatch.Reset();
-			yield retu
+			yield return null;
+			printWatch.Start();
+		}
+		switch(type) {
+			case Type.BAKED:
+				builder.Append(str);
+				break;
+			case Type.STRING:
+				builder.AppendFormat("\"{0}\"", str);
+				break;
+			case Type.NUMBER:
+				if(useInt) {
+					builder.Append(i.ToString());
+				} else {
+#if USEFLOAT
+					if(float.IsInfinity(n))
+						builder.Append(INFINITY);
+					else if(float.IsNegativeInfinity(n))
+						builder.Append(NEGINFINITY);
+					else if(float.IsNaN(n))
+						builder.Append(NaN);
+#else
+				if(double.IsInfinity(n))
+					builder.Append(INFINITY);
+				else if(double.IsNegativeInfinity(n))
+					builder.Append(NEGINFINITY);
+				else if(double.IsNaN(n))
+					builder.Append(NaN);
+#endif
+					else
+						builder.Append(n.ToString());
+				}
+				break;
+			case Type.OBJECT:
+				builder.Append("{");
+				if(list.Count > 0) {
+#if(PRETTY)		
