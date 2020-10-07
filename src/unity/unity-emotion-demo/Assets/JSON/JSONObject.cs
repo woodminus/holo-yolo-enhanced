@@ -721,4 +721,32 @@ public class JSONObject {
 	public string Print(bool pretty = false) {
 		StringBuilder builder = new StringBuilder();
 		Stringify(0, builder, pretty);
-		retu
+		return builder.ToString();
+	}
+	public IEnumerable<string> PrintAsync(bool pretty = false) {
+		StringBuilder builder = new StringBuilder();
+		printWatch.Reset();
+		printWatch.Start();
+		foreach(IEnumerable e in StringifyAsync(0, builder, pretty)) {
+			yield return null;
+		}
+		yield return builder.ToString();
+	}
+#pragma warning restore 219
+	#region STRINGIFY
+	const float maxFrameTime = 0.008f;
+	static readonly Stopwatch printWatch = new Stopwatch();
+	IEnumerable StringifyAsync(int depth, StringBuilder builder, bool pretty = false) {	//Convert the JSONObject into a string
+		//Profiler.BeginSample("JSONprint");
+		if(depth++ > MAX_DEPTH) {
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+			Debug.Log
+#else
+			Debug.WriteLine
+#endif
+			("reached max depth!");
+			yield break;
+		}
+		if(printWatch.Elapsed.TotalSeconds > maxFrameTime) {
+			printWatch.Reset();
+			yield retu
