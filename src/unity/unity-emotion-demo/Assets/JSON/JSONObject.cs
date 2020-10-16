@@ -818,4 +818,38 @@ public class JSONObject {
 #if(PRETTY)
 				if(pretty && list.Count > 0) {
 					builder.Append(NEWLINE);
-				
+					for(int j = 0; j < depth - 1; j++)
+						builder.Append("\t"); //for a bit more readability
+				}
+#endif
+				builder.Append("}");
+				break;
+			case Type.ARRAY:
+				builder.Append("[");
+				if(list.Count > 0) {
+#if(PRETTY)
+					if(pretty)
+						builder.Append(NEWLINE); //for a bit more readability
+#endif
+					for(int i = 0; i < list.Count; i++) {
+						if(list[i]) {
+#if(PRETTY)
+							if(pretty)
+								for(int j = 0; j < depth; j++)
+									builder.Append("\t"); //for a bit more readability
+#endif
+							foreach(IEnumerable e in list[i].StringifyAsync(depth, builder, pretty))
+								yield return e;
+							builder.Append(",");
+#if(PRETTY)
+							if(pretty)
+								builder.Append(NEWLINE); //for a bit more readability
+#endif
+						}
+					}
+#if(PRETTY)
+					if(pretty)
+						builder.Length -= 2;
+					else
+#endif
+						builde
