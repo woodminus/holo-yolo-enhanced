@@ -852,4 +852,34 @@ public class JSONObject {
 						builder.Length -= 2;
 					else
 #endif
-						builde
+						builder.Length--;
+				}
+#if(PRETTY)
+				if(pretty && list.Count > 0) {
+					builder.Append(NEWLINE);
+					for(int j = 0; j < depth - 1; j++)
+						builder.Append("\t"); //for a bit more readability
+				}
+#endif
+				builder.Append("]");
+				break;
+			case Type.BOOL:
+				if(b)
+					builder.Append("true");
+				else
+					builder.Append("false");
+				break;
+			case Type.NULL:
+				builder.Append("null");
+				break;
+		}
+		//Profiler.EndSample();
+	}
+	//TODO: Refactor Stringify functions to share core logic
+	/*
+	 * I know, I know, this is really bad form.  It turns out that there is a
+	 * significant amount of garbage created when calling as a coroutine, so this
+	 * method is duplicated.  Hopefully there won't be too many future changes, but
+	 * I would still like a more elegant way to optionaly yield
+	 */
+	void Stringify(int depth, StringBu
