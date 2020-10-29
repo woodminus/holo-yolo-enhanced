@@ -1059,4 +1059,36 @@ public class JSONObject {
 			Dictionary<string, string> result = new Dictionary<string, string>();
 			for(int i = 0; i < list.Count; i++) {
 				JSONObject val = list[i];
-				switch
+				switch(val.type) {
+					case Type.STRING: result.Add(keys[i], val.str); break;
+					case Type.NUMBER: result.Add(keys[i], val.n + ""); break;
+					case Type.BOOL: result.Add(keys[i], val.b + ""); break;
+					default:
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+						Debug.LogWarning
+#else
+						Debug.WriteLine
+#endif
+						("Omitting object: " + keys[i] + " in dictionary conversion");
+						break;
+				}
+			}
+			return result;
+		}
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+		Debug.Log
+#else
+		Debug.WriteLine
+#endif
+		("Tried to turn non-Object JSONObject into a dictionary");
+		return null;
+	}
+	public static implicit operator bool(JSONObject o) {
+		return o != null;
+	}
+#if POOLING
+	static bool pool = true;
+	public static void ClearPool() {
+		pool = false;
+		releaseQueue.Clear();
+		pool = true;
