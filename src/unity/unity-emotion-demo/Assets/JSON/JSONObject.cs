@@ -1092,3 +1092,18 @@ public class JSONObject {
 		pool = false;
 		releaseQueue.Clear();
 		pool = true;
+	}
+
+	~JSONObject() {
+		if(pool && releaseQueue.Count < MAX_POOL_SIZE) {
+			type = Type.NULL;
+			list = null;
+			keys = null;
+			str = "";
+			n = 0;
+			b = false;
+			releaseQueue.Enqueue(this);
+		}
+	}
+#endif
+}
