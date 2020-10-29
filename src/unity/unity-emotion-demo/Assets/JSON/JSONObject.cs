@@ -882,4 +882,37 @@ public class JSONObject {
 	 * method is duplicated.  Hopefully there won't be too many future changes, but
 	 * I would still like a more elegant way to optionaly yield
 	 */
-	void Stringify(int depth, StringBu
+	void Stringify(int depth, StringBuilder builder, bool pretty = false) {	//Convert the JSONObject into a string
+		//Profiler.BeginSample("JSONprint");
+		if(depth++ > MAX_DEPTH) {
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+			Debug.Log
+#else
+			Debug.WriteLine
+#endif
+			("reached max depth!");
+			return;
+		}
+		switch(type) {
+			case Type.BAKED:
+				builder.Append(str);
+				break;
+			case Type.STRING:
+				builder.AppendFormat("\"{0}\"", str);
+				break;
+			case Type.NUMBER:
+				if(useInt) {
+					builder.Append(i.ToString());
+				} else {
+#if USEFLOAT
+					if(float.IsInfinity(n))
+						builder.Append(INFINITY);
+					else if(float.IsNegativeInfinity(n))
+						builder.Append(NEGINFINITY);
+					else if(float.IsNaN(n))
+						builder.Append(NaN);
+#else
+				if(double.IsInfinity(n))
+					builder.Append(INFINITY);
+				else if(double.IsNegativeInfinity(n))
+					builder.Append(
