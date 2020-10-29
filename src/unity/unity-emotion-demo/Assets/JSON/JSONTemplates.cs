@@ -19,4 +19,22 @@ public static partial class JSONTemplates {
 			FieldInfo[] fieldinfo = obj.GetType().GetFields();
 			foreach(FieldInfo fi in fieldinfo) {
 				JSONObject val = JSONObject.nullJO;
-				if(
+				if(!fi.GetValue(obj).Equals(null)) {
+					MethodInfo info = typeof(JSONTemplates).GetMethod("From" + fi.FieldType.Name);
+					if(info != null) {
+						object[] parms = new object[1];
+						parms[0] = fi.GetValue(obj);
+						val = (JSONObject)info.Invoke(null, parms);
+					} else if(fi.FieldType == typeof(string))
+						val = JSONObject.CreateStringObject(fi.GetValue(obj).ToString());
+					else
+						val = JSONObject.Create(fi.GetValue(obj).ToString());
+				}
+				if(val) {
+					if(val.type != JSONObject.Type.NULL)
+						result.AddField(fi.Name, val);
+					else Debug.LogWarning("Null for this non-null object, property " + fi.Name + " of class " + obj.GetType().Name + ". Object type is " + fi.FieldType.Name);
+				}
+			}
+			//Properties
+			PropertyInfo[] propertyInfo = obj.GetType().GetProperties(
