@@ -982,4 +982,43 @@ public class JSONObject {
 							builder.Append(",");
 #if(PRETTY)
 							if(pretty)
-								builder.Append("\n"); //for a bit 
+								builder.Append("\n"); //for a bit more readability
+#endif
+						}
+					}
+#if(PRETTY)
+					if(pretty)
+						builder.Length -= 2;
+					else
+#endif
+						builder.Length--;
+				}
+#if(PRETTY)
+				if(pretty && list.Count > 0) {
+					builder.Append("\n");
+					for(int j = 0; j < depth - 1; j++)
+						builder.Append("\t"); //for a bit more readability
+				}
+#endif
+				builder.Append("]");
+				break;
+			case Type.BOOL:
+				if(b)
+					builder.Append("true");
+				else
+					builder.Append("false");
+				break;
+			case Type.NULL:
+				builder.Append("null");
+				break;
+		}
+		//Profiler.EndSample();
+	}
+	#endregion
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+	public static implicit operator WWWForm(JSONObject obj) {
+		WWWForm form = new WWWForm();
+		for(int i = 0; i < obj.list.Count; i++) {
+			string key = i + "";
+			if(obj.type == Type.OBJECT)
+				key = obj.keys
