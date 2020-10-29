@@ -915,4 +915,39 @@ public class JSONObject {
 				if(double.IsInfinity(n))
 					builder.Append(INFINITY);
 				else if(double.IsNegativeInfinity(n))
-					builder.Append(
+					builder.Append(NEGINFINITY);
+				else if(double.IsNaN(n))
+					builder.Append(NaN);
+#endif
+					else
+						builder.Append(n.ToString());
+				}
+				break;
+			case Type.OBJECT:
+				builder.Append("{");
+				if(list.Count > 0) {
+#if(PRETTY)		//for a bit more readability, comment the define above to disable system-wide
+					if(pretty)
+						builder.Append("\n");
+#endif
+					for(int i = 0; i < list.Count; i++) {
+						string key = keys[i];
+						JSONObject obj = list[i];
+						if(obj) {
+#if(PRETTY)
+							if(pretty)
+								for(int j = 0; j < depth; j++)
+									builder.Append("\t"); //for a bit more readability
+#endif
+							builder.AppendFormat("\"{0}\":", key);
+							obj.Stringify(depth, builder, pretty);
+							builder.Append(",");
+#if(PRETTY)
+							if(pretty)
+								builder.Append("\n");
+#endif
+						}
+					}
+#if(PRETTY)
+					if(pretty)
+						bu
