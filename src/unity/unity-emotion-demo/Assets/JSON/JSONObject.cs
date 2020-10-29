@@ -1021,4 +1021,42 @@ public class JSONObject {
 		for(int i = 0; i < obj.list.Count; i++) {
 			string key = i + "";
 			if(obj.type == Type.OBJECT)
-				key = obj.keys
+				key = obj.keys[i];
+			string val = obj.list[i].ToString();
+			if(obj.list[i].type == Type.STRING)
+				val = val.Replace("\"", "");
+			form.AddField(key, val);
+		}
+		return form;
+	}
+#endif
+	public JSONObject this[int index] {
+		get {
+			if(list.Count > index) return list[index];
+			return null;
+		}
+		set {
+			if(list.Count > index)
+				list[index] = value;
+		}
+	}
+	public JSONObject this[string index] {
+		get {
+			return GetField(index);
+		}
+		set {
+			SetField(index, value);
+		}
+	}
+	public override string ToString() {
+		return Print();
+	}
+	public string ToString(bool pretty) {
+		return Print(pretty);
+	}
+	public Dictionary<string, string> ToDictionary() {
+		if(type == Type.OBJECT) {
+			Dictionary<string, string> result = new Dictionary<string, string>();
+			for(int i = 0; i < list.Count; i++) {
+				JSONObject val = list[i];
+				switch
