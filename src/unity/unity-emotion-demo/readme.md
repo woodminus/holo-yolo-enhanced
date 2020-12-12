@@ -22,4 +22,14 @@ This demo contains the following components:
 * ParseEmotionResponse.cs: Uses the JSON utility (included) to convert the JSON array to a list of FaceObjects
 * ShowImageOnPanel.cs: Displays the photo onto a panel
 
-## Scene 
+## Scene Setup
+The scene included to show the emotion API contains a main camera, set to the parameters for HoloLens, an EmotionManager object which contains ImageToEmotionAPI, ParseEmotionRespone, and ShowImageOnPanel scripts, and an ImageFrame cube that displays the image when 'P' is pressed.
+
+To change the photo analyzed in testing, replace StreamingAssets > myphoto.jpg with your own image. If you rename it, update line 19 in ImageToEmotionAPI.cs to reflect the new image name.
+
+## Keyboard Shortcuts
+Replace the following triggers with your own mechanism for selecting and displaying photos. 
+
+Space: Calls the Cognitive Services API using your API key to validate and analyzing the sample photo 'myphoto' in the Streaming Assets folder.
+
+P: Display the image on the plane
