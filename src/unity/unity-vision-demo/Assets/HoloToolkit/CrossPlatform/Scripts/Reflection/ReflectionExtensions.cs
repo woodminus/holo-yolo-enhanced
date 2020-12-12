@@ -33,4 +33,28 @@ public static class ReflectionExtensions
             }
         }
 
-        return r
+        return result;
+    }
+
+    public static MethodInfo GetMethod(this Type type, string methodName, BindingFlags bindingAttr,  Object binder, Type[] parameters, Object[] modifiers)
+    {
+        var result = type.GetTypeInfo().GetDeclaredMethod(methodName);
+        if (result == null)
+        {
+            var baseType = type.GetBaseType();
+            if (baseType != null)
+            {
+                return GetMethod(baseType, methodName, bindingAttr, binder, parameters, modifiers);
+            }
+        }
+
+        return result;
+    }
+
+    public static MethodInfo GetMethod(this Type type, string methodName, Type[] parameters)
+    {
+        return GetMethods(type).Where(m => m.Name == methodName).FirstOrDefault(
+            m =>
+            {
+                var types = m.GetParameters().Select(p => p.ParameterType).ToArray();
+                if (types.Length == parameters.Length)
