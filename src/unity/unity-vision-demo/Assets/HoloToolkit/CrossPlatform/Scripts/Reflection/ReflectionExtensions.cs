@@ -58,3 +58,33 @@ public static class ReflectionExtensions
             {
                 var types = m.GetParameters().Select(p => p.ParameterType).ToArray();
                 if (types.Length == parameters.Length)
+                {
+                    for (int idx = 0; idx < types.Length; idx++)
+                    {
+                        if (types[idx] != parameters[idx])
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        );
+    }
+
+    public static IEnumerable<MethodInfo> GetMethods(this Type type)
+    {
+        return GetMethods(type, (BindingFlags)0x0);
+    }
+
+    public static IEnumerable<MethodInfo> GetMethods(this Type type, BindingFlags flags)
+    {
+        return type.GetTypeInfo().GetMethods(flags);
+    }
+
+    public static IEnumerable<MethodInfo> GetMethods(th
