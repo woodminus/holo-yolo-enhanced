@@ -87,4 +87,35 @@ public static class ReflectionExtensions
         return type.GetTypeInfo().GetMethods(flags);
     }
 
-    public static IEnumerable<MethodInfo> GetMethods(th
+    public static IEnumerable<MethodInfo> GetMethods(this TypeInfo type)
+    {
+        return GetMethods(type, (BindingFlags)0x0);
+    }
+
+    public static IEnumerable<MethodInfo> GetMethods(this TypeInfo type, BindingFlags flags)
+    {
+        return type.DeclaredMethods;
+    }
+
+    public static IEnumerable<FieldInfo> GetFields(this Type type)
+    {
+        return  GetFields(type, (BindingFlags)0x0);
+    }
+
+    public static IEnumerable<FieldInfo> GetFields(this Type type, BindingFlags flags)
+    {
+        return type.GetTypeInfo().DeclaredFields;
+    }
+
+    public static FieldInfo GetField(this Type type, string fieldName)
+    {
+        return type.GetRuntimeField(fieldName);
+    }
+
+    public static IEnumerable<PropertyInfo> GetProperties(this Type type, BindingFlags flags)
+    {
+        return type.GetTypeInfo().DeclaredProperties;
+    }
+
+    public static PropertyInfo GetProperty(this Type type, string propertyName)
+  
