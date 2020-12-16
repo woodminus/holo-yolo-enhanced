@@ -118,4 +118,33 @@ public static class ReflectionExtensions
     }
 
     public static PropertyInfo GetProperty(this Type type, string propertyName)
-  
+    {
+        return GetProperty(type, propertyName, (BindingFlags)0x0);
+    }
+
+    public static PropertyInfo GetProperty(this Type type, string propertyName, BindingFlags flags)
+    {
+        return type.GetRuntimeProperty (propertyName);
+    }
+
+    public static PropertyInfo GetProperty(this Type type, string propertyName, Type returnType)
+    {
+        return type.GetRuntimeProperty (propertyName);
+    }
+
+    public static IEnumerable<TypeInfo> GetTypes(this Assembly assembly)
+    {
+        return assembly.DefinedTypes;
+    }
+
+    public static bool IsSubclassOf(this Type type, Type c)
+    {
+        return type.GetTypeInfo().IsSubclassOf(c);
+    }
+
+    public static bool IsAssignableFrom(this Type type, Type c)
+    {
+        return type.IsAssignableFrom(c.GetTypeInfo());
+    }
+
+    public static bool IsEnum(t
