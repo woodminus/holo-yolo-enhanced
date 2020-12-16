@@ -185,4 +185,8 @@ public static class ReflectionExtensions
 
     public static bool IsEnum(this Type type)
     {
-    
+        return type.IsEnum;
+    }
+}
+
+#endif
