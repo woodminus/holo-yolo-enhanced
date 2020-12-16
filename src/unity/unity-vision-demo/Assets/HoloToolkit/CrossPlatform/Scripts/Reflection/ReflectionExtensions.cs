@@ -147,4 +147,42 @@ public static class ReflectionExtensions
         return type.IsAssignableFrom(c.GetTypeInfo());
     }
 
-    public static bool IsEnum(t
+    public static bool IsEnum(this Type type)
+    {
+        return type.GetTypeInfo().IsEnum;
+    }
+
+    public static bool IsAssignableFrom(this Type type, TypeInfo typeInfo)
+    {
+        return type.GetTypeInfo().IsAssignableFrom(typeInfo);
+    }
+
+    public static object[] GetCustomAttributes(this Type type, bool inherit)
+    {
+        return type.GetTypeInfo().GetCustomAttributes(inherit).ToArray();
+    }
+
+    public static object[] GetCustomAttributes(this Type type, Type attributeType, bool inherit)
+    {
+        return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).ToArray();
+    }
+}
+#else
+
+using System;
+
+public static class ReflectionExtensions
+{
+    public static Type GetTypeInfo(this Type type)
+    {
+        return type;
+    }
+
+    public static Type AsType(this Type type)
+    {
+        return type;
+    }
+
+    public static bool IsEnum(this Type type)
+    {
+    
