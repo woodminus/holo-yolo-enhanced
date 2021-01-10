@@ -1,5 +1,6 @@
+
 fileFormatVersion: 2
-guid: ba62e784cfa0c0145819cc7dfdcf8faa
+guid: a21436697051b874fa00fdcca17c671f
 timeCreated: 1468273328
 licenseType: Pro
 PluginImporter:
@@ -39,16 +40,3 @@ PluginImporter:
         CPU: AnyCPU
     Win64:
       enabled: 0
-      settings:
-        CPU: AnyCPU
-    WindowsStoreApps:
-      enabled: 1
-      settings:
-        CPU: ARM
-        DontProcess: False
-        PlaceholderPath: 
-        SDK: AnySDK
-        ScriptingBackend: AnyScriptingBackend
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
