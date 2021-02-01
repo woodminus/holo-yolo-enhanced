@@ -226,4 +226,32 @@ Light:
   m_DrawHalo: 1
   m_Flare: {fileID: 0}
   m_RenderMode: 0
-  m_Culling
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &114000014146313642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012943254746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37be0deba90cea9489f9a6e0acdc84df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CursorOnHolograms: {fileID: 1000012100030190}
+  CursorOffHolograms: {fileID: 1000013615056792}
+  DistanceFromCollision: 0.01
+--- !u!135 &135000012439094316
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013615056792}
+  m_Materia
