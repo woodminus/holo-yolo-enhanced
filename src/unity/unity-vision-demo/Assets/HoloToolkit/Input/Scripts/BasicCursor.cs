@@ -16,4 +16,30 @@ namespace HoloToolkit.Unity
         {
             public bool Hit;
             public Vector3 Position;
-            public Vector3 Norma
+            public Vector3 Normal;
+        }
+
+        [Tooltip("Distance, in meters, to offset the cursor from the collision point.")]
+        public float DistanceFromCollision = 0.01f;
+
+        private Quaternion cursorDefaultRotation;
+
+        private MeshRenderer meshRenderer;
+
+        private GazeManager gazeManager;
+
+        protected virtual void Awake()
+        {
+            meshRenderer = gameObject.GetComponent<MeshRenderer>();
+
+            if (meshRenderer == null)
+            {
+                Debug.LogError("This script requires that your cursor asset has a MeshRenderer component on it.");
+                return;
+            }
+
+            // Hide the Cursor to begin with.
+            meshRenderer.enabled = false;
+
+            // Cache the cursor default rotation so the cursor can be rotated with respect to the original orientation.
+            c
