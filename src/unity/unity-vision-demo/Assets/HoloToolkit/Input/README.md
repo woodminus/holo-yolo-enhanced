@@ -117,3 +117,82 @@ or in your Visual Studio Package.appxmanifest capabilities.
 **RecognizerStart** Set this to determine whether the keyword recognizer will start immediately or if it should wait for your code to tell it to start.
 
 #### Microphone/MicStream.cs
+Lets you access beam-formed microphone streams from the HoloLens to optimize voice and/or room captures, which is impossible to do with Unity's Microphone object. Takes the data and inserts it into Unity's AudioSource object for easy handling. Also lets you record indeterminate-length audio files from the Microphone to your device's Music Library, also using beam-forming.
+
+Check out Assets/HoloToolkit/Input/Tests/Scripts/MicStreamDemo.cs for an example of implementing these features, which is used in the demo scene at Assets/HoloToolkit/Input/Tests/MicrophoneStream.unity.
+
+**IMPORTANT**: Please make sure to add the Microphone and Music Library capabilities in your app, in Unity under  
+Edit -> Project Settings -> Player -> Settings for Windows Store -> Publishing Settings -> Capabilities  
+or in your Visual Studio Package.appxmanifest capabilities.
+
+**_KeywordsAndResponses_** Set the size as the number of keywords you'd like to listen for, then specify the keywords and method responses to complete the array.
+
+**RecognizerStart** Set this to determine whether the keyword recognizer will start immediately or if it should wait for your code to tell it to start.
+
+#### FocusedObjectMessageSender.cs
+Sends Unity message to currently focused object.
+FocusedObjectMessageSender.SendMessageToFocusedObject needs to be registered as a response in KeywordManager
+to enable arbitrary messages to be sent to currently focused object.
+
+#### SelectedObjectMessageSender.cs
+Sends Unity message to currently selected object.
+SelectedObjectMessageSender.SendMessageToSelectedObject needs to be registered as a response in KeywordManager
+to enable arbitrary messages to be sent to currently selected object.
+
+#### FocusedObjectMessageReceiver.cs
+Example on how to handle messages send by FocusedObjectMessageSender.
+In this particular implementation, focused object color it toggled on gaze enter/exit events.
+
+#### SelectedObjectMessageReceiver.cs
+Example on how to handle messages send by SelectedObjectMessageSender.
+In this particular implementation, selected object color it toggled on selecting object and clearing selected object.
+
+#### SimpleGridGenerator.cs
+A grid of dynamic objects to illustrate sending messages to prefab instances created at runtime as opposed
+to only static objects that already exist in the scene.
+
+### [Tests](Tests)
+Tests related to the input features. To use the scene:
+
+1. Navigate to the Tests folder.
+2. Double click on the test scene you wish to explore.
+3. Either click "Play" in the unity editor or File -> Build Settings.
+4. Add Open Scenes, Platform -> Windows Store, SDK -> Universal 10, Build Type -> D3D, Check 'Unity C# Projects'.
+5. Click 'Build' and create an App folder. When compile is done, open the solution and deploy to device.
+
+#### BasicCursor.unity 
+Shows the basic cursor following the user's gaze and hugging the test sphere in the scene.
+
+#### Cursor.unity 
+Shows the cursor on holograms hugging the test sphere in the scene and cursor off holograms when not gazing at the sphere.
+
+#### CursorWithFeedback.unity 
+Shows the cursor hugging the test sphere in the scene and displays hand detected asset when hand is detected in ready state.
+
+#### FocusedObjectKeywords.unity
+Example on how to send keyword messages to currently focused dynamically instantiated object.
+Gazing on an object and saying "Make Smaller" and "Make Bigger" will adjust object size.
+
+#### SelectedObjectKeywords.unity
+Example on how to send keyword messages to currently selected dynamically instantiated object.
+Gazing on an object and saying "Select Object" will persistently select that object for interaction with voice commands,
+after which the user can also adjust object size with "Make Smaller" and "Make Bigger" voice commands and finally clear
+currently selected object by saying "Clear Selection".
+
+#### KeywordManager.unity
+Shows how to use the KeywordManager.cs script to add keywords to your scene.
+
+1. Select whether you want the recognizer to start automatically or when you manually start it.
+2. Specify the number of keywords you want.
+3. Type the word or phrase you'd like to register as the keyword and, if you want, set a key code to use in the Editor. You can also use an attached microphone with the Editor.
+4. Press the + to add a response. Then, drag a GameObject with the script you want to call into the "None (Object)" field.
+5. Select the script and method to call or variable to set from the "No Function" dropdown. Add any parameters, if necessary, into the field below the dropdown.
+
+When you start the scene, your keywords will automatically be registered on a KeywordRecognizer, and the recognizer will be started (or not) based on your Recognizer Start setting.
+
+#### MicrophoneStream.unity
+Example usage of MicStream.cs to select and record beam-formed audio from the hololens. In editor, the script lets you choose if you want to beam-form capture on voice or on the room. When running, press 'Q' to start the stream you selected, 'W' will stop the stream, 'A' starts recording a wav file, and 'S' stops the recording, saves it to your Music library, and prints the full path of the audio clip.
+
+---
+##### [Go back up to the table of contents.](../../../README.md)
+---
