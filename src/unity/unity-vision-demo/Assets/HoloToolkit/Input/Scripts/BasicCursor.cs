@@ -86,4 +86,9 @@ namespace HoloToolkit.Unity
             // Place the cursor at the calculated position.
             gameObject.transform.position = rayResult.Position + rayResult.Normal * DistanceFromCollision;
 
-            // Reorient the cursor to match t
+            // Reorient the cursor to match the hit object normal.
+            gameObject.transform.up = rayResult.Normal;
+            gameObject.transform.rotation *= cursorDefaultRotation;
+        }
+    }
+}
