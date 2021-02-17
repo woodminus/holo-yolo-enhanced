@@ -42,4 +42,25 @@ namespace HoloToolkit.Unity
             meshRenderer.enabled = false;
 
             // Cache the cursor default rotation so the cursor can be rotated with respect to the original orientation.
-            c
+            cursorDefaultRotation = gameObject.transform.rotation;
+        }
+
+        protected virtual void Start()
+        {
+            gazeManager = GazeManager.Instance;
+
+            if (gazeManager == null)
+            {
+                Debug.LogError("Must have a GazeManager somewhere in the scene.");
+            }
+
+            if ((GazeManager.Instance.RaycastLayerMask & (1 << gameObject.layer)) != 0)
+            {
+                Debug.LogError("The cursor has a layer that is checked in the GazeManager's Raycast Layer Mask.  Change the cursor layer (e.g.: to Ignore Raycast) or uncheck the layer in GazeManager: " +
+                    LayerMask.LayerToName(gameObject.layer));
+            }
+        }
+
+        protected virtual RaycastResult CalculateRayIntersect()
+        {
+            RaycastRe
