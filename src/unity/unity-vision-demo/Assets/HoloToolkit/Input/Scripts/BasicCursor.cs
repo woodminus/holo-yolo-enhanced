@@ -63,4 +63,27 @@ namespace HoloToolkit.Unity
 
         protected virtual RaycastResult CalculateRayIntersect()
         {
-            RaycastRe
+            RaycastResult result = new RaycastResult();
+            result.Hit = GazeManager.Instance.Hit;
+            result.Position = GazeManager.Instance.Position;
+            result.Normal = GazeManager.Instance.Normal;
+            return result;
+        }
+
+        protected virtual void LateUpdate()
+        {
+            if (meshRenderer == null || gazeManager == null)
+            {
+                return;
+            }
+
+            // Calculate the raycast result
+            RaycastResult rayResult = CalculateRayIntersect();
+
+            // Show or hide the Cursor based on if the user's gaze hit a hologram.
+            meshRenderer.enabled = rayResult.Hit;
+
+            // Place the cursor at the calculated position.
+            gameObject.transform.position = rayResult.Position + rayResult.Normal * DistanceFromCollision;
+
+            // Reorient the cursor to match t
