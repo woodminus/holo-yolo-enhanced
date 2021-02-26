@@ -58,4 +58,14 @@ namespace HoloToolkit.Unity
             UpdateHandDetectedState();
         }
 
-        private
+        private void UpdateHandDetectedState()
+        {
+            if (handDetectedGameObject == null)
+            {
+                return;
+            }
+
+            handDetectedGameObject.SetActive(HandsManager.Instance.HandDetected);
+        }
+    }
+}
