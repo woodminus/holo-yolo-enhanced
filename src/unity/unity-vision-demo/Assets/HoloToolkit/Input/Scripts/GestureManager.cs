@@ -20,4 +20,27 @@ namespace HoloToolkit.Unity
     /// </remarks>
     [RequireComponent(typeof(GazeManager))]
     public partial class GestureManager : Singleton<GestureManager>
- 
+    {
+        /// <summary>
+        /// Occurs when a manipulation gesture has started
+        /// </summary>
+        public System.Action ManipulationStarted;
+
+        /// <summary>
+        /// Occurs when a manipulation gesture ended as a result of user input
+        /// </summary>
+        public System.Action ManipulationCompleted;
+
+        /// <summary>
+        /// Occurs when a manipulated gesture ended as a result of some other condition.
+        /// (e.g. the hand being used for the gesture is no longer visible).
+        /// </summary>
+        public System.Action ManipulationCanceled;
+
+        /// <summary>
+        /// Key to press in the editor to select the currently gazed hologram
+        /// </summary>
+        public KeyCode EditorSelectKey = KeyCode.Space;
+
+        /// <summary>
+        /// To select even when a hologram is 
