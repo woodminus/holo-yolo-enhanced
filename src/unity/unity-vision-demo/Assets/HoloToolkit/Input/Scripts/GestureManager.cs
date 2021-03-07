@@ -43,4 +43,25 @@ namespace HoloToolkit.Unity
         public KeyCode EditorSelectKey = KeyCode.Space;
 
         /// <summary>
-        /// To select even when a hologram is 
+        /// To select even when a hologram is not being gazed at,
+        /// set the override focused object.
+        /// If its null, then the gazed at object will be selected.
+        /// </summary>
+        public GameObject OverrideFocusedObject { get; set; }
+
+        /// <summary>
+        /// Gets the currently focused object, or null if none.
+        /// </summary>
+        public GameObject FocusedObject { get; private set; }
+
+        /// <summary>
+        /// Whether or not a manipulation gesture is currently in progress
+        /// </summary>
+        public bool ManipulationInProgress { get; private set; }
+
+        /// <summary>
+        /// The offset of the hand from its position at the beginning of 
+        /// the currently active manipulation gesture, in world space.  Not valid if
+        /// a manipulation gesture is not in progress
+        /// </summary>
+    
