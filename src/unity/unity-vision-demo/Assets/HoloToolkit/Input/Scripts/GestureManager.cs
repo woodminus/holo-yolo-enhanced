@@ -64,4 +64,22 @@ namespace HoloToolkit.Unity
         /// the currently active manipulation gesture, in world space.  Not valid if
         /// a manipulation gesture is not in progress
         /// </summary>
-    
+        public Vector3 ManipulationOffset { get; private set; }
+
+        /// <summary>
+        /// The world space position of the hand being used for the current manipulation gesture.  Not valid
+        /// if a manipulation gesture is not in progress.
+        /// </summary>
+        public Vector3 ManipulationHandPosition
+        {
+            get
+            {
+                Vector3 handPosition = Vector3.zero;
+                currentHandState.properties.location.TryGetPosition(out handPosition);
+                return handPosition;
+            }
+        }
+
+        private GestureRecognizer gestureRecognizer;
+        // We use a separate manipulation recognizer here because the tap gesture recognizer cancels
+        // capturing gestures whenever the GazeManager focus changes, which is not
