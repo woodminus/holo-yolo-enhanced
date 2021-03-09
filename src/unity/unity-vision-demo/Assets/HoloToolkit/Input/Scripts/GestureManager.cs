@@ -82,4 +82,24 @@ namespace HoloToolkit.Unity
 
         private GestureRecognizer gestureRecognizer;
         // We use a separate manipulation recognizer here because the tap gesture recognizer cancels
-        // capturing gestures whenever the GazeManager focus changes, which is not
+        // capturing gestures whenever the GazeManager focus changes, which is not the behavior
+        // we want for manipulation
+        private GestureRecognizer manipulationRecognizer;
+
+        private bool hasRecognitionStarted = false;
+
+        private bool HandPressed { get { return pressedHands.Count > 0; } }
+        private HashSet<uint> pressedHands = new HashSet<uint>();
+
+        private InteractionSourceState currentHandState;
+
+        void Start()
+        {
+            InteractionManager.SourcePressed += InteractionManager_SourcePressed;
+            InteractionManager.SourceReleased += InteractionManager_SourceReleased;
+            InteractionManager.SourceUpdated += InteractionManager_SourceUpdated;
+            InteractionManager.SourceLost += InteractionManager_SourceLost;
+
+            // Create a new GestureRecognizer. Sign up for tapped events.
+            gestureRecognizer = new GestureRecognizer();
+            ges
