@@ -134,4 +134,32 @@ namespace HoloToolkit.Unity
             pressedHands.Add(state.source.id);
         }
 
-        private void InteractionManager_SourceUpdated(InteractionSourceState sta
+        private void InteractionManager_SourceUpdated(InteractionSourceState state)
+        {
+            if (HandPressed && state.source.id == currentHandState.source.id)
+            {
+                currentHandState = state;
+            }
+        }
+
+        private void InteractionManager_SourceReleased(InteractionSourceState state)
+        {
+            pressedHands.Remove(state.source.id);
+        }
+
+        private void InteractionManager_SourceLost(InteractionSourceState state)
+        {
+            pressedHands.Remove(state.source.id);
+        }
+
+        private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
+        {
+            OnTap();
+        }
+
+        private void GestureRecognizer_RecognitionStartedEvent(InteractionSourceKind source, Ray headRay)
+        {
+            OnRecognitionStarted();
+        }
+
+        private void Gesture
