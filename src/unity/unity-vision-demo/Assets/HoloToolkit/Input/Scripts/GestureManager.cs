@@ -102,4 +102,17 @@ namespace HoloToolkit.Unity
 
             // Create a new GestureRecognizer. Sign up for tapped events.
             gestureRecognizer = new GestureRecognizer();
-            ges
+            gestureRecognizer.SetRecognizableGestures(GestureSettings.Tap);
+
+            manipulationRecognizer = new GestureRecognizer();
+            manipulationRecognizer.SetRecognizableGestures(GestureSettings.ManipulationTranslate);
+
+            gestureRecognizer.TappedEvent += GestureRecognizer_TappedEvent;
+
+            // We need to send pressed and released events to UI so they can provide visual feedback
+            // of the current state of the UI based on user input.
+            gestureRecognizer.RecognitionStartedEvent += GestureRecognizer_RecognitionStartedEvent;
+            gestureRecognizer.RecognitionEndedEvent += GestureRecogniser_RecognitionEndedEvent;
+
+            manipulationRecognizer.ManipulationStartedEvent += ManipulationRecognizer_ManipulationStartedEvent;
+            ma
