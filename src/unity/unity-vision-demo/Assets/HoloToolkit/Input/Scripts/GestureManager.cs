@@ -115,4 +115,23 @@ namespace HoloToolkit.Unity
             gestureRecognizer.RecognitionEndedEvent += GestureRecogniser_RecognitionEndedEvent;
 
             manipulationRecognizer.ManipulationStartedEvent += ManipulationRecognizer_ManipulationStartedEvent;
-            ma
+            manipulationRecognizer.ManipulationUpdatedEvent += ManipulationRecognizer_ManipulationUpdatedEvent;
+            manipulationRecognizer.ManipulationCompletedEvent += ManipulationRecognizer_ManipulationCompletedEvent;
+            manipulationRecognizer.ManipulationCanceledEvent += ManipulationRecognizer_ManipulationCanceledEvent;
+
+            // Start looking for gestures.
+            gestureRecognizer.StartCapturingGestures();
+            manipulationRecognizer.StartCapturingGestures();
+        }
+
+        private void InteractionManager_SourcePressed(InteractionSourceState state)
+        {
+            if (!HandPressed)
+            {
+                currentHandState = state;
+            }
+
+            pressedHands.Add(state.source.id);
+        }
+
+        private void InteractionManager_SourceUpdated(InteractionSourceState sta
