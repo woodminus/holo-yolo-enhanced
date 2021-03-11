@@ -162,4 +162,30 @@ namespace HoloToolkit.Unity
             OnRecognitionStarted();
         }
 
-        private void Gesture
+        private void GestureRecogniser_RecognitionEndedEvent(InteractionSourceKind source, Ray headRay)
+        {
+            OnRecognitionEndeded();
+        }
+
+        private void OnTap()
+        {
+            if (FocusedObject != null)
+            {
+                FocusedObject.SendMessage("OnSelect", SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
+        private void OnRecognitionStarted()
+        {
+            if (FocusedObject != null)
+            {
+                hasRecognitionStarted = true;
+                FocusedObject.SendMessage("OnPressed", SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
+        private void OnRecognitionEndeded()
+        {
+            if (FocusedObject != null && hasRecognitionStarted)
+            {
+                FocusedObject.SendMessage("OnReleased", SendMessageO
