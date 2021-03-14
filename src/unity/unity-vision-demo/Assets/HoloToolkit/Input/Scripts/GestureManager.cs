@@ -212,4 +212,24 @@ namespace HoloToolkit.Unity
             OnManipulation(true, cumulativeDelta);
         }
 
-        p
+        private void ManipulationRecognizer_ManipulationCompletedEvent(InteractionSourceKind source, Vector3 cumulativeDelta, Ray headRay)
+        {
+            OnManipulation(false, cumulativeDelta);
+            if (ManipulationCompleted != null)
+            {
+                ManipulationCompleted();
+            }
+        }
+
+        private void ManipulationRecognizer_ManipulationCanceledEvent(InteractionSourceKind source, Vector3 cumulativeDelta, Ray headRay)
+        {
+            OnManipulation(false, cumulativeDelta);
+            if (ManipulationCanceled != null)
+            {
+                ManipulationCanceled();
+            }
+        }
+
+        private void OnManipulation(bool inProgress, Vector3 offset)
+        {
+            ManipulationInProgress = inProgr
