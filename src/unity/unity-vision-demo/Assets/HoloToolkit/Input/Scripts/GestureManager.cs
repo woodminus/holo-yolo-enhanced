@@ -188,4 +188,28 @@ namespace HoloToolkit.Unity
         {
             if (FocusedObject != null && hasRecognitionStarted)
             {
-                FocusedObject.SendMessage("OnReleased", SendMessageO
+                FocusedObject.SendMessage("OnReleased", SendMessageOptions.DontRequireReceiver);
+            }
+
+            hasRecognitionStarted = false;
+        }
+
+        private void ManipulationRecognizer_ManipulationStartedEvent(InteractionSourceKind source, Vector3 cumulativeDelta, Ray headRay)
+        {
+            // Don't start another manipulation gesture if one is already underway
+            if (!ManipulationInProgress)
+            {
+                OnManipulation(true, cumulativeDelta);
+                if (ManipulationStarted != null)
+                {
+                    ManipulationStarted();
+                }
+            }
+        }
+
+        private void ManipulationRecognizer_ManipulationUpdatedEvent(InteractionSourceKind source, Vector3 cumulativeDelta, Ray headRay)
+        {
+            OnManipulation(true, cumulativeDelta);
+        }
+
+        p
