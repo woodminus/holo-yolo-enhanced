@@ -232,4 +232,24 @@ namespace HoloToolkit.Unity
 
         private void OnManipulation(bool inProgress, Vector3 offset)
         {
-            ManipulationInProgress = inProgr
+            ManipulationInProgress = inProgress;
+            ManipulationOffset = offset;
+        }
+
+        void LateUpdate()
+        {
+            // set the next focus object to see if focus has changed, but don't replace the current focused object
+            // until all the inputs are handled, like Unity Editor input for OnTap().
+            GameObject newFocusedObject;
+
+            if (GazeManager.Instance.Hit &&
+                OverrideFocusedObject == null &&
+                GazeManager.Instance.HitInfo.collider != null)
+            {
+                // If gaze hits a hologram, set the focused object to that game object.
+                // Also if the caller has not decided to override the focused object.
+                newFocusedObject = GazeManager.Instance.HitInfo.collider.gameObject;
+            }
+            else
+            {
+                // If our gaze doesn't hit a hologram, set the focused object
