@@ -252,4 +252,26 @@ namespace HoloToolkit.Unity
             }
             else
             {
-                // If our gaze doesn't hit a hologram, set the focused object
+                // If our gaze doesn't hit a hologram, set the focused object to null or override focused object.
+                newFocusedObject = OverrideFocusedObject;
+            }
+
+            bool focusedChanged = FocusedObject != newFocusedObject;
+
+#if UNITY_EDITOR
+            if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(EditorSelectKey))
+            {
+                OnTap();
+                OnRecognitionStarted();
+            }
+
+            if (Input.GetMouseButtonUp(1) || Input.GetKeyUp(EditorSelectKey) || focusedChanged)
+            {
+                OnRecognitionEndeded();
+            }
+#endif
+            if (focusedChanged)
+            {
+                // If the currently focused object doesn't match the new focused object, cancel the current gesture.
+                // Start looking for new gestures.  This is to prevent applying gestures from one hologram to another.
+                gestureRecognizer
