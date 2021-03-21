@@ -290,4 +290,13 @@ namespace HoloToolkit.Unity
             manipulationRecognizer.StopCapturingGestures();
             manipulationRecognizer.ManipulationStartedEvent -= ManipulationRecognizer_ManipulationStartedEvent;
             manipulationRecognizer.ManipulationUpdatedEvent -= ManipulationRecognizer_ManipulationUpdatedEvent;
-            manipulationRecognizer.M
+            manipulationRecognizer.ManipulationCompletedEvent -= ManipulationRecognizer_ManipulationCompletedEvent;
+            manipulationRecognizer.ManipulationCanceledEvent -= ManipulationRecognizer_ManipulationCanceledEvent;
+
+            InteractionManager.SourcePressed -= InteractionManager_SourcePressed;
+            InteractionManager.SourceReleased -= InteractionManager_SourceReleased;
+            InteractionManager.SourceUpdated -= InteractionManager_SourceUpdated;
+            InteractionManager.SourceLost -= InteractionManager_SourceLost;
+        }
+    }
+}
