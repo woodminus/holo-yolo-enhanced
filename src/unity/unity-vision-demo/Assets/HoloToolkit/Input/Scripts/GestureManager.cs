@@ -274,4 +274,20 @@ namespace HoloToolkit.Unity
             {
                 // If the currently focused object doesn't match the new focused object, cancel the current gesture.
                 // Start looking for new gestures.  This is to prevent applying gestures from one hologram to another.
-                gestureRecognizer
+                gestureRecognizer.CancelGestures();
+                FocusedObject = newFocusedObject;
+                gestureRecognizer.StartCapturingGestures();
+            }
+        }
+
+        void OnDestroy()
+        {
+            gestureRecognizer.StopCapturingGestures();
+            gestureRecognizer.TappedEvent -= GestureRecognizer_TappedEvent;
+            gestureRecognizer.RecognitionStartedEvent -= GestureRecognizer_RecognitionStartedEvent;
+            gestureRecognizer.RecognitionEndedEvent -= GestureRecogniser_RecognitionEndedEvent;
+
+            manipulationRecognizer.StopCapturingGestures();
+            manipulationRecognizer.ManipulationStartedEvent -= ManipulationRecognizer_ManipulationStartedEvent;
+            manipulationRecognizer.ManipulationUpdatedEvent -= ManipulationRecognizer_ManipulationUpdatedEvent;
+            manipulationRecognizer.M
