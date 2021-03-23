@@ -33,3 +33,29 @@ namespace HoloToolkit.Unity
 
         private bool Manipulating { get; set; }
 
+        private void Start()
+        {
+            gestureManager = GestureManager.Instance;
+
+            if (gestureManager == null)
+            {
+                Debug.LogError(string.Format("GestureManipulator on {0} could not find GestureManager instance, manipulation will not function", name));
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (gestureManager != null)
+            {
+                gestureManager.ManipulationStarted += BeginManipulation;
+                gestureManager.ManipulationCompleted += EndManipulation;
+                gestureManager.ManipulationCanceled += EndManipulation;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (gestureManager != null)
+            {
+                gestureManager.ManipulationStarted -= BeginManipulation;
+                gest
