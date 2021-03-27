@@ -96,4 +96,12 @@ namespace HoloToolkit.Unity
                 Vector3 initialHandToCurrentHand = localHandPosition - initialHandPosition;
 
                 // When performing a manipulation gesture, the hand generally only translates a relatively small amount.
-                // If we move the object only as much as the ha
+                // If we move the object only as much as the hand itself moves, users can only make small adjustments before
+                // the hand is lost and the gesture completes.  To improve the usability of the gesture we scale each
+                // axis of hand movement by some amount (camera relative).  This value can be changed in the editor or
+                // at runtime based on the needs of individual movement scenarios.
+                Vector3 scaledLocalHandPositionDelta = Vector3.Scale(initialHandToCurrentHand, handPositionScale);
+
+                // Once we've figured out how much the object should move relative to the camera we apply that to the initial
+                // camera relative position.  This ensures that the object remains in the appropriate location relative to the camera
+                // and the hand as the camera moves.  The allows users to use both g
