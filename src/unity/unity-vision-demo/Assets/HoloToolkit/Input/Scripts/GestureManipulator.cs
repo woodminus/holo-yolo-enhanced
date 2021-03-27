@@ -58,4 +58,21 @@ namespace HoloToolkit.Unity
             if (gestureManager != null)
             {
                 gestureManager.ManipulationStarted -= BeginManipulation;
-                gest
+                gestureManager.ManipulationCompleted -= EndManipulation;
+                gestureManager.ManipulationCanceled -= EndManipulation;
+            }
+
+            Manipulating = false;
+        }
+
+        private void BeginManipulation()
+        {
+            if (gestureManager != null && gestureManager.ManipulationInProgress)
+            {
+                Manipulating = true;
+
+                targetInterpolator = gameObject.GetComponent<Interpolator>();
+
+                // In order to ensure that any manipulated objects move with the user, we do all our math relative to the camera,
+                // so when we save the initial hand position and object position we first transform them into the camera's coordinate space
+                initialHandPosition = Camera.main.transform.InverseTransformPoint(gestureManager.ManipulationHandP
