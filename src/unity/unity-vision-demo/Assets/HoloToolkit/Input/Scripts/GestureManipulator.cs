@@ -104,4 +104,19 @@ namespace HoloToolkit.Unity
 
                 // Once we've figured out how much the object should move relative to the camera we apply that to the initial
                 // camera relative position.  This ensures that the object remains in the appropriate location relative to the camera
-                // and the hand as the camera moves.  The allows users to use both g
+                // and the hand as the camera moves.  The allows users to use both gaze and gesture to move objects.  Once they
+                // begin manipulating an object they can rotate their head or walk around and the object will move with them
+                // as long as they maintain the gesture, while still allowing adjustment via hand movement.
+                Vector3 localObjectPosition = initialObjectPosition + scaledLocalHandPositionDelta;
+                Vector3 worldObjectPosition = Camera.main.transform.TransformPoint(localObjectPosition);
+
+                // If the object has an interpolator we should use it, otherwise just move the transform directly
+                if (targetInterpolator != null)
+                {
+                    targetInterpolator.SetTargetPosition(worldObjectPosition);
+                }
+                else
+                {
+                    transform.position = worldObjectPosition;
+                }
+    
