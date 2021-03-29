@@ -119,4 +119,7 @@ namespace HoloToolkit.Unity
                 {
                     transform.position = worldObjectPosition;
                 }
-    
+            }
+        }
+    }
+}
