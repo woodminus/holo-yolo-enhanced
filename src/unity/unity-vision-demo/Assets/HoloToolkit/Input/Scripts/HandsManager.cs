@@ -32,4 +32,33 @@ namespace HoloToolkit.Unity
         private void Awake()
         {
             InteractionManager.SourceDetected += InteractionManager_SourceDetected;
-            InteractionManager.SourceLost += In
+            InteractionManager.SourceLost += InteractionManager_SourceLost;
+        }
+
+        private void InteractionManager_SourceDetected(InteractionSourceState state)
+        {
+            // Check to see that the source is a hand.
+            if (state.source.kind != InteractionSourceKind.Hand)
+            {
+                return;
+            }
+
+            trackedHands.Add(state.source.id);
+
+            if (HandInView != null)
+            {
+                HandInView(HandDetected);
+            }
+        }
+
+        private void InteractionManager_SourceLost(InteractionSourceState state)
+        {
+            // Check to see that the source is a hand.
+            if (state.source.kind != InteractionSourceKind.Hand)
+            {
+                return;
+            }
+
+            if (trackedHands.Contains(state.source.id))
+            {
+                trackedHands.Remov
