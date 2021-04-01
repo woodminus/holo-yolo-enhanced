@@ -61,4 +61,19 @@ namespace HoloToolkit.Unity
 
             if (trackedHands.Contains(state.source.id))
             {
-                trackedHands.Remov
+                trackedHands.Remove(state.source.id);
+
+                if (HandInView != null)
+                {
+                    HandInView(HandDetected);
+                }
+            }
+        }
+
+        private void OnDestroy()
+        {
+            InteractionManager.SourceDetected -= InteractionManager_SourceDetected;
+            InteractionManager.SourceLost -= InteractionManager_SourceLost;
+        }
+    }
+}
