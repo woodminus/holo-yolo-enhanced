@@ -82,4 +82,11 @@ Shader "HoloToolkit/Cursor"
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				half4 color = tex2D(_MainTex, IN.texcoord)
+				half4 color = tex2D(_MainTex, IN.texcoord) * IN.color;
+				clip (color.a - 0.01);
+				return color;
+			}
+		ENDCG
+		}
+	}
+}
