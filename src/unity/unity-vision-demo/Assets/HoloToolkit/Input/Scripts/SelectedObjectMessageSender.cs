@@ -33,4 +33,15 @@ public class SelectedObjectMessageSender : MonoBehaviour
         selectedObject = null;
     }
 
-    /// <
+    /// <summary>
+    /// Sends message to currently selected object.
+    /// </summary>
+    /// <param name="message">Message to send</param>
+    public void SendMessageToSelectedObject(string message)
+    {
+        if (selectedObject != null)
+        {
+            selectedObject.SendMessage(message, SendMessageOptions.DontRequireReceiver);
+        }
+    }
+}
