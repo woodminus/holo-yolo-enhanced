@@ -5,4 +5,34 @@ Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
-    m_TransformPare
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000011427910830}
+  m_IsPrefabParent: 1
+--- !u!1 &1000011427910830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013620715900}
+  - 33: {fileID: 33000013071298628}
+  - 135: {fileID: 135000014169959684}
+  - 23: {fileID: 23000012133536934}
+  - 114: {fileID: 114000012306723820}
+  - 114: {fileID: 114000012782293172}
+  m_Layer: 0
+  m_Name: FocusedObjectSphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000013620715900
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fil
