@@ -18,4 +18,10 @@ public class DisplayKeywords : MonoBehaviour
             return;
         }
 
-        textPanel.text 
+        textPanel.text = "Try saying:\n";
+        foreach (KeywordManager.KeywordAndResponse k in keywordManager.KeywordsAndResponses)
+        {
+            textPanel.text += k.Keyword + "\n";
+        }
+    }
+}
