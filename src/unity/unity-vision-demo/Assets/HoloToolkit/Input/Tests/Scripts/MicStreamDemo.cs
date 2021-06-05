@@ -113,4 +113,27 @@ namespace HoloToolkit.Unity
             }
             else if (Input.GetKeyDown(KeyCode.A))
             {
-                CheckForErrorOnCall(MicStream.MicStartRecording(SaveFileName,
+                CheckForErrorOnCall(MicStream.MicStartRecording(SaveFileName, false));
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                string outputPath = MicStream.MicStopRecording();
+                Debug.Log("Saved microphone audio to " + outputPath);
+                CheckForErrorOnCall(MicStream.MicStopStream());
+            }
+
+            this.gameObject.transform.localScale = new Vector3(minSize + averageAmplitude, minSize + averageAmplitude, minSize + averageAmplitude);
+        }
+
+        private void CheckForErrorOnCall(int returnCode)
+        {
+            MicStream.CheckForErrorOnCall(returnCode);
+        }
+
+#if DOTNET_FX
+        // on device, deal with all the ways that we could suspend our program in as few lines as possible
+        private void OnApplicationPause(bool pause)
+        {
+            if (pause)
+            {
+                CheckForErrorOnCall(MicStream.MicPau
