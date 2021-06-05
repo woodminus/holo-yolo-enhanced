@@ -54,4 +54,24 @@ namespace HoloToolkit.Unity
         private float averageAmplitude = 0;
 
         /// <summary>
-        
+        /// how small can our object be in this demo?
+        /// </summary>
+        private float minSize = .3f;
+
+        private void OnAudioFilterRead(float[] buffer, int numChannels)
+        {
+            // this is where we call into the DLL and let it fill our audio buffer for us
+            CheckForErrorOnCall(MicStream.MicGetFrame(buffer, buffer.Length, numChannels));
+
+            float sumOfValues = 0;
+            // figure out the average amplitude from this new data
+            for (int i=0; i<buffer.Length; i++)
+            {
+                sumOfValues += Mathf.Abs(buffer[i]);
+            }
+            averageAmplitude = sumOfValues / buffer.Length;
+        }
+
+        private void Awake()
+        {
+            CheckForErrorOnCall(MicStream.MicInitializeCustomRate((int)StreamType, AudioSettings.ou
