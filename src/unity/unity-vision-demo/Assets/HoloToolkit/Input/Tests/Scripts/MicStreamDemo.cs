@@ -91,4 +91,26 @@ namespace HoloToolkit.Unity
             print("press Q to start stream to audio source, W will stop that stream");
             print("It will start a recording and save it to a wav file. S will stop that recording.");
             print("Since this all goes through the AudioSource, you can mute the mic while using it there, or do anything else you would do with an AudioSource");
-            pri
+            print("In this demo, we start the stream automatically, and then change the size of the gameobject based on microphone signal amplitude");
+        }
+
+        private void OnDestroy()
+        {
+            CheckForErrorOnCall(MicStream.MicDestroy());
+        }
+
+        private void Update()
+        {
+            CheckForErrorOnCall(MicStream.MicSetGain(InputGain));
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                CheckForErrorOnCall(MicStream.MicStartStream(KeepAllData, false));
+            }
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                CheckForErrorOnCall(MicStream.MicStopStream());
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                CheckForErrorOnCall(MicStream.MicStartRecording(SaveFileName,
