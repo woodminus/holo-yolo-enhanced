@@ -136,4 +136,28 @@ namespace HoloToolkit.Unity
         {
             if (pause)
             {
-                CheckForErrorOnCall(MicStream.MicPau
+                CheckForErrorOnCall(MicStream.MicPause());
+            }
+            else
+            {
+                CheckForErrorOnCall(MicStream.MicResume());
+            }
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            this.OnApplicationPause(!focused);
+        }
+
+        private void OnDisable()
+        {
+            this.OnApplicationPause(true);
+        }
+
+        private void OnEnable()
+        {
+            this.OnApplicationPause(false);
+        }
+#endif
+    }
+}
