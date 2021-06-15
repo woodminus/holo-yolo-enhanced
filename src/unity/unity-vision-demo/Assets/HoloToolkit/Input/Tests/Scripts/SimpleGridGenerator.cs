@@ -35,4 +35,23 @@ public class SimpleGridGenerator : MonoBehaviour
         float startY = -0.5f * ObjectSpacing * (Columns - 1);
         for (int i = 0; i < Rows; i++)
         {
-            for (int j = 0; 
+            for (int j = 0; j < Columns; j++)
+            {
+                GameObject prefab = GetRandomPrefab();
+                Vector3 pos = new Vector3(startX + i * ObjectSpacing, startY + j * ObjectSpacing, 0.0f);
+                GameObject go = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+                go.transform.SetParent(transform, false);
+            }
+        }
+    }
+
+    private GameObject GetRandomPrefab()
+    {
+        if (ObjectPrefabs.Count > 0)
+        {
+            int index = Random.Range(0, ObjectPrefabs.Count);
+            return ObjectPrefabs[index];
+        }
+        return null;
+    }
+}
