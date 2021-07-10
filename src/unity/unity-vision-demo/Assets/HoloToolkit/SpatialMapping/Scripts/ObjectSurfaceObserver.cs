@@ -34,4 +34,25 @@ namespace HoloToolkit.Unity
             {
                 Debug.Log("No room model specified.");
                 return;
-    
+            }
+
+            GameObject roomObject = GameObject.Instantiate(roomModel);
+            Cleanup();
+
+            try
+            {
+                MeshFilter[] roomFilters = roomObject.GetComponentsInChildren<MeshFilter>();
+
+                foreach (MeshFilter filter in roomFilters)
+                {
+                    GameObject surface = AddSurfaceObject(filter.sharedMesh, "roomMesh-" + SurfaceObjects.Count, transform);
+                    Renderer renderer = surface.GetComponent<MeshRenderer>();
+
+                    if (SpatialMappingManager.Instance.DrawVisualMeshes == false)
+                    {
+                        renderer.enabled = false;
+                    }
+
+                    if (SpatialMappingManager.Instance.CastShadows == false)
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.
