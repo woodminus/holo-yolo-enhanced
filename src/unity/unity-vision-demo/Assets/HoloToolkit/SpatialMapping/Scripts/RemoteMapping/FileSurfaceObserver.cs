@@ -31,4 +31,24 @@ namespace HoloToolkit.Unity
 
             Cleanup();
 
-            List<Mesh> storedM
+            List<Mesh> storedMeshes = new List<Mesh>();
+            try
+            {
+                storedMeshes.AddRange(MeshSaver.Load(fileName));
+
+                foreach (Mesh mesh in storedMeshes)
+                {
+                    GameObject surface = AddSurfaceObject(mesh, "storedmesh-" + SurfaceObjects.Count, transform);
+                    Renderer renderer = surface.GetComponent<MeshRenderer>();
+
+                    if (SpatialMappingManager.Instance.DrawVisualMeshes == false)
+                    {
+                        renderer.enabled = false;
+                    }
+
+                    if (SpatialMappingManager.Instance.CastShadows == false)
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    }
+
+                    // Reset the sur
