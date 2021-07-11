@@ -51,4 +51,22 @@ namespace HoloToolkit.Unity
                         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                     }
 
-                    // Reset the sur
+                    // Reset the surface mesh collider to fit the updated mesh. 
+                    // Unity tribal knowledge indicates that to change the mesh assigned to a
+                    // mesh collider, the mesh must first be set to null.  Presumably there
+                    // is a side effect in the setter when setting the shared mesh to null.
+                    MeshCollider collider = surface.GetComponent<MeshCollider>();
+                    collider.sharedMesh = null;
+                    collider.sharedMesh = surface.GetComponent<MeshFilter>().mesh;
+                }
+            }
+            catch
+            {
+                Debug.Log("Failed to load " + fileName);
+            }
+        }
+
+        // Called every frame.
+        private void Update()
+        {
+            // Keyboard commands for saving and loading a remotely generated mesh fi
