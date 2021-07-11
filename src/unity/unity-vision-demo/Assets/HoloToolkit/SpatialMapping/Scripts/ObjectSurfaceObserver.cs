@@ -71,4 +71,13 @@ namespace HoloToolkit.Unity
             {
                 Debug.Log("Failed to load object " + roomModel.name);
             }
-           
+            finally
+            {
+                if (roomModel != null && roomObject != null)
+                {
+                    GameObject.DestroyImmediate(roomObject);
+                }
+            }
+        }
+    }
+}
