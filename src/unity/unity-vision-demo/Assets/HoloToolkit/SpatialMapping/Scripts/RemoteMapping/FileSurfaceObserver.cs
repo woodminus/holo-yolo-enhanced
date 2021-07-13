@@ -69,4 +69,21 @@ namespace HoloToolkit.Unity
         // Called every frame.
         private void Update()
         {
-            // Keyboard commands for saving and loading a remotely generated mesh fi
+            // Keyboard commands for saving and loading a remotely generated mesh file.
+#if UNITY_EDITOR
+            // S - saves the active mesh
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                MeshSaver.Save(MeshFileName, SpatialMappingManager.Instance.GetMeshes());
+            }
+
+            // L - loads the previously saved mesh into editor and sets it to be the spatial mapping source.
+            if (Input.GetKeyUp(KeyCode.L))
+            {
+                SpatialMappingManager.Instance.SetSpatialMappingSource(this);
+                Load(MeshFileName);
+            }
+#endif
+        }
+    }
+}
