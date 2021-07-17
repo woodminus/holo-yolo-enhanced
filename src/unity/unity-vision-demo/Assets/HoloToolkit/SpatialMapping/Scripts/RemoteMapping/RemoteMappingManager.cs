@@ -40,4 +40,25 @@ namespace HoloToolkit.Unity
             keywordCollection.Add(SendMeshesKeyword, () => SendMeshes());
 
             // Tell the KeywordRecognizer about our keywords.
-   
+            keywordRecognizer = new KeywordRecognizer(keywordCollection.Keys.ToArray());
+
+            // Register a callback for the KeywordRecognizer and start recognizing.
+            keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+            keywordRecognizer.Start();
+
+#if UNITY_EDITOR
+            remoteMeshTarget = GetComponent<RemoteMeshTarget>();
+
+            if (remoteMeshTarget != null && SpatialMappingManager.Instance.Source == null)
+            {
+                // Use the network-based mapping source to receive meshes in the Unity editor.
+                SpatialMappingManager.Instance.SetSpatialMappingSource(remoteMeshTarget);
+            }
+#endif
+        }
+
+        // Called every frame by the Unity engine.
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // Use the 'network' sourced m
