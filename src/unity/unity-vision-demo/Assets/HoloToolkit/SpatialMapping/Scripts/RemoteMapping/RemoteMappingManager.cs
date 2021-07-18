@@ -106,4 +106,11 @@ namespace HoloToolkit.Unity
 
                 clone.SetVertices(verts); 
                 clone.SetTriangles(source.triangles, 0);
-                meshesToSend.A
+                meshesToSend.Add(clone);
+                byte[] serialized = SimpleMeshSerializer.Serialize(meshesToSend);
+                RemoteMeshSource.Instance.SendData(serialized);
+            }
+#endif
+        }
+    }
+}
