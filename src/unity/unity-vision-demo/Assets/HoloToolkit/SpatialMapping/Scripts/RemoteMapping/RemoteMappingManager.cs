@@ -61,4 +61,29 @@ namespace HoloToolkit.Unity
         private void Update()
         {
 #if UNITY_EDITOR
-            // Use the 'network' sourced m
+            // Use the 'network' sourced mesh.  
+            if (Input.GetKeyUp(RemoteMappingKey))
+            {
+                SpatialMappingManager.Instance.SetSpatialMappingSource(remoteMeshTarget);
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Called by keywordRecognizer when a phrase we registered for is heard.
+        /// </summary>
+        /// <param name="args">Information about the recognition event.</param>
+        private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
+        {
+            System.Action keywordAction;
+
+            if (keywordCollection.TryGetValue(args.text, out keywordAction))
+            {
+                keywordAction.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Sends the spatial mapping surfaces from the HoloLens to a remote system running the Unity editor.
+        /// </summary>
+        private void SendMeshes()
