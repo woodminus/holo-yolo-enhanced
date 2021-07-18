@@ -87,3 +87,23 @@ namespace HoloToolkit.Unity
         /// Sends the spatial mapping surfaces from the HoloLens to a remote system running the Unity editor.
         /// </summary>
         private void SendMeshes()
+        {
+#if !UNITY_EDITOR
+            List<MeshFilter> MeshFilters = SpatialMappingManager.Instance.GetMeshFilters();
+            for (int index = 0; index < MeshFilters.Count; index++)
+            {
+                List<Mesh> meshesToSend = new List<Mesh>();
+                MeshFilter filter = MeshFilters[index];
+                Mesh source = filter.sharedMesh;
+                Mesh clone = new Mesh();
+                List<Vector3> verts = new List<Vector3>();
+                verts.AddRange(source.vertices);
+            
+                for(int vertIndex=0; vertIndex < verts.Count; vertIndex++)
+                {
+                    verts[vertIndex] = filter.transform.TransformPoint(verts[vertIndex]);
+                }
+
+                clone.SetVertices(verts); 
+                clone.SetTriangles(source.triangles, 0);
+                meshesToSend.A
