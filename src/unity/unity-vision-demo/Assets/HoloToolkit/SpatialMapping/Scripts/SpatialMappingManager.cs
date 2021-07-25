@@ -68,4 +68,36 @@ namespace HoloToolkit.Unity
 
         /// <summary>
         /// Returns the layer as a bit mask.
-    
+        /// </summary>
+        public int LayerMask
+        {
+            get { return (1 << PhysicsLayer); }
+        }
+
+        /// <summary>
+        /// The material to use when rendering surfaces.
+        /// </summary>
+        public Material SurfaceMaterial
+        {
+            get
+            {
+                return surfaceMaterial;
+            }
+            set
+            {
+                if (value != surfaceMaterial)
+                {
+                    surfaceMaterial = value;
+                    SetSurfaceMaterial(surfaceMaterial);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether or not the SpatialMapping meshes are to be rendered.
+        /// </summary>
+        public bool DrawVisualMeshes
+        {
+            get
+            {
+        
