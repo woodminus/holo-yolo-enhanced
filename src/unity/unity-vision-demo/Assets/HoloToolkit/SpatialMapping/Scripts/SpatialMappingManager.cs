@@ -17,4 +17,24 @@ namespace HoloToolkit.Unity
     /// Calling StartObserver() clears the stored mesh and enables real-time SpatialMapping updates.
     /// </summary>
     [RequireComponent(typeof(SpatialMappingObserver))]
-    public partial class SpatialMappi
+    public partial class SpatialMappingManager : Singleton<SpatialMappingManager>
+    {
+        [Tooltip("The physics layer for spatial mapping objects to be set to.")]
+        public int PhysicsLayer = 31;
+
+        [Tooltip("The material to use for rendering spatial mapping data.")]
+        public Material surfaceMaterial;
+
+        [Tooltip("Determines if the surface observer should be automatically started.")]
+        public bool autoStartObserver = true;
+
+        [Tooltip("Determines if spatial mapping data will be rendered.")]
+        public bool drawVisualMeshes = false;
+
+        [Tooltip("Determines if spatial mapping data will cast shadows.")]
+        public bool castShadows = false;
+
+        /// <summary>
+        /// Used for gathering real-time Spatial Mapping data on the HoloLens.
+        /// </summary>
+        private SpatialMappingObserv
