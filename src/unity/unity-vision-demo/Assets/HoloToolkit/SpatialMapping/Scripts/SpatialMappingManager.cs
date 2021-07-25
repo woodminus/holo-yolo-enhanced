@@ -37,4 +37,35 @@ namespace HoloToolkit.Unity
         /// <summary>
         /// Used for gathering real-time Spatial Mapping data on the HoloLens.
         /// </summary>
-        private SpatialMappingObserv
+        private SpatialMappingObserver surfaceObserver;
+
+        /// <summary>
+        /// Time when StartObserver() was called.
+        /// </summary>
+        [HideInInspector]
+        public float StartTime { get; private set; }
+
+        /// <summary>
+        /// The current source of spatial mapping data.
+        /// </summary>
+        public SpatialMappingSource Source { get; private set; }
+
+        // Called when the GameObject is first created.
+        private void Awake()
+        {
+            surfaceObserver = gameObject.GetComponent<SpatialMappingObserver>();
+            Source = surfaceObserver;
+        }
+
+        // Use for initialization.
+        private void Start()
+        {
+            if (autoStartObserver)
+            {
+                StartObserver();
+            }
+        }
+
+        /// <summary>
+        /// Returns the layer as a bit mask.
+    
