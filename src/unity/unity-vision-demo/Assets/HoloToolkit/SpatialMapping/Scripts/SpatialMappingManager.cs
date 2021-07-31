@@ -133,4 +133,29 @@ namespace HoloToolkit.Unity
 
         /// <summary>
         /// Sets the source of surface information.
-        /// </
+        /// </summary>
+        /// <param name="mappingSource">The source to switch to. Null means return to the live stream if possible.</param>
+        public void SetSpatialMappingSource(SpatialMappingSource mappingSource)
+        {
+            UpdateRendering(false);
+
+            if (mappingSource == null)
+            {
+                Source = surfaceObserver;
+            }
+            else
+            {
+                Source = mappingSource;
+            }
+
+            UpdateRendering(DrawVisualMeshes);
+        }
+
+        /// <summary>
+        /// Sets the material used by all Spatial Mapping meshes.
+        /// </summary>
+        /// <param name="surfaceMaterial">New material to apply.</param>
+        public void SetSurfaceMaterial(Material surfaceMaterial)
+        {
+            SurfaceMaterial = surfaceMaterial;
+            if (Dr
