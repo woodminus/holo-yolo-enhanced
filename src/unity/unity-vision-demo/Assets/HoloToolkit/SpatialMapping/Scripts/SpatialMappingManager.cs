@@ -100,4 +100,37 @@ namespace HoloToolkit.Unity
         {
             get
             {
-        
+                return drawVisualMeshes;
+            }
+            set
+            {
+                if (value != drawVisualMeshes)
+                {
+                    drawVisualMeshes = value;
+                    UpdateRendering(drawVisualMeshes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether or not the SpatialMapping meshes can cast shadows.
+        /// </summary>
+        public bool CastShadows
+        {
+            get
+            {
+                return castShadows;
+            }
+            set
+            {
+                if (value != castShadows)
+                {
+                    castShadows = value;
+                    SetShadowCasting(castShadows);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the source of surface information.
+        /// </
