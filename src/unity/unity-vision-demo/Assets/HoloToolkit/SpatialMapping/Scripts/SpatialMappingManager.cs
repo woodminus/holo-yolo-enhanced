@@ -185,4 +185,34 @@ namespace HoloToolkit.Unity
         public void StartObserver()
         {
 #if !UNITY_EDITOR
-            if (!IsOb
+            if (!IsObserverRunning())
+            {
+                surfaceObserver.StartObserving();
+                StartTime = Time.time;
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Instructs the SurfaceObserver to stop updating the SpatialMapping mesh.
+        /// </summary>
+        public void StopObserver()
+        {
+#if !UNITY_EDITOR
+            if (IsObserverRunning())
+            {
+                surfaceObserver.StopObserving();
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Gets all meshes that are associated with the SpatialMapping mesh.
+        /// </summary>
+        /// <returns>
+        /// Collection of Mesh objects representing the SpatialMapping mesh.
+        /// </returns>
+        public List<Mesh> GetMeshes()
+        {
+            List<Mesh> meshes = new List<Mesh>();
+            List<MeshFilter> meshFilters = GetMeshFilter
