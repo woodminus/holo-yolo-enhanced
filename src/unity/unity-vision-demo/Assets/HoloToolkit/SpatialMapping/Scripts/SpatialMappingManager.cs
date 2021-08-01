@@ -215,4 +215,28 @@ namespace HoloToolkit.Unity
         public List<Mesh> GetMeshes()
         {
             List<Mesh> meshes = new List<Mesh>();
-            List<MeshFilter> meshFilters = GetMeshFilter
+            List<MeshFilter> meshFilters = GetMeshFilters();
+
+            // Get all valid mesh filters for observed surfaces.
+            foreach (MeshFilter filter in meshFilters)
+            {
+                // GetMeshFilters ensures that both filter and filter.sharedMesh are not null.
+                meshes.Add(filter.sharedMesh);
+            }
+
+            return meshes;
+        }
+
+        /// <summary>
+        /// Gets all the surface objects associated with the Spatial Mapping mesh.
+        /// </summary>
+        /// <returns>Collection of SurfaceObjects.</returns>
+        public List<SpatialMappingSource.SurfaceObject> GetSurfaceObjects()
+        {
+            return Source.SurfaceObjects;
+        }
+
+        /// <summary>
+        /// Gets all Mesh Filter objects associated with the Spatial Mapping mesh.
+        /// </summary>
+        /// <returns>Collection of Mesh Filter objects.</returns
