@@ -158,4 +158,31 @@ namespace HoloToolkit.Unity
         public void SetSurfaceMaterial(Material surfaceMaterial)
         {
             SurfaceMaterial = surfaceMaterial;
-            if (Dr
+            if (DrawVisualMeshes)
+            {
+                foreach (Renderer renderer in Source.GetMeshRenderers())
+                {
+                    if (renderer != null)
+                    {
+                        renderer.sharedMaterial = surfaceMaterial;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if the SurfaceObserver is currently running.
+        /// </summary>
+        /// <returns>True, if the observer state is running.</returns>
+        public bool IsObserverRunning()
+        {
+            return surfaceObserver.ObserverState == ObserverStates.Running;
+        }
+
+        /// <summary>
+        /// Instructs the SurfaceObserver to start updating the SpatialMapping mesh.
+        /// </summary>
+        public void StartObserver()
+        {
+#if !UNITY_EDITOR
+            if (!IsOb
