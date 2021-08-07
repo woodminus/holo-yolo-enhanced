@@ -263,4 +263,27 @@ namespace HoloToolkit.Unity
                     {
                         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                     }
-  
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the rendering state on the currently enabled surfaces.
+        /// Updates the material and shadow casting mode for each renderer.
+        /// </summary>
+        /// <param name="Enable">True, if meshes should be rendered.</param>
+        private void UpdateRendering(bool Enable)
+        {
+            List<MeshRenderer> renderers = Source.GetMeshRenderers();
+            for (int index = 0; index < renderers.Count; index++)
+            {
+                if (renderers[index] != null)
+                {
+                    renderers[index].enabled = Enable;
+                    if (Enable)
+                    {
+                        renderers[index].sharedMaterial = SurfaceMaterial;
+                    }
+                }
+            }
+ 
