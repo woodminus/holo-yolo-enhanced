@@ -239,4 +239,28 @@ namespace HoloToolkit.Unity
         /// <summary>
         /// Gets all Mesh Filter objects associated with the Spatial Mapping mesh.
         /// </summary>
-        /// <returns>Collection of Mesh Filter objects.</returns
+        /// <returns>Collection of Mesh Filter objects.</returns>
+        public List<MeshFilter> GetMeshFilters()
+        {
+            return Source.GetMeshFilters();
+        }
+
+        /// <summary>
+        /// Sets the Cast Shadows property for each Spatial Mapping mesh renderer.
+        /// </summary>
+        private void SetShadowCasting(bool castShadows)
+        {
+            CastShadows = castShadows;
+            foreach (Renderer renderer in Source.GetMeshRenderers())
+            {
+                if (renderer != null)
+                {
+                    if (castShadows)
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                    }
+                    else
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    }
+  
