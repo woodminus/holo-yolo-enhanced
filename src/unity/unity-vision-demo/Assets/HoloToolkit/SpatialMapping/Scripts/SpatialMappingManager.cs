@@ -286,4 +286,6 @@ namespace HoloToolkit.Unity
                     }
                 }
             }
- 
+        }
+    }
+}
