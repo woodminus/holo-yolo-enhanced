@@ -20,4 +20,29 @@ namespace HoloToolkit.Unity
     public struct BoundedPlane
     {
         public Plane Plane;
-        public Or
+        public OrientedBoundingBox Bounds;
+        public float Area;
+
+        /// <summary>
+        /// Builds the bounded plane to match the obb defined by xform
+        /// </summary>
+        public BoundedPlane(Transform xform)
+        {
+            Plane = new Plane(xform.forward, xform.position);
+            Bounds = new OrientedBoundingBox()
+            {
+                Center = xform.position,
+                Extents = xform.localScale / 2,
+                Rotation = xform.rotation
+            };
+            Area = Bounds.Extents.x * Bounds.Extents.y;
+        }
+    };
+
+    public class PlaneFinding
+    {
+        #region Public APIs
+
+        /// <summary>
+        /// PlaneFinding is an expensive task that should not be run from Unity's main thread as it
+        /// will stall the thread and cause a frame rate dip.  Instead, the PlaneFinding APIs should b
