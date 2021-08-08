@@ -60,4 +60,22 @@ namespace HoloToolkit.Unity
             public Vector3[] Normals;
             public Int32[] Indices;
 
-            public MeshData(MeshFilter
+            public MeshData(MeshFilter meshFilter)
+            {
+                Transform = meshFilter.transform.localToWorldMatrix;
+                Verts = meshFilter.sharedMesh.vertices;
+                Normals = meshFilter.sharedMesh.normals;
+                Indices = meshFilter.sharedMesh.triangles;
+            }
+        }
+
+        /// <summary>
+        /// Finds small planar patches that are contained within individual meshes.  The output of this
+        /// API can then be passed to MergeSubPlanes() in order to find larger planar surfaces that
+        /// potentially span across multiple meshes.
+        /// </summary>
+        /// <param name="meshes">
+        /// List of meshes to run the plane finding algorithm on.
+        /// </param>
+        /// <param name="snapToGravityThreshold">
+        /// Planes whose normal vectors are within this threshold (in degrees) from ve
