@@ -45,4 +45,19 @@ namespace HoloToolkit.Unity
 
         /// <summary>
         /// PlaneFinding is an expensive task that should not be run from Unity's main thread as it
-        /// will stall the thread and cause a frame rate dip.  Instead, the PlaneFinding APIs should b
+        /// will stall the thread and cause a frame rate dip.  Instead, the PlaneFinding APIs should be
+        /// exclusively called from background threads.  Unfortunately, Unity's built-in data types
+        /// (such as MeshFilter) are not thread safe and cannot be accessed from background threads.
+        /// The MeshData struct exists to work-around this limitation.  When you want to find planes
+        /// in a collection of MeshFilter objects, start by constructing a list of MeshData structs
+        /// from those MeshFilters. You can then take the resulting list of MeshData structs, and
+        /// safely pass it to the FindPlanes() API from a background thread.
+        /// </summary>
+        public struct MeshData
+        {
+            public Matrix4x4 Transform;
+            public Vector3[] Verts;
+            public Vector3[] Normals;
+            public Int32[] Indices;
+
+            public MeshData(MeshFilter
