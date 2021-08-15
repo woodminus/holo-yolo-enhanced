@@ -147,4 +147,17 @@ namespace HoloToolkit.Unity
         /// <param name="meshes">
         /// List of meshes to run the plane finding algorithm on.
         /// </param>
-        /// <param name="snapToGravityTh
+        /// <param name="snapToGravityThreshold">
+        /// Planes whose normal vectors are within this threshold (in degrees) from vertical/horizontal
+        /// will be snapped to be perfectly gravity aligned.  When set to something other than zero, the
+        /// bounding boxes for each plane will be gravity aligned as well, rather than rotated for an
+        /// optimally tight fit. Pass 0.0 for this parameter to completely disable the gravity alignment
+        /// logic.
+        /// </param>
+        /// <param name="minArea">
+        /// While merging subplanes together, any candidate merged plane whose constituent mesh
+        /// triangles have a total area less than this threshold are ignored.
+        /// </param>
+        public static BoundedPlane[] FindPlanes(List<MeshData> meshes, float snapToGravityThreshold = 0.0f, float minArea = 0.0f)
+        {
+            StartPlaneFind
