@@ -129,4 +129,22 @@ namespace HoloToolkit.Unity
             try
             {
                 int planeCount;
-  
+                IntPtr planesPtr;
+                DLLImports.MergeSubPlanes(subPlanes.Length, PinObject(subPlanes), minArea, snapToGravityThreshold, out planeCount, out planesPtr);
+                return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
+            }
+            finally
+            {
+                FinishPlaneFinding();
+            }
+        }
+
+        /// <summary>
+        /// Convenience wrapper that executes FindSubPlanes followed by MergeSubPlanes via a single
+        /// call into native code (which improves performance by avoiding a bunch of unnecessary data
+        /// marshalling and a managed-to-native transition).
+        /// </summary>
+        /// <param name="meshes">
+        /// List of meshes to run the plane finding algorithm on.
+        /// </param>
+        /// <param name="snapToGravityTh
