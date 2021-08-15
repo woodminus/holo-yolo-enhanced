@@ -94,4 +94,23 @@ namespace HoloToolkit.Unity
                 IntPtr planesPtr;
                 IntPtr pinnedMeshData = PinMeshDataForMarshalling(meshes);
                 DLLImports.FindSubPlanes(meshes.Count, pinnedMeshData, snapToGravityThreshold, out planeCount, out planesPtr);
-             
+                return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
+            }
+            finally
+            {
+                FinishPlaneFinding();
+            }
+        }
+
+        /// <summary>
+        /// Takes the subplanes returned by one or more previous calls to FindSubPlanes() and merges
+        /// them together into larger planes that can potentially span across multiple meshes.
+        /// Overlapping subplanes that have similar plane equations will be merged together to form
+        /// larger planes.
+        /// </summary>
+        /// <param name="subPlanes">
+        /// The output from one or more previous calls to FindSubPlanes().
+        /// </param>
+        /// <param name="snapToGravityThreshold">
+        /// Planes whose normal vectors are within this threshold (in degrees) from vertical/horizontal
+   
