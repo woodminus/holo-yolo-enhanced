@@ -203,4 +203,22 @@ namespace HoloToolkit.Unity
             }
         }
 
-        /// <
+        /// <summary>
+        /// Cleanup after finishing a PlaneFinding API call by unpinning any memory that was pinned
+        /// for the call into the driver, and then reset the findPlanesRunning bool.
+        /// </summary>
+        private static void FinishPlaneFinding()
+        {
+            UnpinAllObjects();
+            findPlanesRunning = false;
+        }
+
+        /// <summary>
+        /// Pins the specified object so that the backing memory can not be relocated, adds the pinned
+        /// memory handle to the tracking list, and then returns that address of the pinned memory so
+        /// that it can be passed into the DLL to be access directly from native code.
+        /// </summary>
+        private static IntPtr PinObject(System.Object obj)
+        {
+            GCHandle h = GCHandle.Alloc(obj, GCHandleType.Pinned);
+        
