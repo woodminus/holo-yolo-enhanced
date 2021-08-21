@@ -160,4 +160,27 @@ namespace HoloToolkit.Unity
         /// </param>
         public static BoundedPlane[] FindPlanes(List<MeshData> meshes, float snapToGravityThreshold = 0.0f, float minArea = 0.0f)
         {
-            StartPlaneFind
+            StartPlaneFinding();
+
+            try
+            {
+                int planeCount;
+                IntPtr planesPtr;
+                IntPtr pinnedMeshData = PinMeshDataForMarshalling(meshes);
+                DLLImports.FindPlanes(meshes.Count, pinnedMeshData, minArea, snapToGravityThreshold, out planeCount, out planesPtr);
+                return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
+            }
+            finally
+            {
+                FinishPlaneFinding();
+            }
+        }
+
+        #endregion
+
+        #region Internal
+
+        private static bool findPlanesRunning = false;
+        private static System.Object findPlanesLock = new System.Object();
+        private static DLLImports.MeshData[] reusedMeshesForMarshalling = null;
+        private static List<GCHandle> reusedPinnedM
