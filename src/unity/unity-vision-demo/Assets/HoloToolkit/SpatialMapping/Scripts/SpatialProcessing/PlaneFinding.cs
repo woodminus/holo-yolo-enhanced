@@ -221,4 +221,26 @@ namespace HoloToolkit.Unity
         private static IntPtr PinObject(System.Object obj)
         {
             GCHandle h = GCHandle.Alloc(obj, GCHandleType.Pinned);
-        
+            reusedPinnedMemoryHandles.Add(h);
+            return h.AddrOfPinnedObject();
+        }
+
+        /// <summary>
+        /// Unpins all of the memory previously pinned by calls to PinObject().
+        /// </summary>
+        private static void UnpinAllObjects()
+        {
+            for (int i = 0; i < reusedPinnedMemoryHandles.Count; ++i)
+            {
+                reusedPinnedMemoryHandles[i].Free();
+            }
+            reusedPinnedMemoryHandles.Clear();
+        }
+
+        /// <summary>
+        /// Copies the supplied mesh data into the reusedMeshesForMarhsalling array. All managed arrays
+        /// are pinned so that the marshalling only needs to pass a pointer and the native code can
+        /// reference the memory in place without needing the marshaller to create a complete copy of
+        /// the data.
+        /// </summary>
+        private static IntPtr PinMeshD
