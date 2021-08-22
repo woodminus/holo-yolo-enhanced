@@ -264,4 +264,20 @@ namespace HoloToolkit.Unity
                 };
             }
 
- 
+            return PinObject(reusedMeshesForMarshalling);
+        }
+
+        /// <summary>
+        /// Marshals BoundedPlane data returned from a DLL API call into a managed BoundedPlane array
+        /// and then frees the memory that was allocated within the DLL.
+        /// </summary>
+        /// <remarks>Disabling warning 618 when calling Marshal.SizeOf(), because
+        /// Unity does not support .Net 4.5.1+ for using the preferred Marshal.SizeOf(T) method."/>, </remarks>
+        private static BoundedPlane[] MarshalBoundedPlanesFromIntPtr(IntPtr outArray, int size)
+        {
+            BoundedPlane[] resArray = new BoundedPlane[size];
+#pragma warning disable 618
+            int structsize = Marshal.SizeOf(typeof(BoundedPlane));
+#pragma warning restore 618
+            IntPtr current = outArray;
+            for (int i = 0; i < size; i++)
