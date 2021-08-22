@@ -243,4 +243,25 @@ namespace HoloToolkit.Unity
         /// reference the memory in place without needing the marshaller to create a complete copy of
         /// the data.
         /// </summary>
-        private static IntPtr PinMeshD
+        private static IntPtr PinMeshDataForMarshalling(List<MeshData> meshes)
+        {
+            // if we have a big enough array reuse it, otherwise create new
+            if (reusedMeshesForMarshalling == null || reusedMeshesForMarshalling.Length < meshes.Count)
+            {
+                reusedMeshesForMarshalling = new DLLImports.MeshData[meshes.Count];
+            }
+
+            for (int i = 0; i < meshes.Count; ++i)
+            {
+                reusedMeshesForMarshalling[i] = new DLLImports.MeshData()
+                {
+                    transform = meshes[i].Transform,
+                    vertCount = meshes[i].Verts.Length,
+                    indexCount = meshes[i].Indices.Length,
+                    verts = PinObject(meshes[i].Verts),
+                    normals = PinObject(meshes[i].Normals),
+                    indices = PinObject(meshes[i].Indices),
+                };
+            }
+
+ 
