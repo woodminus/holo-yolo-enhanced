@@ -308,4 +308,26 @@ namespace HoloToolkit.Unity
             };
 
             [DllImport("PlaneFinding")]
-            public static extern vo
+            public static extern void FindPlanes(
+                [In] int meshCount,
+                [In] IntPtr meshes,
+                [In] float minArea,
+                [In] float snapToGravityThreshold,
+                [Out] out int planeCount,
+                [Out] out IntPtr planesPtr);
+
+            [DllImport("PlaneFinding")]
+            public static extern void FindSubPlanes(
+                [In] int meshCount,
+                [In] IntPtr meshes,
+                [In] float snapToGravityThreshold,
+                [Out] out int planeCount,
+                [Out] out IntPtr planesPtr);
+
+            [DllImport("PlaneFinding")]
+            public static extern void MergeSubPlanes(
+                [In] int subPlaneCount,
+                [In] IntPtr subPlanes,
+                [In] float minArea,
+                [In] float snapToGravityThreshold,
+                [Out]
