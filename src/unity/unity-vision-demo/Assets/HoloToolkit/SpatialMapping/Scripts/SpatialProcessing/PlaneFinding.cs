@@ -281,3 +281,31 @@ namespace HoloToolkit.Unity
 #pragma warning restore 618
             IntPtr current = outArray;
             for (int i = 0; i < size; i++)
+            {
+#pragma warning disable 618
+                resArray[i] = (BoundedPlane)Marshal.PtrToStructure(current, typeof(BoundedPlane));
+#pragma warning restore 618
+                current = (IntPtr)((long)current + structsize);
+            }
+            Marshal.FreeCoTaskMem(outArray);
+            return resArray;
+        }
+
+        /// <summary>
+        /// Raw PlaneFinding.dll imports
+        /// </summary>
+        private class DLLImports
+        {
+            [StructLayout(LayoutKind.Sequential)]
+            public struct MeshData
+            {
+                public Matrix4x4 transform;
+                public Int32 vertCount;
+                public Int32 indexCount;
+                public IntPtr verts;
+                public IntPtr normals;
+                public IntPtr indices;
+            };
+
+            [DllImport("PlaneFinding")]
+            public static extern vo
