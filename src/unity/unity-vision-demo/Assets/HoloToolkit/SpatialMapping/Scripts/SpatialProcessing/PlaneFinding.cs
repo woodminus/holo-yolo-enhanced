@@ -330,4 +330,10 @@ namespace HoloToolkit.Unity
                 [In] IntPtr subPlanes,
                 [In] float minArea,
                 [In] float snapToGravityThreshold,
-                [Out]
+                [Out] out int planeCount,
+                [Out] out IntPtr planesPtr);
+        }
+
+        #endregion
+    }
+}
