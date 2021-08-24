@@ -14,4 +14,25 @@ namespace HoloToolkit.Unity
     /// </summary>
     public class RemoveSurfaceVertices : Singleton<RemoveSurfaceVertices>
     {
-        [Tooltip("The amount, if any, to expand each boun
+        [Tooltip("The amount, if any, to expand each bounding volume by.")]
+        public float BoundsExpansion = 0.0f;
+
+        /// <summary>
+        /// Delegate which is called when the RemoveVerticesComplete event is triggered.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="args"></param>
+        public delegate void EventHandler(object source, EventArgs args);
+
+        /// <summary>
+        /// EventHandler which is triggered when the RemoveSurfaceVertices is finished.
+        /// </summary>
+        public event EventHandler RemoveVerticesComplete;
+
+        /// <summary>
+        /// Indicates if RemoveSurfaceVertices is currently removing vertices from the Spatial Mapping Mesh.
+        /// </summary>
+        private bool removingVerts = false;
+
+        /// <summary>
+        /// Queue of bounding objects to remove surface vertices
