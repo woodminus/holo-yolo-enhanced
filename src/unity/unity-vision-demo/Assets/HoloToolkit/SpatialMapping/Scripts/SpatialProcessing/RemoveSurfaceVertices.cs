@@ -35,4 +35,22 @@ namespace HoloToolkit.Unity
         private bool removingVerts = false;
 
         /// <summary>
-        /// Queue of bounding objects to remove surface vertices
+        /// Queue of bounding objects to remove surface vertices from.
+        /// Bounding objects are queued so that RemoveSurfaceVerticesWithinBounds can be called even when the previous task has not finished.
+        /// </summary>
+        private Queue<Bounds> boundingObjectsQueue;
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// How much time (in sec), while running in the Unity Editor, to allow RemoveSurfaceVertices to consume before returning control to the main program.
+        /// </summary>
+        private static readonly float FrameTime = .016f;
+#else
+        /// <summary>
+        /// How much time (in sec) to allow RemoveSurfaceVertices to consume before returning control to the main program.
+        /// </summary>
+        private static readonly float FrameTime = .008f;
+#endif
+
+        // GameObject initialization.
+        private void Start()
