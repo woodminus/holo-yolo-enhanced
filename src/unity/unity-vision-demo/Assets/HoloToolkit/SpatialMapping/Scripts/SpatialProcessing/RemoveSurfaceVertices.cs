@@ -54,3 +54,25 @@ namespace HoloToolkit.Unity
 
         // GameObject initialization.
         private void Start()
+        {
+            boundingObjectsQueue = new Queue<Bounds>();
+            removingVerts = false;
+        }
+
+        /// <summary>
+        /// Removes portions of the surface mesh that exist within the bounds of the boundingObjects.
+        /// </summary>
+        /// <param name="boundingObjects">Collection of GameObjects that define the bounds where spatial mesh vertices should be removed.</param>
+        public void RemoveSurfaceVerticesWithinBounds(IEnumerable<GameObject> boundingObjects)
+        {
+            if (boundingObjects == null)
+            {
+                return;
+            }
+
+            if (!removingVerts)
+            {
+                removingVerts = true;
+                AddBoundingObjectsToQueue(boundingObjects);
+
+                // We use Coroutine to split the w
