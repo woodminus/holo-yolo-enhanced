@@ -95,4 +95,26 @@ namespace HoloToolkit.Unity
             {
                 Bounds bounds = new Bounds();
 
-                Collider boundingCollider = item
+                Collider boundingCollider = item.GetComponent<Collider>();
+                if (boundingCollider != null)
+                {
+                    bounds = boundingCollider.bounds;
+
+                    // Expand the bounds, if requested.
+                    if (BoundsExpansion > 0.0f)
+                    {
+                        bounds.Expand(BoundsExpansion);
+                    }
+
+                    boundingObjectsQueue.Enqueue(bounds);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Iterator block, analyzes surface meshes to find vertices existing within the bounds of any boundingObject and removes them.
+        /// </summary>
+        /// <returns>Yield result.</returns>
+        private IEnumerator RemoveSurfaceVerticesWithinBoundsRoutine()
+        {
+            List<MeshFilter> meshFilters = SpatialMappingManager.Instance.GetM
