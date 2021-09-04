@@ -140,4 +140,21 @@ namespace HoloToolkit.Unity
                     {
                         // We don't need to do anything to this mesh, move to the next one.
                         continue;
-  
+                    }
+
+                    // Remove vertices from any mesh that intersects with the bounds.
+                    Vector3[] verts = mesh.vertices;
+                    List<int> vertsToRemove = new List<int>();
+
+                    // Find which mesh vertices are within the bounds.
+                    for (int i = 0; i < verts.Length; ++i)
+                    {
+                        if (bounds.Contains(verts[i]))
+                        {
+                            // These vertices are within bounds, so mark them for removal.
+                            vertsToRemove.Add(i);
+                        }
+
+                        // If too much time has passed, we need to return control to the main game loop.
+                        if ((Time.realtimeSinceStartup - start) > FrameTime)
+                     
