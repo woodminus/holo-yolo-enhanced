@@ -117,4 +117,27 @@ namespace HoloToolkit.Unity
         /// <returns>Yield result.</returns>
         private IEnumerator RemoveSurfaceVerticesWithinBoundsRoutine()
         {
-            List<MeshFilter> meshFilters = SpatialMappingManager.Instance.GetM
+            List<MeshFilter> meshFilters = SpatialMappingManager.Instance.GetMeshFilters();
+            float start = Time.realtimeSinceStartup;
+
+            while (boundingObjectsQueue.Count > 0)
+            {
+                // Get the current boundingObject.
+                Bounds bounds = boundingObjectsQueue.Dequeue();
+
+                foreach (MeshFilter filter in meshFilters)
+                {
+                    // Since this is amortized across frames, the filter can be destroyed by the time
+                    // we get here.
+                    if (filter == null)
+                    {
+                        continue;
+                    }
+
+                    Mesh mesh = filter.sharedMesh;
+
+                    if (mesh != null && !mesh.bounds.Intersects(bounds))
+                    {
+                        // We don't need to do anything to this mesh, move to the next one.
+                        continue;
+  
