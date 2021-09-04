@@ -75,4 +75,24 @@ namespace HoloToolkit.Unity
                 removingVerts = true;
                 AddBoundingObjectsToQueue(boundingObjects);
 
-                // We use Coroutine to split the w
+                // We use Coroutine to split the work across multiple frames and avoid impacting the frame rate too much.
+                StartCoroutine(RemoveSurfaceVerticesWithinBoundsRoutine());
+            }
+            else
+            {
+                // Add new boundingObjects to end of queue.
+                AddBoundingObjectsToQueue(boundingObjects);
+            }
+        }
+
+        /// <summary>
+        /// Adds new bounding objects to the end of the Queue.
+        /// </summary>
+        /// <param name="boundingObjects">Collection of GameObjects which define the bounds where spatial mesh vertices should be removed.</param>
+        private void AddBoundingObjectsToQueue(IEnumerable<GameObject> boundingObjects)
+        {
+            foreach (GameObject item in boundingObjects)
+            {
+                Bounds bounds = new Bounds();
+
+                Collider boundingCollider = item
