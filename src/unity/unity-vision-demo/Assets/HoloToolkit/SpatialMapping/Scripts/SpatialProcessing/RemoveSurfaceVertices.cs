@@ -157,4 +157,23 @@ namespace HoloToolkit.Unity
 
                         // If too much time has passed, we need to return control to the main game loop.
                         if ((Time.realtimeSinceStartup - start) > FrameTime)
-                     
+                        {
+                            // Pause our work here, and continue finding vertices to remove on the next frame.
+                            yield return null;
+                            start = Time.realtimeSinceStartup;
+                        }
+                    }
+
+                    if (vertsToRemove.Count == 0)
+                    {
+                        // We did not find any vertices to remove, so move to the next mesh.
+                        continue;
+                    }
+
+                    // We found vertices to remove, so now we need to remove any triangles that reference these vertices.
+                    int[] indices = mesh.GetTriangles(0);
+                    List<int> updatedIndices = new List<int>();
+
+                    for (int index = 0; index < indices.Length; index += 3)
+                    {
+    
