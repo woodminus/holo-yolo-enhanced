@@ -176,4 +176,16 @@ namespace HoloToolkit.Unity
 
                     for (int index = 0; index < indices.Length; index += 3)
                     {
-    
+                        // Each triangle utilizes three slots in the index buffer, check to see if any of the
+                        // triangle indices contain a vertex that should be removed.
+                        if (vertsToRemove.Contains(indices[index]) ||
+                            vertsToRemove.Contains(indices[index + 1]) ||
+                            vertsToRemove.Contains(indices[index + 2]))
+                        {
+                            // Do nothing, we don't want to save this triangle...
+                        }
+                        else
+                        {
+                            // Every vertex in this triangle is good, so let's save it.
+                            updatedIndices.Add(indices[index]);
+                            updatedIndices.Add(indices[index
