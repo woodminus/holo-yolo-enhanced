@@ -188,4 +188,23 @@ namespace HoloToolkit.Unity
                         {
                             // Every vertex in this triangle is good, so let's save it.
                             updatedIndices.Add(indices[index]);
-                            updatedIndices.Add(indices[index
+                            updatedIndices.Add(indices[index + 1]);
+                            updatedIndices.Add(indices[index + 2]);
+                        }
+
+                        // If too much time has passed, we need to return control to the main game loop.
+                        if ((Time.realtimeSinceStartup - start) > FrameTime)
+                        {
+                            // Pause our work, and continue making additional planes on the next frame.
+                            yield return null;
+                            start = Time.realtimeSinceStartup;
+                        }
+                    }
+
+                    if (indices.Length == updatedIndices.Count)
+                    {
+                        // None of the verts to remove were being referenced in the triangle list.
+                        continue;
+                    }
+
+                    /
