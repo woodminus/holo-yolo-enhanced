@@ -207,4 +207,24 @@ namespace HoloToolkit.Unity
                         continue;
                     }
 
-                    /
+                    // Update mesh to use the new triangles.
+                    mesh.SetTriangles(updatedIndices.ToArray(), 0);
+                    mesh.RecalculateBounds();
+                    yield return null;
+                    start = Time.realtimeSinceStartup;
+
+                    // Reset the mesh collider to fit the new mesh.
+                    MeshCollider collider = filter.gameObject.GetComponent<MeshCollider>();
+                    if (collider != null)
+                    {
+                        collider.sharedMesh = null;
+                        collider.sharedMesh = mesh;
+                    }
+                }
+            }
+
+            Debug.Log("Finished removing vertices.");
+
+            // We are done removing vertices, trigger an event.
+            EventHandler handler = RemoveVerticesComplete;
+         
