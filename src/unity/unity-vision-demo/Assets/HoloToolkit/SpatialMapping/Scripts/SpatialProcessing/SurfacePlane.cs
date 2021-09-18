@@ -74,3 +74,156 @@ namespace HoloToolkit.Unity
             get
             {
                 return plane;
+            }
+            set
+            {
+                plane = value;
+                UpdateSurfacePlane();
+            }
+        }
+
+        /// <summary>
+        /// Gets the normal of the plane that was determined by the BoundedPlane object.
+        /// </summary>
+        public Vector3 SurfaceNormal { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the visibility of the current gameObject.
+        /// </summary>
+        public bool IsVisible
+        {
+            get
+            {
+                return gameObject.GetComponent<Renderer>().enabled;
+            }
+            set
+            {
+                if (IsVisible != value)
+                {
+                    gameObject.GetComponent<Renderer>().enabled = value;
+                }
+            }
+        }
+
+        private void Awake()
+        {
+            plane = new BoundedPlane(transform);
+        }
+
+        private void Start()
+        {
+            UpdateSurfacePlane();
+        }
+
+        /// <summary>
+        /// Updates the SurfacePlane object to have the same configuration of the BoundingPlane object.
+        /// Determine what type of plane the SurfacePlane aligns to.
+        /// Sets the material based on the plane type.
+        /// </summary>
+        private void UpdateSurfacePlane()
+        {
+            SetPlaneGeometry();
+            SetPlaneType();
+            SetPlaneMaterialByType();
+        }
+
+        /// <summary>
+        /// Updates the plane geometry to match the bounded plane found by SurfaceMeshesToPlanes.
+        /// </summary>
+        private void SetPlaneGeometry()
+        {
+            // Set the SurfacePlane object to have the same extents as the BoundingPlane object.
+            gameObject.transform.position = plane.Bounds.Center;
+            gameObject.transform.rotation = plane.Bounds.Rotation;
+            Vector3 extents = plane.Bounds.Extents * 2;
+            gameObject.transform.localScale = new Vector3(extents.x, extents.y, PlaneThickness);
+        }
+
+        /// <summary>
+        /// Classifies the surface as a floor, wall, ceiling, table, etc.
+        /// </summary>
+        private void SetPlaneType()
+        {
+            SurfaceNormal = plane.Plane.normal;
+            float floorYPosition = SurfaceMeshesToPlanes.Instance.FloorYPosition;
+            float ceilingYPosition = SurfaceMeshesToPlanes.Instance.CeilingYPosition;
+
+            // Determine what type of plane this is.
+            // Use the upNormalThreshold to help determine if we have a horizontal or vertical surface.
+            if (SurfaceNormal.y >= UpNormalThreshold)
+            {
+                // If we have a horizontal surface with a normal pointing up, classify it as a floor.
+                PlaneType = PlaneTypes.Floor;
+
+                if (gameObject.transform.position.y > (floorYPosition + FloorBuffer))
+                {
+                    // If the plane is too high to be considered part of the floor, classify it as a table.
+                    PlaneType = PlaneTypes.Table;
+                }
+            }
+            else if (SurfaceNormal.y <= -(UpNormalThreshold))
+            {
+                // If we have a horizontal surface with a normal pointing down, classify it as a ceiling.
+                PlaneType = PlaneTypes.Ceiling;
+
+                if (gameObject.transform.position.y < (ceilingYPosition - CeilingBuffer))
+                {
+                    // If the plane is not high enough to be considered part of the ceiling, classify it as a table.
+                    PlaneType = PlaneTypes.Table;
+                }
+            }
+            else if (Mathf.Abs(SurfaceNormal.y) <= (1 - UpNormalThreshold))
+            {
+                // If the plane is vertical, then classify it as a wall.
+                PlaneType = PlaneTypes.Wall;
+            }
+            else
+            {
+                // The plane has a strange angle, classify it as 'unknown'.
+                PlaneType = PlaneTypes.Unknown;
+            }
+        }
+
+        /// <summary>
+        /// Sets the renderer material to match the object's plane type.
+        /// </summary>
+        private void SetPlaneMaterialByType()
+        {
+            Renderer renderer = gameObject.GetComponent<Renderer>();
+
+            switch (PlaneType)
+            {
+                case PlaneTypes.Floor:
+                    if (FloorMaterial != null)
+                    {
+                        renderer.material = FloorMaterial;
+                    }
+                    break;
+                case PlaneTypes.Table:
+                    if (TableMaterial != null)
+                    {
+                        renderer.material = TableMaterial;
+                    }
+                    break;
+                case PlaneTypes.Ceiling:
+                    if (CeilingMaterial != null)
+                    {
+                        renderer.material = CeilingMaterial;
+                    }
+                    break;
+                case PlaneTypes.Wall:
+                    if (WallMaterial != null)
+                    {
+                        renderer.material = WallMaterial;
+                    }
+                    break;
+                default:
+                    if (UnknownMaterial != null)
+                    {
+                        renderer.material = UnknownMaterial;
+                    }
+                    break;
+            }
+        }
+    }
+}
