@@ -227,4 +227,12 @@ namespace HoloToolkit.Unity
 
             // We are done removing vertices, trigger an event.
             EventHandler handler = RemoveVerticesComplete;
-         
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+
+            removingVerts = false;
+        }
+    }
+}
