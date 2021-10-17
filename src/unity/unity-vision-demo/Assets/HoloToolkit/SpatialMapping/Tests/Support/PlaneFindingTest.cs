@@ -34,4 +34,22 @@ public class PlaneFindingTest : MonoBehaviour
         }
 
         // Now call FindPlanes().  NOTE: In a real application, this MUST be executed on a
-        // background thread (i.
+        // background thread (i.e.: via ThreadPool.QueueUserWorkItem) so that it doesn't stall the
+        // rendering thread while running plane finding.  Maintaining a solid 60fps is crucial
+        // to a good user experience.
+        planes = (VisualizeSubPlanes) ?
+            PlaneFinding.FindSubPlanes(meshData, SnapToGravityThreshold) :
+            PlaneFinding.FindPlanes(meshData, SnapToGravityThreshold, MinArea);
+    }
+
+    private static Color[] colors = new Color[] { Color.blue, Color.cyan, Color.green, Color.magenta, Color.red, Color.white, Color.yellow };
+    private void OnDrawGizmos()
+    {
+        if (planes != null)
+        {
+            for (int i = 0; i < planes.Length; ++i)
+            {
+                Vector3 center = planes[i].Bounds.Center;
+                Quaternion rotation = planes[i].Bounds.Rotation;
+                Vector3 extents = planes[i].Bounds.Extents;
+                Vector3 nor
