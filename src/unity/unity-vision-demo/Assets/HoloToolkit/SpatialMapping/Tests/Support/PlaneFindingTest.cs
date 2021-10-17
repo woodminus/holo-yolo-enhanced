@@ -52,4 +52,20 @@ public class PlaneFindingTest : MonoBehaviour
                 Vector3 center = planes[i].Bounds.Center;
                 Quaternion rotation = planes[i].Bounds.Rotation;
                 Vector3 extents = planes[i].Bounds.Extents;
-                Vector3 nor
+                Vector3 normal = planes[i].Plane.normal;
+                center -= planes[i].Plane.GetDistanceToPoint(center) * normal;
+
+                Vector3[] corners = new Vector3[4] {
+                    center + rotation * new Vector3(+extents.x, +extents.y, 0),
+                    center + rotation * new Vector3(-extents.x, +extents.y, 0),
+                    center + rotation * new Vector3(-extents.x, -extents.y, 0),
+                    center + rotation * new Vector3(+extents.x, -extents.y, 0)
+                };
+
+                Color color = colors[i % colors.Length];
+
+                Gizmos.color = color;
+                Gizmos.DrawLine(corners[0], corners[1]);
+                Gizmos.DrawLine(corners[0], corners[2]);
+                Gizmos.DrawLine(corners[0], corners[3]);
+                Gizmos.DrawLine(corners[1], corner
