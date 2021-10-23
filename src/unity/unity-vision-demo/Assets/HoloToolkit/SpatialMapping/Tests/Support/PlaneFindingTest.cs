@@ -68,4 +68,26 @@ public class PlaneFindingTest : MonoBehaviour
                 Gizmos.DrawLine(corners[0], corners[1]);
                 Gizmos.DrawLine(corners[0], corners[2]);
                 Gizmos.DrawLine(corners[0], corners[3]);
-                Gizmos.DrawLine(corners[1], corner
+                Gizmos.DrawLine(corners[1], corners[2]);
+                Gizmos.DrawLine(corners[1], corners[3]);
+                Gizmos.DrawLine(corners[2], corners[3]);
+                Gizmos.DrawLine(center, center + normal * 0.4f);
+            }
+        }
+    }
+
+#if UNITY_EDITOR
+    // This relies on helper functionality from the UnityEditor.Handles class, so make it UNITY_EDITOR only
+    private void OnDrawGizmosSelected()
+    {
+        if (planes != null)
+        {
+            Ray cameraForward = new Ray(Camera.current.transform.position, Camera.current.transform.forward);
+
+            // Draw planes
+            for (int i = 0; i < planes.Length; ++i)
+            {
+                Vector3 center = planes[i].Bounds.Center;
+                Quaternion rotation = planes[i].Bounds.Rotation;
+                Vector3 extents = planes[i].Bounds.Extents;
+                Vector3 nor
