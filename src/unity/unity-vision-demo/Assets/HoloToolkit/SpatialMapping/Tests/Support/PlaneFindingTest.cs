@@ -105,4 +105,15 @@ public class PlaneFindingTest : MonoBehaviour
                 // Draw the same plane lines using the Handles class which ignores the depth buffer
                 UnityEditor.Handles.color = color;
                 UnityEditor.Handles.DrawLine(corners[0], corners[1]);
-               
+                UnityEditor.Handles.DrawLine(corners[0], corners[2]);
+                UnityEditor.Handles.DrawLine(corners[0], corners[3]);
+                UnityEditor.Handles.DrawLine(corners[1], corners[2]);
+                UnityEditor.Handles.DrawLine(corners[1], corners[3]);
+                UnityEditor.Handles.DrawLine(corners[2], corners[3]);
+                UnityEditor.Handles.ArrowCap(0, center, Quaternion.FromToRotation(Vector3.forward, normal), 0.4f);
+
+                // If this plane is currently in the center of the camera's field of view, highlight it by drawing a
+                // solid rectangle, and display the important details about this plane.
+                float planeHitDistance;
+                if (planes[i].Plane.Raycast(cameraForward, out planeHitDistance))
+        
