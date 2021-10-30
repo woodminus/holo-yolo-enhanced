@@ -116,4 +116,21 @@ public class PlaneFindingTest : MonoBehaviour
                 // solid rectangle, and display the important details about this plane.
                 float planeHitDistance;
                 if (planes[i].Plane.Raycast(cameraForward, out planeHitDistance))
+                {
+                    Vector3 hitPoint = Quaternion.Inverse(rotation) * (cameraForward.GetPoint(planeHitDistance) - center);
+                    if (Mathf.Abs(hitPoint.x) <= extents.x && Mathf.Abs(hitPoint.y) <= extents.y)
+                    {
+                        color.a = 0.1f;
+                        UnityEditor.Handles.DrawSolidRectangleWithOutline(corners, color, Color.clear);
+
+                        string text = string.Format("Area: {0} Bounds: {1}\nPlane: N{2}, D({3})",
+                            planes[i].Area.ToString("F1"),
+                            ((Vector2)extents).ToString("F2"),
+                            normal.ToString("F3"),
+                            planes[i].Plane.distance.ToString("F3"));
+
+                        UnityEditor.Handles.Label(center, text, GUI.skin.textField);
+                    }
+                }
+            }
         
