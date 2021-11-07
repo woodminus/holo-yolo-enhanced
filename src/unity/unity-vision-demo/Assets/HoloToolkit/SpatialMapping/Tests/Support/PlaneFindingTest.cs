@@ -133,4 +133,7 @@ public class PlaneFindingTest : MonoBehaviour
                     }
                 }
             }
-        
+        }
+    }
+#endif
+}
