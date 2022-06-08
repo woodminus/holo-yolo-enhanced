@@ -23,3 +23,39 @@ namespace HoloToolkit.Unity
                 primarySource = value;
                 if (primarySource != null)
                 {
+                    primarySource.enabled = true;
+                }
+            }
+        }
+
+        private AudioSource secondarySource = null;
+        public AudioSource SecondarySource
+        {
+            get
+            {
+                return secondarySource;
+            }
+            private set
+            {
+                secondarySource = value;
+                if (secondarySource != null)
+                {
+                    secondarySource.enabled = true;
+                }
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                return
+                    (primarySource != null && primarySource.isPlaying) ||
+                    (secondarySource != null && secondarySource.isPlaying);
+            }
+        }
+
+        public GameObject AudioEmitter
+        {
+            get;
+            priva
