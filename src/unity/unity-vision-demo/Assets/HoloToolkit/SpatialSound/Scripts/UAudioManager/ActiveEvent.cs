@@ -58,4 +58,29 @@ namespace HoloToolkit.Unity
         public GameObject AudioEmitter
         {
             get;
-            priva
+            private set;
+        }
+
+        public string MessageOnAudioEnd
+        {
+            get;
+            private set;
+        }
+
+        public AudioEvent audioEvent = null;
+        public bool isStoppable = true;
+        public float volDest = 1;
+        public float altVolDest = 1;
+        public float currentFade = 0;
+        public bool playingAlt = false;
+        public bool isActiveTimeComplete = false;
+        public float activeTime = 0;
+        public bool cancelEvent = false;
+
+        public ActiveEvent(AudioEvent audioEvent, GameObject emitter, AudioSource primarySource, AudioSource secondarySource, string messageOnAudioEnd = null)
+        {
+            this.audioEvent = audioEvent;
+            AudioEmitter = emitter;
+            PrimarySource = primarySource;
+            SecondarySource = secondarySource;
+            MessageO
