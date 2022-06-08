@@ -83,4 +83,30 @@ namespace HoloToolkit.Unity
             AudioEmitter = emitter;
             PrimarySource = primarySource;
             SecondarySource = secondarySource;
-            MessageO
+            MessageOnAudioEnd = messageOnAudioEnd;
+            SetSourceProperties();
+        }
+
+        public static AnimationCurve SpatialRolloff;
+
+        /// <summary>
+        /// Set the volume, spatialization, etc., on our AudioSources to match the settings on the event to play.
+        /// </summary>
+        private void SetSourceProperties()
+        {
+            Action<Action<AudioSource>> forEachSource = (action) =>
+            {
+                action(PrimarySource);
+                if (SecondarySource != null)
+                {
+                    action(SecondarySource);
+                }
+            };
+
+            AudioEvent audioEvent = this.audioEvent;
+            switch (audioEvent.spatialization)
+            {
+                case SpatialPositioningType.TwoD:
+                    forEachSource((source) =>
+                    {
+           
