@@ -109,4 +109,23 @@ namespace HoloToolkit.Unity
                 case SpatialPositioningType.TwoD:
                     forEachSource((source) =>
                     {
-           
+                        source.spatialBlend = 0f;
+                        source.spatialize = false;
+                    });
+                    break;
+                case SpatialPositioningType.ThreeD:
+                    forEachSource((source) =>
+                    {
+                        source.spatialBlend = 1f;
+                        source.spatialize = false;
+                    });
+                    break;
+                case SpatialPositioningType.SpatialSound:
+                    forEachSource((source) =>
+                    {
+                        source.spatialBlend = 1f;
+                        source.spatialize = true;
+                    });
+                    break;
+                default:
+                    Debug.LogErrorFormat("Unexpected spatialization type: {0}", audioEvent.spatialization.ToString());
