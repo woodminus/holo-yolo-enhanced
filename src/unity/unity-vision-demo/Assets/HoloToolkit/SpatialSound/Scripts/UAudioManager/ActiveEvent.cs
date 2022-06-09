@@ -129,3 +129,22 @@ namespace HoloToolkit.Unity
                     break;
                 default:
                     Debug.LogErrorFormat("Unexpected spatialization type: {0}", audioEvent.spatialization.ToString());
+                    break;
+            }
+
+            if (audioEvent.spatialization == SpatialPositioningType.SpatialSound)
+            {
+                CreateFlatSpatialRolloffCurve();
+                forEachSource((source) =>
+                {
+                    source.rolloffMode = AudioRolloffMode.Custom;
+                    source.SetCustomCurve(AudioSourceCurveType.CustomRolloff, SpatialRolloff);
+                    SpatialSoundSettings.SetRoomSize(source, audioEvent.roomSize);
+                    SpatialSoundSettings.SetMinGain(source, audioEvent.minGain);
+                    SpatialSoundSettings.SetMaxGain(source, audioEvent.maxGain);
+                    SpatialSoundSettings.SetUnityGainDistance(source, audioEvent.unityGainDistance);
+                });
+            }
+            else
+            {
+                forEachSour
