@@ -147,4 +147,30 @@ namespace HoloToolkit.Unity
             }
             else
             {
-                forEachSour
+                forEachSource((source) =>
+                {
+                    source.rolloffMode = AudioRolloffMode.Logarithmic;
+                });
+            }
+
+            if (audioEvent.bus != null)
+            {
+                forEachSource((source) => source.outputAudioMixerGroup = audioEvent.bus);
+            }
+
+            float pitch = 1f;
+
+            if (audioEvent.pitchRandomization != 0)
+            {
+                pitch = UnityEngine.Random.Range(audioEvent.pitchCenter - audioEvent.pitchRandomization, audioEvent.pitchCenter + audioEvent.pitchRandomization);
+            }
+            else
+            {
+                pitch = audioEvent.pitchCenter;
+            }
+            forEachSource((source) => source.pitch = pitch);
+
+            float vol = 1f;
+            if (audioEvent.fadeInTime > 0)
+            {
+                forEachSource((s
