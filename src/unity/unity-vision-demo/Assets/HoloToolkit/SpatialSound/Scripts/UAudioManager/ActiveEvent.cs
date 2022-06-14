@@ -173,4 +173,24 @@ namespace HoloToolkit.Unity
             float vol = 1f;
             if (audioEvent.fadeInTime > 0)
             {
-                forEachSource((s
+                forEachSource((source) => source.volume = 0f);
+                this.currentFade = audioEvent.fadeInTime;
+                if (audioEvent.volumeRandomization != 0)
+                {
+                    vol = UnityEngine.Random.Range(audioEvent.volumeCenter - audioEvent.volumeRandomization, audioEvent.volumeCenter + audioEvent.volumeRandomization);
+                }
+                else
+                {
+                    vol = audioEvent.volumeCenter;
+                }
+                this.volDest = vol;
+            }
+            else
+            {
+                if (audioEvent.volumeRandomization != 0)
+                {
+                    vol = UnityEngine.Random.Range(audioEvent.volumeCenter - audioEvent.volumeRandomization, audioEvent.volumeCenter + audioEvent.volumeRandomization);
+                }
+                else
+                {
+             
