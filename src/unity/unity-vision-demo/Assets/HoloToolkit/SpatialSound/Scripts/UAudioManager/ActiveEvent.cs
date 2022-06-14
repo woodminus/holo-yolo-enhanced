@@ -193,4 +193,25 @@ namespace HoloToolkit.Unity
                 }
                 else
                 {
-             
+                    vol = audioEvent.volumeCenter;
+                }
+                forEachSource((source) => source.volume = vol);
+            }
+
+            float pan = audioEvent.panCenter;
+            if (audioEvent.panRandomization != 0)
+            {
+                pan = UnityEngine.Random.Range(audioEvent.panCenter - audioEvent.panRandomization, audioEvent.panCenter + audioEvent.panRandomization);
+            }
+            forEachSource((source) => source.panStereo = pan);
+        }
+
+        /// <summary>
+        /// Sets the pitch value for the primary source.
+        /// </summary>
+        /// <param name="newPitch">The value to set the pitch, between 0 (exclusive) and 3 (inclusive).</param>
+        public void SetPitch(float newPitch)
+        {
+            if (newPitch <= 0 || newPitch > 3)
+            {
+                Debug.LogErrorFormat("Invali
