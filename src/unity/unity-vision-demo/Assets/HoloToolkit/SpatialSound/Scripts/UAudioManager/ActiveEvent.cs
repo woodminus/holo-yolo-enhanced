@@ -214,4 +214,35 @@ namespace HoloToolkit.Unity
         {
             if (newPitch <= 0 || newPitch > 3)
             {
-                Debug.LogErrorFormat("Invali
+                Debug.LogErrorFormat("Invalid pitch {0} set for event", newPitch);
+                return;
+            }
+
+            this.PrimarySource.pitch = newPitch;
+        }
+
+        public void Dispose()
+        {
+            if (this.primarySource != null)
+            {
+                this.primarySource.enabled = false;
+                this.primarySource = null;
+            }
+
+            if (this.secondarySource != null)
+            {
+                this.secondarySource.enabled = false;
+                this.secondarySource = null;
+            }
+        }
+
+        /// <summary>
+        /// Creates a flat animation curve to negate Unity's distance attenuation when using Spatial Sound
+        /// </summary>
+        public static void CreateFlatSpatialRolloffCurve()
+        {
+            if (SpatialRolloff != null)
+            {
+                return;
+            }
+            SpatialRol
