@@ -245,4 +245,9 @@ namespace HoloToolkit.Unity
             {
                 return;
             }
-            SpatialRol
+            SpatialRolloff = new AnimationCurve();
+            SpatialRolloff.AddKey(0, 1);
+            SpatialRolloff.AddKey(1, 1);
+        }
+    }
+}
