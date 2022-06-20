@@ -37,4 +37,19 @@ namespace HoloToolkit.Unity
         SpatialSound,   // Microsoft Spatial Sound
     }
 
-    /
+    /// <summary>
+    /// The AudioEvent class is the main component of UAudioManager and contains settings and a container for playing audio clips.
+    /// </summary>
+    [System.Serializable]
+    public class AudioEvent : IComparable, IComparable<AudioEvent>
+    {
+        [Tooltip("The name of this AudioEvent.")]
+        public string name = "_NewAudioEvent";
+
+        [Tooltip("How this sound is to be positioned.")]
+        public SpatialPositioningType spatialization = SpatialPositioningType.TwoD;
+
+        [Tooltip("The size of the Microsoft Spatial Sound room.  Only used when positioning is set to SpatialSound.")]
+        public SpatialSoundRoomSizes roomSize = SpatialSoundSettings.DefaultSpatialSoundRoom;
+
+        [Tooltip("The minimum gain, in decibels.  Only used when positioning is set to SpatialSound."
