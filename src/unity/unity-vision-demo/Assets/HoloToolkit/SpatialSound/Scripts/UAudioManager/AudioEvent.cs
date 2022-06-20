@@ -52,4 +52,16 @@ namespace HoloToolkit.Unity
         [Tooltip("The size of the Microsoft Spatial Sound room.  Only used when positioning is set to SpatialSound.")]
         public SpatialSoundRoomSizes roomSize = SpatialSoundSettings.DefaultSpatialSoundRoom;
 
-        [Tooltip("The minimum gain, in decibels.  Only used when positioning is set to SpatialSound."
+        [Tooltip("The minimum gain, in decibels.  Only used when positioning is set to SpatialSound.")]
+        [Range(SpatialSoundSettings.MinimumGainDecibels, SpatialSoundSettings.MaximumGainDecibels)]
+        public float minGain = SpatialSoundSettings.DefaultMinGain;
+
+        [Tooltip("The maximum gain, in decibels.  Only used when positioning is set to SpatialSound.")]
+        [Range(SpatialSoundSettings.MinimumGainDecibels, SpatialSoundSettings.MaximumGainDecibels)]
+        public float maxGain = SpatialSoundSettings.DefaultMaxGain;
+
+        [Tooltip("The distance, in meters at which the gain is 0 decibels.  Only used when positioning is set to SpatialSound.")]
+        [Range(SpatialSoundSettings.MinimumUnityGainDistanceMeters, SpatialSoundSettings.MaximumUnityGainDistanceMeters)]
+        public float unityGainDistance = SpatialSoundSettings.DefaultUnityGainDistance;
+
+        [Tooltip("The AudioMixerGroup to us
