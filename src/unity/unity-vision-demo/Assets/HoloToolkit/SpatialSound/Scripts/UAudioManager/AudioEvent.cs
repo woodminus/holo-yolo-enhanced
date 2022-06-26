@@ -64,4 +64,23 @@ namespace HoloToolkit.Unity
         [Range(SpatialSoundSettings.MinimumUnityGainDistanceMeters, SpatialSoundSettings.MaximumUnityGainDistanceMeters)]
         public float unityGainDistance = SpatialSoundSettings.DefaultUnityGainDistance;
 
-        [Tooltip("The AudioMixerGroup to us
+        [Tooltip("The AudioMixerGroup to use when playing.")]
+        public UnityEngine.Audio.AudioMixerGroup bus = null;
+
+        [Tooltip("The default or center pitch around which randomization can be done.")]
+        [Range(-3.0f, 3.0f)]
+        public float pitchCenter = 1.0f;
+
+        /// <summary>
+        /// The amount in either direction from Pitch Center that the pitch can randomly vary upon playing the event.
+        /// </summary>
+        /// <remarks>The supported range is 0.0f - 2.0f.</remarks>
+        [HideInInspector]
+        public float pitchRandomization = 0.0f;
+
+        [Tooltip("The default or center volume level around which randomization can be done.")]
+        [Range(0.0f, 1.0f)]
+        public float volumeCenter = 1.0f;
+
+        /// <summary>
+        /// The amount in either direction from Volume Center that the volume can randomly vary upon playing the
