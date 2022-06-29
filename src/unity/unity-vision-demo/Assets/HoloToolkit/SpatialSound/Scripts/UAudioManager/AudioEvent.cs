@@ -83,4 +83,21 @@ namespace HoloToolkit.Unity
         public float volumeCenter = 1.0f;
 
         /// <summary>
-        /// The amount in either direction from Volume Center that the volume can randomly vary upon playing the
+        /// The amount in either direction from Volume Center that the volume can randomly vary upon playing the event.
+        /// </summary>
+        /// <remarks>The supported range is 0.0f - 0.5f.</remarks>
+        [HideInInspector]
+        public float volumeRandomization = 0.0f;
+
+        [Tooltip("The default or center panning. Only used when positioning is set to 2D.")]
+        [Range(-1.0f, 1.0f)]
+        public float panCenter = 0;
+
+        /// <summary>
+        /// The amount in either direction from Pan Center that panning can randomly vary upon playing the event.
+        /// </summary>
+        /// <remarks>The supported range is 0.0f - 0.5f.</remarks>
+        [HideInInspector]
+        public float panRandomization = 0.0f;
+
+        [Tooltip("Time, in seconds, for the audio to fade from 0 to the selected volume.  Does not apply to continuous containers in which the Crossfade TGime property is used.
