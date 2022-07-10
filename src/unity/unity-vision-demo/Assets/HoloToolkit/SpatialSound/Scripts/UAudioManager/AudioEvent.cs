@@ -100,4 +100,20 @@ namespace HoloToolkit.Unity
         [HideInInspector]
         public float panRandomization = 0.0f;
 
-        [Tooltip("Time, in seconds, for the audio to fade from 0 to the selected volume.  Does not apply to continuous containers in which the Crossfade TGime property is used.
+        [Tooltip("Time, in seconds, for the audio to fade from 0 to the selected volume.  Does not apply to continuous containers in which the Crossfade TGime property is used.")]
+        public float fadeInTime = 0.0f;
+
+        [Tooltip("The maximum number of instances that should be allowed at a time for this event. Any new instances will be suppressed.")]
+        public int instanceLimit = 0;
+
+        [Tooltip("The amount of time in seconds that an event will remain active past when the sound ends. Useful for limiting the instances of an event beyond the clip play time.")]
+        public float instanceTimeBuffer = 0.0f;
+
+        [Tooltip("The behavior when the instance limit is reached.")]
+        public AudioEventInstanceBehavior instanceBehavior = AudioEventInstanceBehavior.KillOldest;
+
+        /// <summary>
+        /// Contains the sounds associated with this AudioEvent.
+        /// </summary>
+        public AudioContainer container = new AudioContainer();
+
