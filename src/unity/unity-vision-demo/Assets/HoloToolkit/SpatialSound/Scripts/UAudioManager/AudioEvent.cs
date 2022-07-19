@@ -133,4 +133,25 @@ namespace HoloToolkit.Unity
         /// <param name="obj">The object to compare against.</param>
         /// <returns>An integer that indicates whether this AudioEvent precedes (-1), follows (1),
         /// or appears in the same position (0) in the sort order as the AudioEvent being compared.</returns>
-        /// <rema
+        /// <remarks>If the specified object is not an AudioEvent, the return value is 1.</remarks>
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            AudioEvent tempEvent = obj as AudioEvent;
+            if (tempEvent != null)
+            {
+                return CompareTo(tempEvent);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not an AudioEvent");
+            }
+        }
+
+        /// <summary>
+        /// Compares this AudioEvent with another AudioEvent.
+        /// </summary>
+        /// <param name="other">The AudioEvent to compare against.</param>
+        /// <returns>An integer that indicates whether this AudioEvent precedes (-1), follows (1),
+        /// or appears in the same position (0) in the sort order as the AudioEvent being compa
