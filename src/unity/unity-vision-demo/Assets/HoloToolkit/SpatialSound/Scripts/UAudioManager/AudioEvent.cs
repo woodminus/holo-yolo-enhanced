@@ -154,4 +154,11 @@ namespace HoloToolkit.Unity
         /// </summary>
         /// <param name="other">The AudioEvent to compare against.</param>
         /// <returns>An integer that indicates whether this AudioEvent precedes (-1), follows (1),
-        /// or appears in the same position (0) in the sort order as the AudioEvent being compa
+        /// or appears in the same position (0) in the sort order as the AudioEvent being compared.</returns>
+        public int CompareTo(AudioEvent other)
+        {
+            if (other == null) return 1;
+            return string.Compare(name, other.name);
+        }
+    }
+}
