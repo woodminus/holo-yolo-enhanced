@@ -117,3 +117,20 @@ namespace HoloToolkit.Unity
         /// </summary>
         public AudioContainer container = new AudioContainer();
 
+        /// <summary>
+        /// Is this AudioEvent's container a continuous container?
+        /// </summary>
+        /// <returns>True if this AudioEvent's container is one of the continuous types (random or sequential), otherwise false.</returns>
+        public bool IsContinuous()
+        {
+            return container.containerType == AudioContainerType.ContinuousRandom ||
+                   container.containerType == AudioContainerType.ContinuousSequence;
+        }
+
+        /// <summary>
+        /// Compares this AudioEvent with another object.
+        /// </summary>
+        /// <param name="obj">The object to compare against.</param>
+        /// <returns>An integer that indicates whether this AudioEvent precedes (-1), follows (1),
+        /// or appears in the same position (0) in the sort order as the AudioEvent being compared.</returns>
+        /// <rema
