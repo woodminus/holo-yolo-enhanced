@@ -95,4 +95,23 @@ namespace HoloToolkit.Unity
 
         private void DrawEventInspector(SerializedProperty selectedEventProperty, TEvent selectedEvent, TEvent[] EditorEvents, bool showEmitters)
         {
-            // Get cu
+            // Get current event's properties.
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("name"));
+
+            if (selectedEvent.name != this.eventNames[this.selectedEventIndex])
+            {
+                UpdateEventNames(EditorEvents);
+            }
+
+            if (showEmitters)
+            {
+                EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("primarySource"));
+                if (selectedEvent.IsContinuous())
+                {
+                    EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("secondarySource"));
+                }
+            }
+
+            // Positioning
+            selectedEvent.spatialization = (SpatialPositioningType)EditorGUILayout.Popup("Positioning", (int)selectedEvent.spatialization, this.posTypes);
+    
