@@ -74,4 +74,25 @@ namespace HoloToolkit.Unity
             // Add or remove current event.
             EditorGUILayout.Space();
             EditorGUILayout.BeginHorizontal();
-           
+            EditorGUILayoutExtensions.Label("Events");
+
+            using (new EditorGUI.DisabledScope((EditorEvents != null) && (EditorEvents.Length < 1)))
+            {
+                if (EditorGUILayoutExtensions.Button("Remove"))
+                {
+                    this.myTarget.EditorEvents = RemoveAudioEvent(EditorEvents, this.selectedEventIndex);
+                }
+            }
+
+            if (EditorGUILayoutExtensions.Button("Add"))
+            {
+                this.myTarget.EditorEvents = AddAudioEvent(EditorEvents);
+            }
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+        }
+
+        private void DrawEventInspector(SerializedProperty selectedEventProperty, TEvent selectedEvent, TEvent[] EditorEvents, bool showEmitters)
+        {
+            // Get cu
