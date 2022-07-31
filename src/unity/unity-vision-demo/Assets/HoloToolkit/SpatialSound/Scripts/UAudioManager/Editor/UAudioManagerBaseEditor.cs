@@ -35,4 +35,17 @@ namespace HoloToolkit.Unity
             {
                 // Display current event in dropdown.
                 EditorGUI.indentLevel++;
-  
+                this.selectedEventIndex = EditorGUILayout.Popup(this.selectedEventIndex, this.eventNames);
+
+                if (this.selectedEventIndex < this.myTarget.EditorEvents.Length)
+                {
+                    TEvent selectedEvent;
+
+                    selectedEvent = this.myTarget.EditorEvents[this.selectedEventIndex];
+                    SerializedProperty selectedEventProperty = this.serializedObject.FindProperty("events.Array.data[" + this.selectedEventIndex.ToString() + "]");
+                    EditorGUILayout.Space();
+
+                    if (selectedEventProperty != null)
+                    {
+                        DrawEventInspector(selectedEventProperty, selectedEvent, this.myTarget.EditorEvents, showEmitters);
+                        if (!DrawContainerInspector(selectedEven
