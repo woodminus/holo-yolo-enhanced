@@ -48,4 +48,30 @@ namespace HoloToolkit.Unity
                     if (selectedEventProperty != null)
                     {
                         DrawEventInspector(selectedEventProperty, selectedEvent, this.myTarget.EditorEvents, showEmitters);
-                        if (!DrawContainerInspector(selectedEven
+                        if (!DrawContainerInspector(selectedEventProperty, selectedEvent))
+                        {
+                            EditorGUI.indentLevel++;
+                            DrawSoundClipInspector(selectedEventProperty, selectedEvent);
+                            EditorGUI.indentLevel--;
+                        }
+                    }
+
+                    EditorGUI.indentLevel--;
+                }
+            }
+
+            EditorGUI.EndChangeCheck();
+            this.serializedObject.ApplyModifiedProperties();
+
+            if (UnityEngine.GUI.changed)
+            {
+                EditorUtility.SetDirty(this.myTarget);
+            }
+        }
+
+        private void DrawEventHeader(TEvent[] EditorEvents)
+        {
+            // Add or remove current event.
+            EditorGUILayout.Space();
+            EditorGUILayout.BeginHorizontal();
+           
