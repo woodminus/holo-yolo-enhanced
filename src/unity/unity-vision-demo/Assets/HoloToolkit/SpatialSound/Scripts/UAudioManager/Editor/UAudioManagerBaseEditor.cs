@@ -148,4 +148,24 @@ namespace HoloToolkit.Unity
             EditorGUILayout.Space();
         }
 
-        private bool DrawC
+        private bool DrawContainerInspector(SerializedProperty selectedEventProperty, TEvent selectedEvent)
+        {
+            bool addedSound = false;
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.containerType"));
+
+            if (!selectedEvent.IsContinuous())
+            {
+                EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.looping"));
+
+                if (selectedEvent.container.looping)
+                {
+                    EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.loopTime"));
+                }
+            }
+
+            // Sounds
+            EditorGUILayout.Space();
+
+            if (selectedEvent.IsContinuous())
+            {
+                EditorGUILayout.PropertyField(selectedEventProperty.Fin
