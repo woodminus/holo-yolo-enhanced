@@ -129,4 +129,23 @@ namespace HoloToolkit.Unity
             }
 
             // Pitch Settings
-            EditorGUILayout.PropertyField(selectedEventProperty.FindProp
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("pitchCenter"));
+
+            // Volume settings
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("volumeCenter"));
+
+            // Pan Settings
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("panCenter"));
+
+            // Instancing
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("instanceLimit"));
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("instanceTimeBuffer"));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("instanceBehavior"));
+
+            // Container
+            EditorGUILayout.Space();
+        }
+
+        private bool DrawC
