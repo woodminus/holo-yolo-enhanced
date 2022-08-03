@@ -114,4 +114,19 @@ namespace HoloToolkit.Unity
 
             // Positioning
             selectedEvent.spatialization = (SpatialPositioningType)EditorGUILayout.Popup("Positioning", (int)selectedEvent.spatialization, this.posTypes);
-    
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("roomSize"));
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("minGain"));
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("maxGain"));
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("unityGainDistance"));
+
+            // Bus
+            EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("bus"));
+
+            // Fades
+            if (!selectedEvent.IsContinuous())
+            {
+                EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("fadeInTime"));
+            }
+
+            // Pitch Settings
+            EditorGUILayout.PropertyField(selectedEventProperty.FindProp
