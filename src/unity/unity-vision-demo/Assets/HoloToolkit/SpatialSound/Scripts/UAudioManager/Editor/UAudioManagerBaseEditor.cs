@@ -168,4 +168,29 @@ namespace HoloToolkit.Unity
 
             if (selectedEvent.IsContinuous())
             {
-                EditorGUILayout.PropertyField(selectedEventProperty.Fin
+                EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.crossfadeTime"));
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Sounds");
+
+            if (EditorGUILayoutExtensions.Button("Add"))
+            {
+                AddSound(selectedEvent);
+
+                // Skip drawing sound inspector after adding a new sound.
+                addedSound = true;
+            }
+            EditorGUILayout.EndHorizontal();
+            return addedSound;
+        }
+
+        private void DrawSoundClipInspector(SerializedProperty selectedEventProperty, TEvent selectedEvent)
+        {
+            bool allowLoopingClip = !selectedEvent.container.looping;
+
+            if (allowLoopingClip)
+            {
+                if (selectedEvent.IsContinuous())
+                {
+             
