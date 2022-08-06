@@ -214,4 +214,15 @@ namespace HoloToolkit.Unity
                 if (!selectedEvent.IsContinuous())
                 {
                     EditorGUILayout.BeginHorizontal();
-                    Edit
+                    EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.sounds.Array.data[" + i + "].delayCenter"));
+                    EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.sounds.Array.data[" + i + "].delayRandomization"));
+                    EditorGUILayout.EndHorizontal();
+
+                    //Disable looping next clips in a simultaneous container only.
+                    if (allowLoopingClip)
+                    {
+                        EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.sounds.Array.data[" + i + "].looping"));
+
+                        if (selectedEvent.container.sounds[i].looping && selectedEvent.container.containerType == AudioContainerType.Simultaneous)
+                        {
+                            allowLoopingClip =
