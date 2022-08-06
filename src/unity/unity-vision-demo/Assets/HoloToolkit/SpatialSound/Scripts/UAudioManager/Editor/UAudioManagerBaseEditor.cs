@@ -193,4 +193,25 @@ namespace HoloToolkit.Unity
             {
                 if (selectedEvent.IsContinuous())
                 {
-             
+                    allowLoopingClip = false;
+                }
+            }
+
+            for (int i = 0; i < selectedEvent.container.sounds.Length; i++)
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(selectedEventProperty.FindPropertyRelative("container.sounds.Array.data[" + i + "].sound"));
+
+                if (EditorGUILayoutExtensions.Button("Remove"))
+                {
+                    selectedEventProperty.FindPropertyRelative("container.sounds.Array.data[" + i + "]").DeleteCommand();
+                    break;
+                }
+
+                EditorGUILayout.EndHorizontal();
+
+                if (!selectedEvent.IsContinuous())
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    Edit
