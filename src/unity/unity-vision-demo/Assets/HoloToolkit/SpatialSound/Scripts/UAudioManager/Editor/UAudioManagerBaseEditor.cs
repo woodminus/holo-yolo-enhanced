@@ -252,4 +252,25 @@ namespace HoloToolkit.Unity
                     EditorEvents[i].name = "_" + EditorEvents[i].name;
                 }
 
-                this.ev
+                this.eventNames[i] = EditorEvents[i].name;
+                previousEventNames.Add(this.eventNames[i]);
+            }
+        }
+
+        private void AddSound(TEvent selectedEvent)
+        {
+
+            UAudioClip[] tempClips = new UAudioClip[selectedEvent.container.sounds.Length + 1];
+            selectedEvent.container.sounds.CopyTo(tempClips, 0);
+            tempClips[tempClips.Length - 1] = new UAudioClip();
+            selectedEvent.container.sounds = tempClips;
+        }
+
+        private TEvent[] AddAudioEvent(TEvent[] EditorEvents)
+        {
+            TEvent tempEvent = new TEvent();
+            TEvent[] tempEventArray = new TEvent[EditorEvents.Length + 1];
+            tempEvent.container = new AudioContainer();
+            tempEvent.container.sounds = new UAudioClip[0];
+            EditorEvents.CopyTo(tempEventArray, 0);
+            te
