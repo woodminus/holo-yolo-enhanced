@@ -225,4 +225,31 @@ namespace HoloToolkit.Unity
 
                         if (selectedEvent.container.sounds[i].looping && selectedEvent.container.containerType == AudioContainerType.Simultaneous)
                         {
-                            allowLoopingClip =
+                            allowLoopingClip = false;
+                        }
+                    }
+                    else
+                    {
+                        selectedEvent.container.sounds[i].looping = false;
+                    }
+                }
+            }
+        }
+
+        private void UpdateEventNames(TEvent[] EditorEvents)
+        {
+            HashSet<string> previousEventNames = new HashSet<string>();
+
+            for (int i = 0; i < EditorEvents.Length; i++)
+            {
+                if (string.IsNullOrEmpty(EditorEvents[i].name))
+                {
+                    EditorEvents[i].name = "_NewEvent" + i.ToString();
+                }
+
+                while (previousEventNames.Contains(EditorEvents[i].name))
+                {
+                    EditorEvents[i].name = "_" + EditorEvents[i].name;
+                }
+
+                this.ev
