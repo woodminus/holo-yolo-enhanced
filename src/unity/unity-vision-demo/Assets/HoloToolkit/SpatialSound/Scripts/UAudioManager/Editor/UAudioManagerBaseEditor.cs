@@ -273,4 +273,26 @@ namespace HoloToolkit.Unity
             tempEvent.container = new AudioContainer();
             tempEvent.container.sounds = new UAudioClip[0];
             EditorEvents.CopyTo(tempEventArray, 0);
-            te
+            tempEventArray[EditorEvents.Length] = tempEvent;
+            this.eventNames = new string[tempEventArray.Length];
+            UpdateEventNames(tempEventArray);
+            this.selectedEventIndex = this.eventNames.Length - 1;
+            return tempEventArray;
+        }
+
+        private TEvent[] RemoveAudioEvent(TEvent[] editorEvents, int eventToRemove)
+        {
+            editorEvents = RemoveElement(editorEvents, eventToRemove);
+            this.eventNames = new string[editorEvents.Length];
+            UpdateEventNames(editorEvents);
+
+            if (this.selectedEventIndex >= editorEvents.Length)
+            {
+                this.selectedEventIndex--;
+            }
+
+            return editorEvents;
+        }
+
+        /// <summary>
+        /// Returns a new array that has the item at the giv
