@@ -295,4 +295,29 @@ namespace HoloToolkit.Unity
         }
 
         /// <summary>
-        /// Returns a new array that has the item at the giv
+        /// Returns a new array that has the item at the given index removed.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="index">Index to remove.</param>
+        /// <returns>The new array.</returns>
+        public static T[] RemoveElement<T>(T[] array, int index)
+        {
+            T[] newArray = new T[array.Length - 1];
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                // Send the clip to the previous item in the new array if we have passed the removed clip.
+                if (i > index)
+                {
+                    newArray[i - 1] = array[i];
+                }
+                else if (i < index)
+                {
+                    newArray[i] = array[i];
+                }
+            }
+
+            return newArray;
+        }
+    }
+}
