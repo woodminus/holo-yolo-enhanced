@@ -28,4 +28,32 @@ namespace HoloToolkit.Unity
             if (profilerWindow.eventTimeline == null)
             {
                 profilerWindow.currentFrame = 0;
-        
+                profilerWindow.eventTimeline = new List<ProfilerEvent[]>();
+            }
+            profilerWindow.Show();
+        }
+
+        // Only update the currently-playing events 10 times a second - we don't need millisecond-accurate profiling
+        private void OnInspectorUpdate()
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                return;
+            }
+
+            ProfilerEvent[] currentEvents = new ProfilerEvent[0];
+
+            if (this.eventTimeline == null)
+            {
+                this.eventTimeline = new List<ProfilerEvent[]>();
+            }
+
+            if (UAudioManager.Instance != null && !EditorApplication.isPaused)
+            {
+                CollectProfilerEvents(currentEvents);
+            }
+
+            Repaint();
+        }
+
+        // Popu
