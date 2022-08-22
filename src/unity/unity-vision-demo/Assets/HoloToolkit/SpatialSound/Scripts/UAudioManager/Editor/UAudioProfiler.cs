@@ -97,4 +97,25 @@ namespace HoloToolkit.Unity
             {
                 EditorGUILayoutExtensions.Label("Profiler only active in play mode!");
                 return;
-   
+            }
+
+            this.currentFrame = EditorGUILayout.IntSlider(this.currentFrame, 0, this.eventTimeline.Count - 1);
+            scrollOffset = EditorGUILayout.BeginScrollView(scrollOffset);
+
+            if (this.eventTimeline.Count > this.currentFrame)
+            {
+                for (int i = 0; i < this.eventTimeline[this.currentFrame].Length; i++)
+                {
+                    DrawEventButton(this.eventTimeline[this.currentFrame][i], i);
+                }
+            }
+
+            EditorGUILayout.EndScrollView();
+        }
+
+        private void DrawEventButton(ProfilerEvent currentEvent, int id)
+        {
+            EditorGUILayout.SelectableLabel(currentEvent.EventName + "-->(" + currentEvent.EmitterName + ")-->(" + currentEvent.BusName + ")");
+        }
+    }
+}
