@@ -56,4 +56,19 @@ namespace HoloToolkit.Unity
             Repaint();
         }
 
-        // Popu
+        // Populate an array of the active events, and add it to the timeline list of all captured audio frames.
+        private void CollectProfilerEvents(ProfilerEvent[] currentEvents)
+        {
+            List<ActiveEvent> activeEvents = UAudioManager.Instance.ProfilerEvents;
+            currentEvents = new ProfilerEvent[activeEvents.Count];
+            for (int i = 0; i < currentEvents.Length; i++)
+            {
+                ActiveEvent currentEvent = activeEvents[i];
+                ProfilerEvent tempEvent = new ProfilerEvent();
+                tempEvent.EventName = currentEvent.audioEvent.name;
+                tempEvent.EmitterName = currentEvent.AudioEmitter.name;
+
+                // The bus might be null, Unity defaults to Editor-hidden master bus.
+                if (currentEvent.audioEvent.bus == null)
+                {
+            
