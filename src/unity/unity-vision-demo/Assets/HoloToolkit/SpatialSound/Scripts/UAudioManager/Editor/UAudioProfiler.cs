@@ -71,4 +71,30 @@ namespace HoloToolkit.Unity
                 // The bus might be null, Unity defaults to Editor-hidden master bus.
                 if (currentEvent.audioEvent.bus == null)
                 {
-            
+                    tempEvent.BusName = "-MasterBus-";
+                }
+                else
+                {
+                    tempEvent.BusName = currentEvent.audioEvent.bus.name;
+                }
+
+                currentEvents[i] = tempEvent;
+            }
+            this.eventTimeline.Add(currentEvents);
+
+            // Trim the first event if we have exceeded the maximum stored frames.
+            if (this.eventTimeline.Count > MaxFrames)
+            {
+                this.eventTimeline.RemoveAt(0);
+            }
+            this.currentFrame = this.eventTimeline.Count - 1;
+        }
+
+        // Draw the profiler window.
+        private void OnGUI()
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                EditorGUILayoutExtensions.Label("Profiler only active in play mode!");
+                return;
+   
