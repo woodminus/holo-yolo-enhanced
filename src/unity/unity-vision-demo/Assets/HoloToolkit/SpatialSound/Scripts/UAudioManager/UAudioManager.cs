@@ -404,3 +404,71 @@ namespace HoloToolkit.Unity
             {
                 if (globalInstanceBehavior == AudioEventInstanceBehavior.KillOldest)
                 {
+                    StopEvent(activeEvents[0]);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stops the first (oldest) instance of an event with the matching name
+        /// </summary>
+        /// <param name="eventName">The name associated with the AudioEvent to stop.</param>
+        private void KillOldestInstance(string eventName)
+        {
+            for (int i = 0; i < activeEvents.Count; i++)
+            {
+                ActiveEvent tempEvent = activeEvents[i];
+
+                if (tempEvent.audioEvent.name == eventName)
+                {
+                    StopEvent(tempEvent);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies the registered transform to an audio emitter.
+        /// </summary>
+        /// <param name="emitter"></param>
+        /// <returns></returns>
+        /// <remarks>If there is no registered transform, the GameObject specified in the
+        /// emitter parameter will be returned.</remarks>
+        private GameObject ApplyAudioEmitterTransform(GameObject emitter)
+        {
+            if (AudioEmitterTransform != null)
+            {
+                emitter = AudioEmitterTransform(emitter);
+            }
+
+            return emitter;
+        }
+
+        /// <summary>
+        /// Create the Dictionary for quick lookup of AudioEvents.
+        /// </summary>
+        private void CreateEventsDictionary()
+        {
+            eventsDictionary = new Dictionary<string, AudioEvent>(events.Length);
+
+            for (int i = 0; i < events.Length; i++)
+            {
+                AudioEvent tempEvent = events[i];
+                eventsDictionary.Add(tempEvent.name, tempEvent);
+            }
+        }
+
+#if UNITY_EDITOR
+        [ContextMenu("Sort Events")]
+        private void AlphabetizeEventList()
+        {
+            Array.Sort<AudioEvent>(events);
+        }
+#endif
+    }
+}
