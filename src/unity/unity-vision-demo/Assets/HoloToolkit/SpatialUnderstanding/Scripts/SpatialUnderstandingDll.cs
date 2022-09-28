@@ -185,3 +185,395 @@ namespace HoloToolkit.Unity
         /// <summary>
         /// Resuable playspace statistics. Can be used for inline playspace statistics calls.
         /// </summary>
+        /// <returns>playspace statistics structure</returns>
+        public Imports.PlayspaceStats GetStaticPlayspaceStats()
+        {
+            return reusedPlayspaceStats;
+        }
+
+        /// <summary>
+        /// Resuable playspace alignment pointer. Can be used for inline playspace alignment query calls.
+        /// </summary>
+        /// <returns>playspace alignment pointer</returns>
+        public IntPtr GetStaticPlayspaceAlignmentPtr()
+        {
+            if (reusedPlayspaceAlignmentPtr == IntPtr.Zero)
+            {
+                GCHandle h = GCHandle.Alloc(reusedPlayspaceAlignment, GCHandleType.Pinned);
+                reusedPlayspaceAlignmentPtr = h.AddrOfPinnedObject();
+            }
+            return reusedPlayspaceAlignmentPtr;
+        }
+        /// <summary>
+        /// Resuable playspace alignment. Can be used for inline playspace alignment query calls.
+        /// </summary>
+        /// <returns>playspace alignment structure</returns>
+        public Imports.PlayspaceAlignment GetStaticPlayspaceAlignment()
+        {
+            return reusedPlayspaceAlignment;
+        }
+
+        /// <summary>
+        /// Resuable object placement results pointer. Can be used for inline object placement queries.
+        /// </summary>
+        /// <returns>Object placement result pointer</returns>
+        public IntPtr GetStaticObjectPlacementResultPtr()
+        {
+            if (reusedObjectPlacementResultPtr == IntPtr.Zero)
+            {
+                GCHandle h = GCHandle.Alloc(reusedObjectPlacementResult, GCHandleType.Pinned);
+                reusedObjectPlacementResultPtr = h.AddrOfPinnedObject();
+            }
+            return reusedObjectPlacementResultPtr;
+        }
+        /// <summary>
+        /// Resuable object placement results. Can be used for inline object placement queries.
+        /// </summary>
+        /// <returns>Object placement result structure</returns>
+        public SpatialUnderstandingDllObjectPlacement.ObjectPlacementResult GetStaticObjectPlacementResult()
+        {
+            return reusedObjectPlacementResult;
+        }
+        
+        /// <summary>
+        /// Marshals BoundedPlane data returned from a DLL API call into a managed BoundedPlane array
+        /// and then frees the memory that was allocated within the DLL.
+        /// </summary>
+        /// <remarks>Disabling warning 618 when calling Marshal.SizeOf(), because
+        /// Unity does not support .Net 4.5.1+ for using the preferred Marshal.SizeOf(T) method."/>, </remarks>
+        public T[] MarshalArrayFromIntPtr<T>(IntPtr outArray, int count)
+        {
+            T[] resultArray = new T[count];
+#pragma warning disable 618
+            int structSize = Marshal.SizeOf(typeof(T));
+#pragma warning restore 618
+            IntPtr current = outArray;
+
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+#pragma warning disable 618
+                    resultArray[i] = (T)Marshal.PtrToStructure(current, typeof(T));
+#pragma warning restore 618
+                    current = (IntPtr)((long)current + structSize);
+                }
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(outArray);
+            }
+
+            return resultArray;
+        }
+
+        public class Imports
+        {
+            /// <summary>
+            /// Mesh input data passed to the dll
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public struct MeshData
+            {
+                public int meshID;
+                public int lastUpdateID;
+                public Matrix4x4 transform;
+                public Int32 vertCount;
+                public Int32 indexCount;
+                public IntPtr verts;
+                public IntPtr normals;
+                public IntPtr indices;
+            };
+            /// <summary>
+            /// Playspace statistics for querying scanning progress
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public class PlayspaceStats
+            {
+                public int IsWorkingOnStats;				// 0 if still working on creating the stats
+
+                public float HorizSurfaceArea;              // In m2 : All horizontal faces UP between Ground – 0.15 and Ground + 1.f (include Ground and convenient horiz surface)
+                public float TotalSurfaceArea;              // In m2 : All !
+                public float UpSurfaceArea;                 // In m2 : All horizontal faces UP (no constraint => including ground)
+                public float DownSurfaceArea;               // In m2 : All horizontal faces DOWN (no constraint => including ceiling)
+                public float WallSurfaceArea;               // In m2 : All Vertical faces (not only walls)
+                public float VirtualCeilingSurfaceArea;     // In m2 : estimation of surface of virtual Ceiling.
+                public float VirtualWallSurfaceArea;        // In m2 : estimation of surface of virtual Walls.
+
+                public int NumFloor;                        // List of Area of each Floor surface (contains count)
+                public int NumCeiling;                      // List of Area of each Ceiling surface (contains count)
+                public int NumWall_XNeg;                    // List of Area of each Wall XNeg surface (contains count)
+                public int NumWall_XPos;                    // List of Area of each Wall XPos surface (contains count)
+                public int NumWall_ZNeg;                    // List of Area of each Wall ZNeg surface (contains count)
+                public int NumWall_ZPos;                    // List of Area of each Wall ZPos surface (contains count)
+                public int NumPlatform;                     // List of Area of each Horizontal not Floor surface (contains count)
+
+                public int CellCount_IsPaintMode;           // Number paint cells (could deduce surface of painted area) => 8cm x 8cm cell
+                public int CellCount_IsSeenQualtiy_None;    // Number of not seen cells => 8cm x 8cm cell
+                public int CellCount_IsSeenQualtiy_Seen;    // Number of seen cells => 8cm x 8cm cell
+                public int CellCount_IsSeenQualtiy_Good;    // Number of seen cells good quality => 8cm x 8cm cell
+            };
+            /// <summary>
+            /// Playspace alignment results. Reports internal alignment of room in Unity space and basic alignment of the room.
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public class PlayspaceAlignment
+            {
+                public Vector3 Center;
+                public Vector3 HalfDims;
+                public Vector3 BasisX;
+                public Vector3 BasisY;
+                public Vector3 BasisZ;
+                public float FloorYValue;
+                public float CeilingYValue;
+            };
+            /// <summary>
+            /// Result structure returns from a raycast call.
+            /// </summary>
+            [StructLayout(LayoutKind.Sequential)]
+            public class RaycastResult
+            {
+                public enum SurfaceTypes
+                {
+                    Invalid,            // If no intersection
+                    Other,
+                    Floor,
+                    FloorLike,          // Not part of the floor topology, but close to the floor and looks like the floor
+                    Platform,			// Horizontal platform between the ground and the ceiling
+                    Ceiling,
+                    WallExternal,
+                    WallLike,           // Not part of the external wall surface
+                };
+                public SurfaceTypes SurfaceType;
+                float SurfaceArea;		// Zero if unknown (not part of the topology analysis)
+                public Vector3 IntersectPoint;
+                public Vector3 IntersectNormal;
+            };
+
+            // Functions
+            /// <summary>
+            /// Initialize the spatial understanding dll. Function must be called
+            /// before any other dll function.
+            /// </summary>
+            /// <returns>Zero if fails, one if success</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int SpatialUnderstanding_Init();
+#else
+            public static int SpatialUnderstanding_Init()
+            {
+                return 0;
+            }
+#endif
+            /// <summary>
+            /// Terminate the spatial understanding dll. 
+            /// </summary>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern void SpatialUnderstanding_Term();
+#else
+            public static void SpatialUnderstanding_Term()
+            {
+            }
+#endif
+
+            /// <summary>
+            /// Initialize the scanning process.
+            /// </summary>
+            /// <param name="camPos_X">The user's camera/view position, x value</param>
+            /// <param name="camPos_Y">The user's camera/view position, y value</param>
+            /// <param name="camPos_Z">The user's camera/view position, z value</param>
+            /// <param name="camFwd_X">The user's camera/view unit forward vector, x value</param>
+            /// <param name="camFwd_Y">The user's camera/view unit forward vector, y value</param>
+            /// <param name="camFwd_Z">The user's camera/view unit forward vector, z value</param>
+            /// <param name="camUp_X">The user's camera/view unit up vector, x value</param>
+            /// <param name="camUp_Y">The user's camera/view unit up vector, y value</param>
+            /// <param name="camUp_Z">The user's camera/view unit up vector, z value</param>
+            /// <param name="searchDst">Suggested search distance for playspace center</param>
+            /// <param name="optimalSize">Optimal room size. Used to determind the playspace size</param>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern void GeneratePlayspace_InitScan(
+                [In] float camPos_X, [In] float camPos_Y, [In] float camPos_Z,
+                [In] float camFwd_X, [In] float camFwd_Y, [In] float camFwd_Z,
+                [In] float camUp_X, [In] float camUp_Y, [In] float camUp_Z,
+                [In] float searchDst, [In] float optimalSize);
+#else
+            public static void GeneratePlayspace_InitScan(
+                [In] float camPos_X, [In] float camPos_Y, [In] float camPos_Z,
+                [In] float camFwd_X, [In] float camFwd_Y, [In] float camFwd_Z,
+                [In] float camUp_X, [In] float camUp_Y, [In] float camUp_Z,
+                [In] float searchDst, [In] float optimalSize)
+            {
+            }
+#endif
+
+            /// <summary>
+            /// Update the playspace scanning. Should be called once per frame during scanning.
+            /// </summary>
+            /// <param name="meshCount">Number of meshes passed in the meshes parameter</param>
+            /// <param name="meshes">Array of meshes</param>
+            /// <param name="camPos_X">The user's camera/view position, x value</param>
+            /// <param name="camPos_Y">The user's camera/view position, y value</param>
+            /// <param name="camPos_Z">The user's camera/view position, z value</param>
+            /// <param name="camFwd_X">The user's camera/view unit forward vector, x value</param>
+            /// <param name="camFwd_Y">The user's camera/view unit forward vector, y value</param>
+            /// <param name="camFwd_Z">The user's camera/view unit forward vector, z value</param>
+            /// <param name="camUp_X">The user's camera/view unit up vector, x value</param>
+            /// <param name="camUp_Y">The user's camera/view unit up vector, y value</param>
+            /// <param name="camUp_Z">The user's camera/view unit up vector, z value</param>
+            /// <param name="deltaTime">Time since last update</param>
+            /// <returns>One if scanning has been finalized, zero if more updates are required.</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int GeneratePlayspace_UpdateScan(
+                [In] int meshCount, [In] IntPtr meshes,
+                [In] float camPos_X, [In] float camPos_Y, [In] float camPos_Z,
+                [In] float camFwd_X, [In] float camFwd_Y, [In] float camFwd_Z,
+                [In] float camUp_X, [In] float camUp_Y, [In] float camUp_Z,
+                [In] float deltaTime);
+#else
+            public static int GeneratePlayspace_UpdateScan(
+                [In] int meshCount, [In] IntPtr meshes,
+                [In] float camPos_X, [In] float camPos_Y, [In] float camPos_Z,
+                [In] float camFwd_X, [In] float camFwd_Y, [In] float camFwd_Z,
+                [In] float camUp_X, [In] float camUp_Y, [In] float camUp_Z,
+                [In] float deltaTime)
+            {
+                return 0;
+            }
+#endif
+
+            /// <summary>
+            /// Request scanning that the scanning phase be ended and the playspace
+            /// finalized. This should be called once the user is happy with the currently
+            /// scanned in playspace.
+            /// </summary>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern void GeneratePlayspace_RequestFinish();
+#else
+            public static void GeneratePlayspace_RequestFinish()
+            {
+            }
+#endif
+
+            /// <summary>
+            /// Extracting the mesh is a two step process, the first generates the mesh for extraction & saves it off.
+            ///	The caller is able to see vertex counts, etc. so they can allocate the proper amount of memory.
+            /// The second call, the caller provides buffers of the appropriate size (or larger), passing in the 
+            /// buffer sizes for validation.
+            /// </summary>
+            /// <param name="vertexCount">Filled in with the number of vertices to be returned in the subsequent extract call</param>
+            /// <param name="indexCount">Filled in with the number of indices to be returned in the subsequent extract call</param>
+            /// <returns>Zero if fails, one if success</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int GeneratePlayspace_ExtractMesh_Setup(
+                [Out] out int vertexCount,
+                [Out] out int indexCount);
+#else
+            public static int GeneratePlayspace_ExtractMesh_Setup(
+                [Out] out int vertexCount,
+                [Out] out int indexCount)
+            {
+                vertexCount = 0;
+                indexCount = 0;
+                return 0;
+            }
+#endif
+
+            /// <summary>
+            /// Call to receive the dll's custom generated mesh data. Use GeneratePlayspace_ExtractMesh_Setup to
+            /// query the minimum size of the vertex positions, normals, and indices.
+            /// </summary>
+            /// <param name="bufferVertexCount">Size of vericesPos & verticesNormal, in number Vector3 elements in each array</param>
+            /// <param name="verticesPos">Array to receive the vertex positions</param>
+            /// <param name="verticesNormal">Array to receive vertex normals</param>
+            /// <param name="bufferIndexCount">Size of indices, in number of elements</param>
+            /// <param name="indices">Array to receive the mesh indices</param>
+            /// <returns>Zero if fails, one if success</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int GeneratePlayspace_ExtractMesh_Extract(
+                [In] int bufferVertexCount,
+                [In] IntPtr verticesPos,        // (vertexCount) DirectX::XMFLOAT3*
+                [In] IntPtr verticesNormal,     // (vertexCount) DirectX::XMFLOAT3*
+                [In] int bufferIndexCount,
+                [In] IntPtr indices);           // (indexCount) INT32*
+#else
+            public static int GeneratePlayspace_ExtractMesh_Extract(
+                [In] int bufferVertexCount,
+                [In] IntPtr verticesPos,        // (vertexCount) DirectX::XMFLOAT3*
+                [In] IntPtr verticesNormal,     // (vertexCount) DirectX::XMFLOAT3*
+                [In] int bufferIndexCount,
+                [In] IntPtr indices)            // (indexCount) INT32*
+            {
+                return 0;
+            }
+#endif
+
+            /// <summary>
+            /// Query the playspace scan statistics. 
+            /// </summary>
+            /// <param name="playspaceStats">playspace stats structure to receive the statistics data</param>
+            /// <returns>Zero if fails, one if success</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int QueryPlayspaceStats(
+                [In] IntPtr playspaceStats);    // PlayspaceStats
+#else
+            public static int QueryPlayspaceStats(
+                [In] IntPtr playspaceStats)
+            {
+                return 0;
+            }
+#endif
+
+            /// <summary>
+            /// Query the playspace alignment data. This will not be valid until after scanning is finalized.
+            /// </summary>
+            /// <param name="playspaceAlignment">playspace alignment structure to receive the alignment data</param>
+            /// <returns>Zero if fails, one if success</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int QueryPlayspaceAlignment(
+                [In] IntPtr playspaceAlignment); // PlayspaceAlignment
+#else
+            public static int QueryPlayspaceAlignment(
+                [In] IntPtr playspaceAlignment)
+            {
+                return 0;
+            }
+#endif
+
+            /// <summary>
+            /// Perform a raycast against the internal world representation of the understanding dll. 
+            /// This will not be valid until after scanning is finalized.
+            /// </summary>
+            /// <param name="rayPos_X">Ray origin, x component</param>
+            /// <param name="rayPos_Y">Ray origin, y component</param>
+            /// <param name="rayPos_Z">Ray origin, z component</param>
+            /// <param name="rayVec_X">Ray direction vector, x component. Length of ray indicates the length of the ray cast query.</param>
+            /// <param name="rayVec_Y">Ray direction vector, y component. Length of ray indicates the length of the ray cast query.</param>
+            /// <param name="rayVec_Z">Ray direction vector, z component. Length of ray indicates the length of the ray cast query.</param>
+            /// <param name="result">Structure to receive the results of the raycast</param>
+            /// <returns>Zero if fails or no intersection, one if an intersection is detected</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+            [DllImport("SpatialUnderstanding")]
+            public static extern int PlayspaceRaycast(
+                [In] float rayPos_X, [In] float rayPos_Y, [In] float rayPos_Z,
+                [In] float rayVec_X, [In] float rayVec_Y, [In] float rayVec_Z,
+                [In] IntPtr result);            // RaycastResult
+#else
+            public static int PlayspaceRaycast(
+                [In] float rayPos_X, [In] float rayPos_Y, [In] float rayPos_Z,
+                [In] float rayVec_X, [In] float rayVec_Y, [In] float rayVec_Z,
+                [In] IntPtr result)
+            {
+                return 0;
+            }
+#endif
+        }
+    }
+}
