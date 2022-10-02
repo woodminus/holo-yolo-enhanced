@@ -36,4 +36,18 @@ namespace HoloToolkit.Unity
         /// <param name="minWidthOfWallSpace">Minimum width of space to be found by the query</param>
         /// <param name="minHeightAboveFloor">Minimum distance above the floor for the bottom edge of the space</param>
         /// <param name="minFacingClearance">Minimum amount of space in front of the space</param>
-        /// <param name="locationCount">Number of location results supplied by the user in locat
+        /// <param name="locationCount">Number of location results supplied by the user in locationData</param>
+        /// <param name="locationData">Location result array of TopologyResult to be filled with the spaces found by the query</param>
+        /// <returns>Number of spaces found by the query. This value is limited by the number of results supplied by the caller (locationCount)</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+        // Queries (topology)
+        [DllImport("SpatialUnderstanding")]
+        public static extern int QueryTopology_FindPositionsOnWalls(
+            [In] float minHeightOfWallSpace,
+            [In] float minWidthOfWallSpace,
+            [In] float minHeightAboveFloor,
+            [In] float minFacingClearance,
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData);     // TopologyResult
+#else
+        public
