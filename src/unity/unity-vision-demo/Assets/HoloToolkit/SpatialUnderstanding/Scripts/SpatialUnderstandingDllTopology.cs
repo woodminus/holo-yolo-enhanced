@@ -50,4 +50,21 @@ namespace HoloToolkit.Unity
             [In] int locationCount,         // Pass in the space allocated in locationData
             [Out] IntPtr locationData);     // TopologyResult
 #else
-        public
+        public static int QueryTopology_FindPositionsOnWalls(
+            [In] float minHeightOfWallSpace,
+            [In] float minWidthOfWallSpace,
+            [In] float minHeightAboveFloor,
+            [In] float minFacingClearance,
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData)
+        {
+            return 0;
+        }
+#endif
+
+        /// <summary>
+        /// Finds only large spaces on walls meeting the criteria specified by the parameters.
+        /// </summary>
+        /// <param name="minHeightOfWallSpace">Minimum height of space to be found by the query</param>
+        /// <param name="minWidthOfWallSpace">Minimum width of space to be found by the query</param>
+        /// <param name="minHeightAboveFloor">Minimum distance above the floor for the bottom e
