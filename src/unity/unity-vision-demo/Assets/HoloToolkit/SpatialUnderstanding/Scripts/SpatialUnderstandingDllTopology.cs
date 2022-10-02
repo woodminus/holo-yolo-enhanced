@@ -22,4 +22,18 @@ namespace HoloToolkit.Unity
         [StructLayout(LayoutKind.Sequential)]
         public struct TopologyResult
         {
-            pu
+            public Vector3 position;
+            public Vector3 normal;
+            public float width;
+            public float length;
+        };
+
+        // Functions
+        /// <summary>
+        /// Finds spaces on walls meeting the criteria specified by the parameters.
+        /// </summary>
+        /// <param name="minHeightOfWallSpace">Minimum height of space to be found by the query</param>
+        /// <param name="minWidthOfWallSpace">Minimum width of space to be found by the query</param>
+        /// <param name="minHeightAboveFloor">Minimum distance above the floor for the bottom edge of the space</param>
+        /// <param name="minFacingClearance">Minimum amount of space in front of the space</param>
+        /// <param name="locationCount">Number of location results supplied by the user in locat
