@@ -99,4 +99,22 @@ namespace HoloToolkit.Unity
         /// </summary>
         /// <param name="wall">Pointer to a TopologyResult structure, to be filled with the found wall</param>
         /// <returns>Zero if fails, one if success</returns>
-#
+#if UNITY_METRO && !UNITY_EDITOR
+        [DllImport("SpatialUnderstanding")]
+        public static extern int QueryTopology_FindLargestWall(
+            [Out] IntPtr wall);             // TopologyResult
+#else
+        public static int QueryTopology_FindLargestWall(
+            [Out] IntPtr wall)
+        {
+            return 0;
+        }
+#endif
+
+        /// <summary>
+        /// Finds spaces on the floor meeting the criteria specified by the parameters.
+        /// </summary>
+        /// <param name="minLengthOfFloorSpace">Minimum length of space to be found by the query</param>
+        /// <param name="minWidthOfFloorSpace">Minimum width of space to be found by the query</param>
+        /// <param name="locationCount">Number of location results supplied by the user in locationData</param>
+        /// <param name="locationData">Location 
