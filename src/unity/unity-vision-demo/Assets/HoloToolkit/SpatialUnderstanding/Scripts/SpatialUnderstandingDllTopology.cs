@@ -146,4 +146,21 @@ namespace HoloToolkit.Unity
 #if UNITY_METRO && !UNITY_EDITOR
         [DllImport("SpatialUnderstanding")]
         public static extern int QueryTopology_FindLargestPositionsOnFloor(
-           
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData);     // TopologyResult
+#else
+        public static int QueryTopology_FindLargestPositionsOnFloor(
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData)
+        {
+            return 0;
+        }
+#endif
+
+        /// <summary>
+        /// Finds good spaces for sitting or placing objects on surfaces.
+        /// </summary>
+        /// <param name="minHeight">Minimum height above the floor for a space</param>
+        /// <param name="maxHeight">Maximum height above the floor for a space</param>
+        /// <param name="minFacingClearance">Minimum clearance for the space above the placement surface (minimum space height)</param>
+        //
