@@ -130,4 +130,20 @@ namespace HoloToolkit.Unity
         public static int QueryTopology_FindPositionsOnFloor(
             [In] float minLengthOfFloorSpace,
             [In] float minWidthOfFloorSpace,
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData)
+        {
+            return 0;
+        }
+#endif
+
+        /// <summary>
+        /// Finds the largest spaces on the floor
+        /// </summary>
+        /// <param name="locationCount">Number of location results supplied by the user in locationData</param>
+        /// <param name="locationData">Location result array of TopologyResult to be filled with the spaces found by the query</param>
+        /// <returns>Number of spaces found by the query. This value is limited by the number of results supplied by the caller (locationCount)</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+        [DllImport("SpatialUnderstanding")]
+        public static extern int QueryTopology_FindLargestPositionsOnFloor(
            
