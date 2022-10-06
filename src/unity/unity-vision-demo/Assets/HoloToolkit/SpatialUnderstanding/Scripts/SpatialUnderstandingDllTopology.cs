@@ -163,4 +163,16 @@ namespace HoloToolkit.Unity
         /// <param name="minHeight">Minimum height above the floor for a space</param>
         /// <param name="maxHeight">Maximum height above the floor for a space</param>
         /// <param name="minFacingClearance">Minimum clearance for the space above the placement surface (minimum space height)</param>
-        //
+        /// <param name="locationCount">Number of location results supplied by the user in locationData</param>
+        /// <param name="locationData">Location result array of TopologyResult to be filled with the spaces found by the query</param>
+        /// <returns>Number of spaces found by the query. This value is limited by the number of results supplied by the caller (locationCount)</returns>
+#if UNITY_METRO && !UNITY_EDITOR
+        [DllImport("SpatialUnderstanding")]
+        public static extern int QueryTopology_FindPositionsSittable(
+            [In] float minHeight,
+            [In] float maxHeight,
+            [In] float minFacingClearance,
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData);     // TopologyResult
+#else
+        public static int Query
