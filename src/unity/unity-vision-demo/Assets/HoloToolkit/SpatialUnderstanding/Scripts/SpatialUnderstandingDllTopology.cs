@@ -175,4 +175,16 @@ namespace HoloToolkit.Unity
             [In] int locationCount,         // Pass in the space allocated in locationData
             [Out] IntPtr locationData);     // TopologyResult
 #else
-        public static int Query
+        public static int QueryTopology_FindPositionsSittable(
+            [In] float minHeight,
+            [In] float maxHeight,
+            [In] float minFacingClearance,
+            [In] int locationCount,         // Pass in the space allocated in locationData
+            [Out] IntPtr locationData)
+        {
+            return 0;
+        }
+#endif
+    }
+
+}
