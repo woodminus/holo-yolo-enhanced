@@ -34,4 +34,8 @@ namespace HoloToolkit.Unity
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(EditorGUIExtensions.Indent);
- 
+            GUILayout.Label(text, style, options);
+            EditorGUILayout.EndHorizontal();
+        }
+    }
+}
