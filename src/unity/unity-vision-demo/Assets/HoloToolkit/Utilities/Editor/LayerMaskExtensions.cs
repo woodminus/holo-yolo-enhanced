@@ -47,4 +47,11 @@ namespace HoloToolkit.Unity
                         stringBuilder.Append(" | ");
                     }
 
-                    stringBuilder.Append(LayerMaskExtensions
+                    stringBuilder.Append(LayerMaskExtensions.LayerMaskNames[layer]);
+                }
+            }
+
+            return stringBuilder == null ? "None" : stringBuilder.ToString();
+        }
+    }
+}
