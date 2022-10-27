@@ -40,4 +40,22 @@ namespace HoloToolkit.Unity
         /// <summary>
         /// Keeps the object facing the camera.
         /// </summary>
-        private void Update(
+        private void Update()
+        {
+            // Get a Vector that points from the Camera to the target.
+            Vector3 forward;
+            Vector3 up;
+
+            // Adjust for the pivot axis. We need a forward and an up for use with Quaternion.LookRotation
+            switch (PivotAxis)
+            {
+                // If we're fixing one axis, then we're projecting the camera's forward vector onto
+                // the plane defined by the fixed axis and using that as the new forward.
+                case PivotAxis.X:
+                    Vector3 right = transform.right; // Fixed right
+                    forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, right).normalized;
+                    up = Vector3.Cross(forward, right); // Compute the up vector
+                    break;
+
+                case PivotAxis.Y:
+    
