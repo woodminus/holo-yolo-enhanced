@@ -58,4 +58,22 @@ namespace HoloToolkit.Unity
                     break;
 
                 case PivotAxis.Y:
-    
+                    up = transform.up; // Fixed up
+                    forward = Vector3.ProjectOnPlane(Camera.main.transform.forward, up).normalized;
+                    break;
+
+                // If the axes are free then we're simply aligning the forward and up vectors
+                // of the object with those of the camera. 
+                case PivotAxis.Free:
+                default:
+                    forward = Camera.main.transform.forward;
+                    up = Camera.main.transform.up;
+                    break;
+            }
+
+
+            // Calculate and apply the rotation required to reorient the object
+            transform.rotation = Quaternion.LookRotation(forward, up);
+        }
+    }
+}
