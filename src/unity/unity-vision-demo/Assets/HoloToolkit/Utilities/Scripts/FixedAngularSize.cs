@@ -12,4 +12,25 @@ namespace HoloToolkit.Unity
     /// </summary>
     public class FixedAngularSize : MonoBehaviour
     {
-        // The ratio between the transform's local scale and 
+        // The ratio between the transform's local scale and its starting
+        // distance from the camera.
+        private Vector3 defaultSizeRatios;
+
+        void Start()
+        {
+            // Calculate the XYZ ratios for the transform's localScale over its
+            // initial distance from the camera.
+            float startingDistance = Vector3.Distance(Camera.main.transform.position, transform.position);
+            if (startingDistance > 0.0f)
+            {
+                defaultSizeRatios = transform.localScale / startingDistance;
+            }
+            else
+            {
+                // If the transform and the camera are both in the same
+                // position (that is, the distance between them is zero),
+                // disable this Behaviour so we don't get a DivideByZero
+                // error later on.
+                enabled = false;
+#if UNITY_EDITOR
+                Debug.Log
