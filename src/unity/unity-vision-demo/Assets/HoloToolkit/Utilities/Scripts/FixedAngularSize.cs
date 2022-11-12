@@ -33,4 +33,15 @@ namespace HoloToolkit.Unity
                 // error later on.
                 enabled = false;
 #if UNITY_EDITOR
-                Debug.Log
+                Debug.LogWarning("The object and the camera are in the same position at Start(). The attached FixedAngularSize Behaviour is now disabled.");
+#endif // UNITY_EDITOR
+            }
+        }
+
+        void Update()
+        {
+            float distanceToHologram = Vector3.Distance(Camera.main.transform.position, transform.position);
+            transform.localScale = defaultSizeRatios * distanceToHologram;
+        }
+    }
+}
