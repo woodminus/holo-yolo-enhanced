@@ -32,4 +32,18 @@ public class NearPlaneFade : MonoBehaviour
 
     private void UpdateShaderParams()
     {
-        
+        float rangeInverse = 1.0f / (FadeDistanceStart - FadeDistanceEnd);
+        var fadeDist = new Vector4(-FadeDistanceEnd * rangeInverse, rangeInverse, 0, 0);
+
+        Shader.SetGlobalVector(fadeDistancePropertyID, fadeDist);
+
+        if (NearPlaneFadeOn)
+        {
+            Shader.EnableKeyword(FadeKeywordOn);
+        }
+        else
+        {
+            Shader.DisableKeyword(FadeKeywordOn);
+        }
+    }
+}
