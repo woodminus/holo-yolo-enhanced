@@ -347,3 +347,162 @@ namespace HoloToolkit.Unity
             {
                 Vector3 lerpTargetLocalScale = targetLocalScale;
                 if (SmoothLerpToTarget)
+                {
+                    lerpTargetLocalScale = Vector3.Lerp(transform.localScale, lerpTargetLocalScale, SmoothScaleLerpRatio);
+                }
+
+                Vector3 newScale = NonLinearInterpolateTo(transform.localScale, lerpTargetLocalScale, Time.deltaTime, ScalePerSecond);
+                if ((targetLocalScale - newScale).sqrMagnitude <= smallNumber)
+                {
+                    // Snap to final scale
+                    newScale = targetLocalScale;
+                    AnimatingLocalScale = false;
+                }
+                else
+                {
+                    interpOccuredThisFrame = true;
+                }
+
+                transform.localScale = newScale;
+            }
+
+            // If all interpolations have completed, stop updating
+            if (!interpOccuredThisFrame)
+            {
+                if (InterpolationDone != null)
+                {
+                    InterpolationDone();
+                }
+                enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Snaps to the final target and stops interpolating
+        /// </summary>
+        public void SnapToTarget()
+        {
+            if (enabled)
+            {
+                transform.position = TargetPosition;
+                transform.rotation = TargetRotation;
+                transform.localRotation = TargetLocalRotation;
+                transform.localScale = TargetLocalScale;
+
+                AnimatingPosition = false;
+                AnimatingLocalScale = false;
+                AnimatingRotation = false;
+                AnimatingLocalRotation = false;
+
+                enabled = false;
+
+                if (InterpolationDone != null)
+                {
+                    InterpolationDone();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stops the interpolation regardless if it has reached the target
+        /// </summary>
+        public void StopInterpolating()
+        {
+            if (enabled)
+            {
+                Reset();
+
+                if (InterpolationDone != null)
+                {
+                    InterpolationDone();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stops the transform in place and terminates any animations.
+        /// </summary>
+        public void Reset()
+        {
+            targetPosition = transform.position;
+            targetRotation = transform.rotation;
+            targetLocalRotation = transform.localRotation;
+            targetLocalScale = transform.localScale;
+
+            AnimatingPosition = false;
+            AnimatingRotation = false;
+            AnimatingLocalRotation = false;
+            AnimatingLocalScale = false;
+
+            enabled = false;
+        }
+
+        /// <summary>
+        /// If animating position, specifies the target position as specified
+        /// by SetTargetPosition. Otherwise returns the current position of
+        /// the transform.
+        /// </summary>
+        public Vector3 TargetPosition
+        {
+            get
+            {
+                if (AnimatingPosition)
+                {
+                    return targetPosition;
+                }
+                return transform.position;
+            }
+        }
+
+        /// <summary>
+        /// If animating rotation, specifies the target rotation as specified
+        /// by SetTargetRotation. Otherwise returns the current rotation of
+        /// the transform.
+        /// </summary>
+        public Quaternion TargetRotation
+        {
+            get
+            {
+                if (AnimatingRotation)
+                {
+                    return targetRotation;
+                }
+                return transform.rotation;
+            }
+        }
+
+        /// <summary>
+        /// If animating local rotation, specifies the target local rotation as
+        /// specified by SetTargetLocalRotation. Otherwise returns the current
+        /// local rotation of the transform.
+        /// </summary>
+        public Quaternion TargetLocalRotation
+        {
+            get
+            {
+                if (AnimatingLocalRotation)
+                {
+                    return targetLocalRotation;
+                }
+                return transform.localRotation;
+            }
+        }
+
+        /// <summary>
+        /// If animating local scale, specifies the target local scale as
+        /// specified by SetTargetLocalScale. Otherwise returns the current
+        /// local scale of the transform.
+        /// </summary>
+        public Vector3 TargetLocalScale
+        {
+            get
+            {
+                if (AnimatingLocalScale)
+                {
+                    return targetLocalScale;
+                }
+                return transform.localScale;
+            }
+        }
+    }
+}
