@@ -11,4 +11,26 @@ namespace HoloToolkit.Unity
     /// </summary>
     public class StabilizationPlaneModifier : Singleton<StabilizationPlaneModifier>
     {
-        [Tooltip("Checking enables SetFocusPointForFrame to 
+        [Tooltip("Checking enables SetFocusPointForFrame to set the stabilization plane.")]
+        public bool SetStabilizationPlane = true;
+        [Tooltip("Lerp speed when moving focus point closer.")]
+        public float LerpStabilizationPlanePowerCloser = 4.0f;
+        [Tooltip("Lerp speed when moving focus point farther away.")]
+        public float LerpStabilizationPlanePowerFarther = 7.0f;
+
+        [SerializeField, Tooltip("Used to temporarily override the location of the stabilization plane.")]
+        private Transform targetOverride;
+        public Transform TargetOverride
+        {
+            get
+            {
+                return targetOverride;
+            }
+            set
+            {
+                if (targetOverride != value)
+                {
+                    targetOverride = value;
+                    if (targetOverride)
+                    {
+                        targetOverridePreviousPosition = targetOverride.positio
