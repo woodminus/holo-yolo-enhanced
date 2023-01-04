@@ -33,4 +33,34 @@ namespace HoloToolkit.Unity
                     targetOverride = value;
                     if (targetOverride)
                     {
-                        targetOverridePreviousPosition = targetOverride.positio
+                        targetOverridePreviousPosition = targetOverride.position;
+                    }
+                }
+            }
+        }
+
+        [SerializeField, Tooltip("Keeps track of position-based velocity for the target object.")]
+        private bool trackVelocity = false;
+        public bool TrackVelocity
+        {
+            get
+            {
+                return trackVelocity;
+            }
+            set
+            {
+                trackVelocity = value;
+                if (TargetOverride)
+                {
+                    targetOverridePreviousPosition = TargetOverride.position;
+                }
+            }
+        }
+
+        [Tooltip("Use the GazeManager class to set the plane to the gazed upon hologram.")]
+        public bool UseGazeManager = true;
+
+        [Tooltip("Default distance to set plane if plane is gaze-locked.")]
+        public float DefaultPlaneDistance = 2.0f;
+
+        [Tooltip("Visualize the pl
