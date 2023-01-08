@@ -87,4 +87,35 @@ namespace HoloToolkit.Unity
         /// </summary>
         private void LateUpdate()
         {
-       
+            if (SetStabilizationPlane && Camera.main != null)
+            {
+                if (TargetOverride != null)
+                {
+                    ConfigureTransformOverridePlane();
+                }
+                else if (UseGazeManager && GazeManager.Instance != null)
+                {
+                    ConfigureGazeManagerPlane();
+                }
+                else
+                {
+                    ConfigureFixedDistancePlane();
+                }
+
+#if UNITY_EDITOR
+                if (DrawGizmos)
+                {
+                    OnDrawGizmos();
+                }
+#endif
+            }
+        }
+
+        private void OnValidate()
+        {
+            TrackVelocity = trackVelocity;
+            TargetOverride = targetOverride;
+        }
+
+        /// <summary>
+        /// Configures the stabilization plane to update its po
