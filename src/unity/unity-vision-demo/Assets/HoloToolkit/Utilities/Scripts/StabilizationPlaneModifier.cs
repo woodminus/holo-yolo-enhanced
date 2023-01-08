@@ -63,4 +63,28 @@ namespace HoloToolkit.Unity
         [Tooltip("Default distance to set plane if plane is gaze-locked.")]
         public float DefaultPlaneDistance = 2.0f;
 
-        [Tooltip("Visualize the pl
+        [Tooltip("Visualize the plane at runtime.")]
+        public bool DrawGizmos = false;
+
+        /// <summary>
+        /// Position of the plane in world space.
+        /// </summary>
+        private Vector3 planePosition;
+
+        /// <summary>
+        /// Current distance of the plane from the user's head. Only used when not using the target override
+        /// or the GazeManager to set the plane's position. 
+        /// </summary>
+        private float currentPlaneDistance = 4.0f;
+
+        /// <summary>
+        /// Tracks the previous position of the target override object. Used if velocity is being tracked.
+        /// </summary>
+        private Vector3 targetOverridePreviousPosition;
+
+        /// <summary>
+        /// Updates the focus point for every frame after all objects have finished moving.
+        /// </summary>
+        private void LateUpdate()
+        {
+       
