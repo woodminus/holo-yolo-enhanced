@@ -118,4 +118,24 @@ namespace HoloToolkit.Unity
         }
 
         /// <summary>
-        /// Configures the stabilization plane to update its po
+        /// Configures the stabilization plane to update its position based on an object in the scene.        
+        /// </summary>
+        private void ConfigureTransformOverridePlane()
+        {
+            planePosition = TargetOverride.position;
+
+            Vector3 velocity = Vector3.zero;
+            if (TrackVelocity)
+            {
+                velocity = UpdateVelocity();
+            }
+            
+            // Place the plane at the desired depth in front of the camera and billboard it to the camera.
+            HolographicSettings.SetFocusPointForFrame(planePosition, -Camera.main.transform.forward, velocity);
+        }
+
+        /// <summary>
+        /// Configures the stabilization plane to update its position based on what your gaze intersects in the scene.
+        /// </summary>
+        private void ConfigureGazeManagerPlane()
+     
