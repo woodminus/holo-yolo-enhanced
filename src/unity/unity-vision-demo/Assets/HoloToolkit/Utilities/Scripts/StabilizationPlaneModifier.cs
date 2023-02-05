@@ -138,4 +138,18 @@ namespace HoloToolkit.Unity
         /// Configures the stabilization plane to update its position based on what your gaze intersects in the scene.
         /// </summary>
         private void ConfigureGazeManagerPlane()
-     
+        {
+            Vector3 gazeOrigin = Camera.main.transform.position;
+            Vector3 gazeDirection = Camera.main.transform.forward;
+
+            // Calculate the delta between camera's position and current hit position.
+            float focusPointDistance = (gazeOrigin - GazeManager.Instance.Position).magnitude;
+            float lerpPower = focusPointDistance > currentPlaneDistance ? LerpStabilizationPlanePowerFarther
+                                                                        : LerpStabilizationPlanePowerCloser;
+
+            // Smoothly move the focus point from previous hit position to new position.
+            currentPlaneDistance = Mathf.Lerp(currentPlaneDistance, focusPointDistance, lerpPower * Time.deltaTime);
+
+            planePosition = gazeOrigin + (gazeDirection * currentPlaneDistance);
+
+            Hol
