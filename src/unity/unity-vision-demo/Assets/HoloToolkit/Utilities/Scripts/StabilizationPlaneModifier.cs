@@ -183,4 +183,22 @@ namespace HoloToolkit.Unity
 
         /// <summary>
         /// When in editor, draws a magenta quad that visually represents the stabilization plane.
-        /// </summa
+        /// </summary>
+        private void OnDrawGizmos()
+        {
+            if (UnityEngine.Application.isPlaying)
+            {
+                Vector3 focalPlaneNormal = -Camera.main.transform.forward;
+                Vector3 planeUp = Vector3.Cross(Vector3.Cross(focalPlaneNormal, Vector3.up), focalPlaneNormal);
+                Gizmos.matrix = Matrix4x4.TRS(planePosition, Quaternion.LookRotation(focalPlaneNormal, planeUp), new Vector3(4.0f, 3.0f, 0.01f));
+
+                Color gizmoColor = Color.magenta;
+                gizmoColor.a = 0.5f;
+                Gizmos.color = gizmoColor;
+
+                Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+                Gizmos.DrawCube(Vector3.zero, Vector3.one);
+            }
+        }
+    }
+}
