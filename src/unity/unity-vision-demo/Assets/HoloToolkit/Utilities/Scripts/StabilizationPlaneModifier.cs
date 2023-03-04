@@ -152,4 +152,18 @@ namespace HoloToolkit.Unity
 
             planePosition = gazeOrigin + (gazeDirection * currentPlaneDistance);
 
-            Hol
+            HolographicSettings.SetFocusPointForFrame(planePosition, -gazeDirection, Vector3.zero);
+        }
+
+        /// <summary>
+        /// Configures the stabilization plane to update based on a fixed distance away from you.
+        /// </summary>
+        private void ConfigureFixedDistancePlane()
+        {
+            float lerpPower = DefaultPlaneDistance > currentPlaneDistance ? LerpStabilizationPlanePowerFarther
+                                                                          : LerpStabilizationPlanePowerCloser;
+
+            // Smoothly move the focus point from previous hit position to new position.
+            currentPlaneDistance = Mathf.Lerp(currentPlaneDistance, DefaultPlaneDistance, lerpPower * Time.deltaTime);
+
+            planePosition = Camera.main.transform.position + (Camera.main.transfo
