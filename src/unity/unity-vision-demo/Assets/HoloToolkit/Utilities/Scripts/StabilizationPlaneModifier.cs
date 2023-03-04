@@ -166,4 +166,21 @@ namespace HoloToolkit.Unity
             // Smoothly move the focus point from previous hit position to new position.
             currentPlaneDistance = Mathf.Lerp(currentPlaneDistance, DefaultPlaneDistance, lerpPower * Time.deltaTime);
 
-            planePosition = Camera.main.transform.position + (Camera.main.transfo
+            planePosition = Camera.main.transform.position + (Camera.main.transform.forward * currentPlaneDistance);
+            HolographicSettings.SetFocusPointForFrame(planePosition, -Camera.main.transform.forward, Vector3.zero);
+        }
+
+        /// <summary>
+        /// Tracks the velocity of the target object to be used as a hint for the plane stabilization.
+        /// </summary>
+        private Vector3 UpdateVelocity()
+        {
+            // Roughly calculate the velocity based on previous position, current position, and frame time.
+            Vector3 velocity = (TargetOverride.position - targetOverridePreviousPosition) / Time.deltaTime;
+            targetOverridePreviousPosition = TargetOverride.position;
+            return velocity;
+        }
+
+        /// <summary>
+        /// When in editor, draws a magenta quad that visually represents the stabilization plane.
+        /// </summa
