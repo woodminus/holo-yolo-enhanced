@@ -29,4 +29,42 @@ struct Input
 
 void vert(inout appdata_full v, out Input o)
 {
-    UNITY_INITIALIZE_OUT
+    UNITY_INITIALIZE_OUTPUT(Input, o);
+    
+    #if _NEAR_PLANE_FADE_ON
+        o.fade = ComputeNearPlaneFadeLinear(v.vertex);
+    #endif
+}
+
+void surf(Input IN, inout SurfaceOutput o)
+{
+    float4 c;
+
+    #if _USEMAINTEX_ON
+        c = UNITY_SAMPLE_TEX2D(_MainTex, IN.uv_MainTex);
+    #else
+        c = 1;
+    #endif
+
+    #if _USECOLOR_ON
+        c *= _Color;
+    #endif
+
+    o.Albedo = c.rgb;
+    
+    #if _NEAR_PLANE_FADE_ON
+        o.Albedo.rgb *= IN.fade;
+    #endif
+
+    o.Alpha = c.a;
+    o.Specular = _Specular;
+    o.Gloss = _Gloss;
+
+    #if _USEBUMPMAP_ON
+        o.Normal = UnpackNormal(UNITY_SAMPLE_TEX2D(_BumpMap, IN.uv_MainTex));
+    #endif
+
+    #if _USEEMISSIONTEX_ON
+        o.Emission = UNITY_SAMPLE_TEX2D(_EmissionTex, IN.uv_MainTex);
+    #endif
+}
