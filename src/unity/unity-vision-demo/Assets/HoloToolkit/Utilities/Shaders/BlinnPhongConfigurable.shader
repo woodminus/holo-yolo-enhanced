@@ -22,4 +22,24 @@ Shader "HoloToolkit/BlinnPhong Configurable"
         [NoScaleOffset] _BumpMap("Normalmap", 2D) = "bump" {}
         [Space(20)]
 
-       
+        // Uses UV scale, etc from main texture
+        [Header(Emission(RGB))]
+        [Toggle] _UseEmissionTex("Enabled?", Float) = 0
+        [NoScaleOffset] _EmissionTex("Emission (RGB)", 2D) = "white" {}
+        [Space(20)]
+
+        // Specular
+        [Header(Specular)]
+        _SpecColor("Specular Color", Color) = (0.5, 0.5, 0.5, 1)
+        _Specular("Specular", Range(0.0, 1.0)) = 0.5
+        _Gloss("Gloss", Range(0.0, 10.0)) = 0.5
+        [Space(20)]
+
+        [Header(Blend State)]
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("SrcBlend", Float) = 1 //"One"
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("DestBlend", Float) = 0 //"Zero"
+        [Space(20)]
+
+        [Header(Other)]
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 2 //"Back"
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest
