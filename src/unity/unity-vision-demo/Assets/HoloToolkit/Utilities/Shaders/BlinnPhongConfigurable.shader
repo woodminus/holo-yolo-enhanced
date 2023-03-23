@@ -42,4 +42,29 @@ Shader "HoloToolkit/BlinnPhong Configurable"
 
         [Header(Other)]
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 2 //"Back"
-        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 4 //"LessEqual"
+        [Enum(Off,0,On,1)] _ZWrite("ZWrite", Float) = 1.0 //"On"
+        [Enum(UnityEngine.Rendering.ColorWriteMask)] _ColorWriteMask("ColorWriteMask", Float) = 15 //"All"
+    }
+
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "PerformanceChecks" = "False" }
+        Blend[_SrcBlend][_DstBlend]
+        ZTest[_ZTest]
+        ZWrite[_ZWrite]
+        Cull[_Cull]
+        ColorMask[_ColorWriteMask]
+        LOD 300
+
+        CGPROGRAM
+        // We only target the HoloLens (and the Unity editor), so take advantage of shader model 5.
+        #pragma target 5.0
+        #pragma only_renderers d3d11
+
+        #pragma surface surf BlinnPhong vertex:vert
+
+        #pragma shader_feature _USECOLOR_ON
+        #pragma shader_feature _USEMAINTEX_ON
+        #pragma shader_feature _USEBUMPMAP_ON
+        #pragma shader_fe
