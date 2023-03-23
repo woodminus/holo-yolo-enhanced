@@ -1,8 +1,9 @@
+
 // Very fast shader that uses the Unity lighting model.
 // Compiles down to only performing the operations you're actually using.
 // Uses material property drawers rather than a custom editor for ease of maintenance.
 
-Shader "HoloToolkit/BlinnPhong Configurable"
+Shader "HoloToolkit/BlinnPhong Configurable Transparent"
 {
     Properties
     {
@@ -49,7 +50,7 @@ Shader "HoloToolkit/BlinnPhong Configurable"
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "PerformanceChecks" = "False" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" "PerformanceChecks" = "False" }
         Blend[_SrcBlend][_DstBlend]
         ZTest[_ZTest]
         ZWrite[_ZWrite]
@@ -62,7 +63,7 @@ Shader "HoloToolkit/BlinnPhong Configurable"
         #pragma target 5.0
         #pragma only_renderers d3d11
 
-        #pragma surface surf BlinnPhong vertex:vert
+        #pragma surface surf BlinnPhong vertex:vert alpha:fade
 
         #pragma shader_feature _USECOLOR_ON
         #pragma shader_feature _USEMAINTEX_ON
