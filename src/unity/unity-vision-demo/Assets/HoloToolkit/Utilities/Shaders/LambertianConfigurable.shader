@@ -40,4 +40,30 @@ Shader "HoloToolkit/Lambertian Configurable"
         [Enum(UnityEngine.Rendering.ColorWriteMask)] _ColorWriteMask("ColorWriteMask", Float) = 15 //"All"
     }
 
-    SubS
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "PerformanceChecks" = "False" }
+        Blend[_SrcBlend][_DstBlend]
+        ZTest[_ZTest]
+        ZWrite[_ZWrite]
+        Cull[_Cull]
+        ColorMask[_ColorWriteMask]
+        LOD 300
+
+        CGPROGRAM
+        // We only target the HoloLens (and the Unity editor), so take advantage of shader model 5.
+        #pragma target 5.0
+        #pragma only_renderers d3d11
+
+        #pragma surface surf Lambert vertex:vert
+
+        #pragma shader_feature _USECOLOR_ON
+        #pragma shader_feature _USEMAINTEX_ON
+        #pragma shader_feature _USEBUMPMAP_ON
+        #pragma shader_feature _USEEMISSIONTEX_ON
+        #pragma shader_feature _NEAR_PLANE_FADE_ON
+
+        #include "HoloToolkitCommon.cginc"
+        #include "LambertianConfigurable.cginc"
+
+        END
