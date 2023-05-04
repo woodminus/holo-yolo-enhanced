@@ -44,4 +44,29 @@ v2f vert(appdata_t v)
         o.fade = ComputeNearPlaneFadeLinear(v.vertex);
     #endif
 
-    UNITY_TRANS
+    UNITY_TRANSFER_FOG(o, o.vertex);
+    return o;
+}
+
+float4 frag(v2f i) : SV_Target
+{
+    float4 c;
+
+    #if _USEMAINTEX_ON
+        c = UNITY_SAMPLE_TEX2D(_MainTex, i.texcoord);
+    #else
+        c = 1;
+    #endif
+
+    #if _USECOLOR_ON
+        c *= _Color;
+    #endif
+        
+    UNITY_APPLY_FOG(i.fogCoord, c);
+
+    #if _NEAR_PLANE_FADE_ON
+        c.rgb *= i.fade;
+    #endif
+
+    return c;
+}
