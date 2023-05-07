@@ -26,3 +26,32 @@ Shader "HoloToolkit/Unlit Configurable"
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 2 //"Back"
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 4 //"LessEqual"
         [Enum(Off,0,On,1)] _ZWrite("ZWrite", Float) = 1.0 //"On"
+        [Enum(UnityEngine.Rendering.ColorWriteMask)] _ColorWriteMask("ColorWriteMask", Float) = 15 //"All"
+    }
+
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" }
+        LOD 100
+        Blend[_SrcBlend][_DstBlend]
+        ZTest[_ZTest]
+        ZWrite[_ZWrite]
+        Cull[_Cull]
+        ColorMask[_ColorWriteMask]
+
+        Pass
+        {
+            Name "FORWARD"
+            Tags { "LightMode" = "Always" }
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_fog
+
+            // We only target the HoloLens (and the Unity editor), so take advantage of shader model 5.
+            #pragma target 5.0
+            #pragma only_renderers d3d11
+
+            #pragma shader_feature _USECOLOR_ON
+            #pragma shader_feature _USEMAINTEX_ON
