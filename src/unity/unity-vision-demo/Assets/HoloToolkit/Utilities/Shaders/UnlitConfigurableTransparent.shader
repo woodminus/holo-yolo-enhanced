@@ -31,4 +31,36 @@ Shader "HoloToolkit/Unlit Configurable Transparent"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        LOD 100
+        Blend[_SrcBlend][_DstBlend]
+        ZTest[_ZTest]
+        ZWrite[_ZWrite]
+        Cull[_Cull]
+        ColorMask[_ColorWriteMask]
+
+        Pass
+        {
+            Name "FORWARD"
+            Tags { "LightMode" = "Always" }
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_fog
+
+            // We only target the HoloLens (and the Unity editor), so take advantage of shader model 5.
+            #pragma target 5.0
+            #pragma only_renderers d3d11
+
+            #pragma shader_feature _USECOLOR_ON
+            #pragma shader_feature _USEMAINTEX_ON
+            #pragma shader_feature _NEAR_PLANE_FADE_ON
+
+            #include "HoloToolkitCommon.cginc"
+            #include "UnlitConfigurable.cginc"
+
+            ENDCG
+        }
+    }
+}
