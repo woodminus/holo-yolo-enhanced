@@ -1,0 +1,1 @@
+// Very fast vertex lit shader that uses the Unity lighting mode
