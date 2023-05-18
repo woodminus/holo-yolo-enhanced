@@ -46,4 +46,29 @@ Shader "HoloToolkit/Vertex Lit Configurable Transparent"
 
         Pass
         {
-            Name "FORWAR
+            Name "FORWARD"
+            Tags{ "LightMode" = "ForwardBase" }
+
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog
+
+            // We only target the HoloLens (and the Unity editor), so take advantage of shader model 5.
+            #pragma target 5.0
+            #pragma only_renderers d3d11
+
+            #pragma shader_feature _USECOLOR_ON
+            #pragma shader_feature _USEMAINTEX_ON
+            #pragma shader_feature _USEEMISSIONTEX_ON
+            #pragma shader_feature _NEAR_PLANE_FADE_ON
+
+            #include "HoloToolkitCommon.cginc"
+            #include "VertexLitConfigurable.cginc"
+
+            ENDCG
+        }
+    }
+}
