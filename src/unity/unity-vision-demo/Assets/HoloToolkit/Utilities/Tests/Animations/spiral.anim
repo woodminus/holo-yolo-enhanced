@@ -37,4 +37,36 @@ AnimationClip:
         outSlope: {x: 360, y: 0, z: 0}
         tangentMode: 0
       - time: 2
-        value: {x: 720, y: 0,
+        value: {x: 720, y: 0, z: 0}
+        inSlope: {x: 400, y: 0, z: 0}
+        outSlope: {x: 400, y: 0, z: 0}
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: 
+  m_PositionCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: {x: -1.5, y: 0, z: -5}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+      - time: 1
+        value: {x: 1.5, y: 0, z: -5}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+      - time: 2
+        value: {x: -1.5, y: 0, z: -5}
+        inSlope: {x: 0.0026738048, y: 0, z: 0}
+        outSlope: {x: 0.0026738048, y: 0, z: 0}
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: 
+  m_ScaleCurves: []
+  m_FloatCu
