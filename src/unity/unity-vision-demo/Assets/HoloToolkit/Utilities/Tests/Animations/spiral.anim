@@ -145,4 +145,45 @@ AnimationClip:
         inSlope: 0
         outSlope: 0
         tangentMode: 10
-     
+      - time: 1
+        value: -5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      - time: 2
+        value: -5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: 
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 360
+        outSlope: 360
+        tangentMode: 10
+      - time: 0.5
+        value: 180
+        inSlope: 360
+        outSlope: 360
+        tangentMode: 10
+      - time: 1
+        value: 360
+        inSlope: 340
+        outSlope: 340
+        tangentMode: 10
+      - time: 1.5
+        value: 520
+        inSlope: 360
+        outSlope: 360
+        tangentMode: 10
+      - time: 2
+      
