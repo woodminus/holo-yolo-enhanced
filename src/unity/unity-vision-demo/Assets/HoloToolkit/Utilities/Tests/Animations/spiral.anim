@@ -186,4 +186,19 @@ AnimationClip:
         outSlope: 360
         tangentMode: 10
       - time: 2
-      
+        value: 720
+        inSlope: 400
+        outSlope: 400
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.x
+    path: 
+    classID: 4
+    script: {fileID: 0}
+  m_EulerEditorCurves: []
+  m_HasGenericRootTransform: 1
+  m_HasMotionFloatCurves: 0
+  m_GenerateMotionCurves: 0
+  m_Events: []
