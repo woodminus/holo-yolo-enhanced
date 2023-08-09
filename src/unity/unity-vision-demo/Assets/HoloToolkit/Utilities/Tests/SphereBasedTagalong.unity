@@ -350,4 +350,30 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 402774, guid: b84b73491ac53a34095000876132a211, type: 2}
       propertyPath: m_LocalRotation.w
-      valu
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 402774, guid: b84b73491ac53a34095000876132a211, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035550, guid: b84b73491ac53a34095000876132a211, type: 2}
+      propertyPath: field of view
+      value: 18
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: b84b73491ac53a34095000876132a211, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &1396030260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1396030262}
+  - 108: {fileID: 1396030261}
+  m_Layer: 0
+  m_Name: Directional light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+ 
