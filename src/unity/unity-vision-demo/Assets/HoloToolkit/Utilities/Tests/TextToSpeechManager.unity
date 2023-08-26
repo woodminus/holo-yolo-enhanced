@@ -88,4 +88,37 @@ NavMeshSettings:
     accuratePlacement: 0
     minRegionArea: 2
     cellSize: 0.16666666
-    manualCellSiz
+    manualCellSize: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &26734024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 26734030}
+  - 33: {fileID: 26734029}
+  - 65: {fileID: 26734028}
+  - 23: {fileID: 26734027}
+  - 82: {fileID: 26734026}
+  - 114: {fileID: 26734025}
+  m_Layer: 0
+  m_Name: Cube1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &26734025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 26734024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6f3b91ea1f9634db308846d1cdfb7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: 
