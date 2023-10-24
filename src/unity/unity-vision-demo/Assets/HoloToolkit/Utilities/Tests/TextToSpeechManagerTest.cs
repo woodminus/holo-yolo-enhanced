@@ -19,4 +19,27 @@ public class TextToSpeechManagerTest : MonoBehaviour
         gestureRecognizer.StartCapturingGestures();
     }
 
-    private void GestureRecognizer_TappedEvent(Interac
+    private void GestureRecognizer_TappedEvent(InteractionSourceKind source, int tapCount, Ray headRay)
+    {
+        GazeManager gm = GazeManager.Instance;
+        if (gm.Hit)
+        {
+            // Get the target object
+            GameObject obj = gm.HitInfo.collider.gameObject;
+
+            // Try and get a TTS Manager
+            TextToSpeechManager tts = null;
+            if (obj != null)
+            {
+                tts = obj.GetComponent<TextToSpeechManager>();
+            }
+
+            // If we have a text to speech manager on the target object, say something.
+            // This voice will appear to emanate from the object.
+            if (tts != null)
+            {
+                // Get the name
+                var voiceName = Enum.GetName(typeof(TextToSpeechVoice), tts.Voice);
+
+                // Create message
+                var msg = string.Format("This is t
