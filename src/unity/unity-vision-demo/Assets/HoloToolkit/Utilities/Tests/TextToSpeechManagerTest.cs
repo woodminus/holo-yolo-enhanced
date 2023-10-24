@@ -42,4 +42,18 @@ public class TextToSpeechManagerTest : MonoBehaviour
                 var voiceName = Enum.GetName(typeof(TextToSpeechVoice), tts.Voice);
 
                 // Create message
-                var msg = string.Format("This is t
+                var msg = string.Format("This is the {0} voice. It should sound like it's coming from the object you clicked. Feel free to walk around and listen from different angles.", voiceName);
+
+                // Speak message
+                tts.SpeakText(msg);
+            }
+        }
+    }
+
+    public void SpeakTime()
+    {
+        // Say something using the text to speech manager on THIS test class (the "global" one).
+        // This voice will appear to follow the user.
+        textToSpeechManager.SpeakText("The time is " + DateTime.Now.ToString("t"));
+    }
+}
