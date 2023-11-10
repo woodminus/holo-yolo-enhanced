@@ -110,4 +110,28 @@ public class JSONObject {
 		type = Type.OBJECT;
 		keys = new List<string>();
 		list = new List<JSONObject>();
-		//Not 
+		//Not sure if it's worth removing the foreach here
+		foreach(KeyValuePair<string, string> kvp in dic) {
+			keys.Add(kvp.Key);
+			list.Add(CreateStringObject(kvp.Value));
+		}
+	}
+	public JSONObject(Dictionary<string, JSONObject> dic) {
+		type = Type.OBJECT;
+		keys = new List<string>();
+		list = new List<JSONObject>();
+		//Not sure if it's worth removing the foreach here
+		foreach(KeyValuePair<string, JSONObject> kvp in dic) {
+			keys.Add(kvp.Key);
+			list.Add(kvp.Value);
+		}
+	}
+	public JSONObject(AddJSONContents content) {
+		content.Invoke(this);
+	}
+	public JSONObject(JSONObject[] objs) {
+		type = Type.ARRAY;
+		list = new List<JSONObject>(objs);
+	}
+	//Convenience function for creating a JSONObject containing a string.  This is not part of the constructor so that malformed JSON data doesn't just turn into a string object
+	public sta
