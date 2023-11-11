@@ -205,4 +205,23 @@ public class JSONObject {
 		obj.i = val;
 		return obj;
 	}
-	public static
+	public static JSONObject CreateStringObject(string val) {
+		JSONObject obj = Create();
+		obj.type = Type.STRING;
+		obj.str = val;
+		return obj;
+	}
+	public static JSONObject CreateBakedObject(string val) {
+		JSONObject bakedObject = Create();
+		bakedObject.type = Type.BAKED;
+		bakedObject.str = val;
+		return bakedObject;
+	}
+	/// <summary>
+	/// Create a JSONObject by parsing string data
+	/// </summary>
+	/// <param name="val">The string to be parsed</param>
+	/// <param name="maxDepth">The maximum depth for the parser to search.  Set this to to 1 for the first level, 
+	/// 2 for the first 2 levels, etc.  It defaults to -2 because -1 is the depth value that is parsed (see below)</param>
+	/// <param name="storeExcessLevels">Whether to store levels beyond maxDepth in baked JSONObjects</param>
+	/// <param name="strict">Whether to be strict in the parsing.
