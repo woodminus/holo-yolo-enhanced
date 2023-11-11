@@ -165,4 +165,44 @@ public class JSONObject {
 	}
 	public static JSONObject Create(Type t) {
 		JSONObject obj = Create();
-		o
+		obj.type = t;
+		switch(t) {
+			case Type.ARRAY:
+				obj.list = new List<JSONObject>();
+				break;
+			case Type.OBJECT:
+				obj.list = new List<JSONObject>();
+				obj.keys = new List<string>();
+				break;
+		}
+		return obj;
+	}
+	public static JSONObject Create(bool val) {
+		JSONObject obj = Create();
+		obj.type = Type.BOOL;
+		obj.b = val;
+		return obj;
+	}
+	public static JSONObject Create(float val) {
+		JSONObject obj = Create();
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		return obj;
+	}
+	public static JSONObject Create(int val) {
+		JSONObject obj = Create();
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		obj.useInt = true;
+		obj.i = val;
+		return obj;
+	}
+	public static JSONObject Create(long val) {
+		JSONObject obj = Create();
+		obj.type = Type.NUMBER;
+		obj.n = val;
+		obj.useInt = true;
+		obj.i = val;
+		return obj;
+	}
+	public static
