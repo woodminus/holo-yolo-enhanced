@@ -249,3 +249,27 @@ public class JSONObject {
 		}
 		return obj;
 	}
+	public JSONObject() { }
+	#region PARSE
+	public JSONObject(string str, int maxDepth = -2, bool storeExcessLevels = false, bool strict = false) {	//create a new JSONObject from a string (this will also create any children, and parse the whole string)
+		Parse(str, maxDepth, storeExcessLevels, strict);
+	}
+	void Parse(string str, int maxDepth = -2, bool storeExcessLevels = false, bool strict = false) {
+		if(!string.IsNullOrEmpty(str)) {
+			str = str.Trim(WHITESPACE);
+			if(strict) {
+				if(str[0] != '[' && str[0] != '{') {
+					type = Type.NULL;
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+					Debug.LogWarning
+#else
+					Debug.WriteLine
+#endif
+						("Improper (strict) JSON formatting.  First character must be [ or {");
+					return;
+				}
+			}
+			if(str.Length > 0) {
+#if UNITY_WP8 || UNITY_WSA
+				if (str == "true") {
+		
