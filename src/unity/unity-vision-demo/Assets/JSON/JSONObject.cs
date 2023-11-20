@@ -305,4 +305,39 @@ public class JSONObject {
 					n = double.PositiveInfinity;
 				} else if(str == NEGINFINITY) {
 					type = Type.NUMBER;
-					n = double.Negati
+					n = double.NegativeInfinity;
+				} else if(str == NaN) {
+					type = Type.NUMBER;
+					n = double.NaN;
+#endif
+				} else if(str[0] == '"') {
+					type = Type.STRING;
+					this.str = str.Substring(1, str.Length - 2);
+				} else {
+					int tokenTmp = 1;
+					/*
+					 * Checking for the following formatting (www.json.org)
+					 * object - {"field1":value,"field2":value}
+					 * array - [value,value,value]
+					 * value - string	- "string"
+					 *		 - number	- 0.0
+					 *		 - bool		- true -or- false
+					 *		 - null		- null
+					 */
+					int offset = 0;
+					switch(str[offset]) {
+						case '{':
+							type = Type.OBJECT;
+							keys = new List<string>();
+							list = new List<JSONObject>();
+							break;
+						case '[':
+							type = Type.ARRAY;
+							list = new List<JSONObject>();
+							break;
+						default:
+							try {
+#if USEFLOAT
+								n = System.Convert.ToSingle(str);
+#else
+		
