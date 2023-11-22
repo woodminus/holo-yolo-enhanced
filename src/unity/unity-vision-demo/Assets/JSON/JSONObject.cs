@@ -340,4 +340,35 @@ public class JSONObject {
 #if USEFLOAT
 								n = System.Convert.ToSingle(str);
 #else
-		
+								n = System.Convert.ToDouble(str);				 
+#endif
+								if(!str.Contains(".")) {
+									i = System.Convert.ToInt64(str);
+									useInt = true;
+								}
+								type = Type.NUMBER;
+							} catch(System.FormatException) {
+								type = Type.NULL;
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+								Debug.LogWarning
+#else
+								Debug.WriteLine
+#endif
+								("improper JSON formatting:" + str);
+							}
+							return;
+					}
+					string propName = "";
+					bool openQuote = false;
+					bool inProp = false;
+					int depth = 0;
+					while(++offset < str.Length) {
+						if(System.Array.IndexOf(WHITESPACE, str[offset]) > -1)
+							continue;
+						if(str[offset] == '\\') {
+							offset += 1;
+							continue;
+						}
+						if(str[offset] == '"') {
+							if(openQuote) {
+								if(!inProp && depth == 0 && type == Type.
