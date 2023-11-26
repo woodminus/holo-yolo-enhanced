@@ -371,4 +371,31 @@ public class JSONObject {
 						}
 						if(str[offset] == '"') {
 							if(openQuote) {
-								if(!inProp && depth == 0 && type == Type.
+								if(!inProp && depth == 0 && type == Type.OBJECT)
+									propName = str.Substring(tokenTmp + 1, offset - tokenTmp - 1);
+								openQuote = false;
+							} else {
+								if(depth == 0 && type == Type.OBJECT)
+									tokenTmp = offset;
+								openQuote = true;
+							}
+						}
+						if(openQuote)
+							continue;
+						if(type == Type.OBJECT && depth == 0) {
+							if(str[offset] == ':') {
+								tokenTmp = offset + 1;
+								inProp = true;
+							}
+						}
+
+						if(str[offset] == '[' || str[offset] == '{') {
+							depth++;
+						} else if(str[offset] == ']' || str[offset] == '}') {
+							depth--;
+						}
+						//if  (encounter a ',' at top level)  || a closing ]/}
+						if((str[offset] == ',' && depth == 0) || depth < 0) {
+							inProp = false;
+							string inner = str.Substring(tokenTmp, offset - tokenTmp).Trim(WHITESPACE);
+		
