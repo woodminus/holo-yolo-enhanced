@@ -398,4 +398,27 @@ public class JSONObject {
 						if((str[offset] == ',' && depth == 0) || depth < 0) {
 							inProp = false;
 							string inner = str.Substring(tokenTmp, offset - tokenTmp).Trim(WHITESPACE);
-		
+							if(inner.Length > 0) {
+								if(type == Type.OBJECT)
+									keys.Add(propName);
+								if(maxDepth != -1)															//maxDepth of -1 is the end of the line
+									list.Add(Create(inner, (maxDepth < -1) ? -2 : maxDepth - 1));
+								else if(storeExcessLevels)
+									list.Add(CreateBakedObject(inner));
+
+							}
+							tokenTmp = offset + 1;
+						}
+					}
+				}
+			} else type = Type.NULL;
+		} else type = Type.NULL;	//If the string is missing, this is a null
+		//Profiler.EndSample();
+	}
+	#endregion
+	public bool IsNumber { get { return type == Type.NUMBER; } }
+	public bool IsNull { get { return type == Type.NULL; } }
+	public bool IsString { get { return type == Type.STRING; } }
+	public bool IsBool { get { return type == Type.BOOL; } }
+	public bool IsArray { get { return type == Type.ARRAY; } }
+	public bool 
