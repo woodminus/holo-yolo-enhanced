@@ -421,4 +421,37 @@ public class JSONObject {
 	public bool IsString { get { return type == Type.STRING; } }
 	public bool IsBool { get { return type == Type.BOOL; } }
 	public bool IsArray { get { return type == Type.ARRAY; } }
-	public bool 
+	public bool IsObject { get { return type == Type.OBJECT || type == Type.BAKED; } }
+	public void Add(bool val) {
+		Add(Create(val));
+	}
+	public void Add(float val) {
+		Add(Create(val));
+	}
+	public void Add(int val) {
+		Add(Create(val));
+	}
+	public void Add(string str) {
+		Add(CreateStringObject(str));
+	}
+	public void Add(AddJSONContents content) {
+		Add(Create(content));
+	}
+	public void Add(JSONObject obj) {
+		if(obj) {		//Don't do anything if the object is null
+			if(type != Type.ARRAY) {
+				type = Type.ARRAY;		//Congratulations, son, you're an ARRAY now
+				if(list == null)
+					list = new List<JSONObject>();
+			}
+			list.Add(obj);
+		}
+	}
+	public void AddField(string name, bool val) {
+		AddField(name, Create(val));
+	}
+	public void AddField(string name, float val) {
+		AddField(name, Create(val));
+	}
+	public void AddField(string name, int val) {
+		AddField(name, 
