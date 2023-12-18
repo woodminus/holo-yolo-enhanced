@@ -454,4 +454,32 @@ public class JSONObject {
 		AddField(name, Create(val));
 	}
 	public void AddField(string name, int val) {
-		AddField(name, 
+		AddField(name, Create(val));
+	}
+	public void AddField(string name, long val) {
+		AddField(name, Create(val));
+	}
+	public void AddField(string name, AddJSONContents content) {
+		AddField(name, Create(content));
+	}
+	public void AddField(string name, string val) {
+		AddField(name, CreateStringObject(val));
+	}
+	public void AddField(string name, JSONObject obj) {
+		if(obj) {		//Don't do anything if the object is null
+			if(type != Type.OBJECT) {
+				if(keys == null)
+					keys = new List<string>();
+				if(type == Type.ARRAY) {
+					for(int i = 0; i < list.Count; i++)
+						keys.Add(i + "");
+				} else
+					if(list == null)
+						list = new List<JSONObject>();
+				type = Type.OBJECT;		//Congratulations, son, you're an OBJECT now
+			}
+			keys.Add(name);
+			list.Add(obj);
+		}
+	}
+	public void SetField(string name, string v
