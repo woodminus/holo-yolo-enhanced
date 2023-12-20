@@ -503,4 +503,37 @@ public class JSONObject {
 	public delegate void GetFieldResponse(JSONObject obj);
 	public bool GetField(out bool field, string name, bool fallback) {
 		field = fallback;
-		return GetField(ref 
+		return GetField(ref field, name);
+	}
+	public bool GetField(ref bool field, string name, FieldNotFound fail = null) {
+		if(type == Type.OBJECT) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				field = list[index].b;
+				return true;
+			}
+		}
+		if(fail != null) fail.Invoke(name);
+		return false;
+	}
+#if USEFLOAT
+	public bool GetField(out float field, string name, float fallback) {
+#else
+	public bool GetField(out double field, string name, double fallback) {
+#endif
+		field = fallback;
+		return GetField(ref field, name);
+	}
+#if USEFLOAT
+	public bool GetField(ref float field, string name, FieldNotFound fail = null) {
+#else
+	public bool GetField(ref double field, string name, FieldNotFound fail = null) {
+#endif
+		if(type == Type.OBJECT) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				field = list[index].n;
+				return true;
+			}
+		}
+		if(fail != null) fail
