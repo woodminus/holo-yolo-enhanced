@@ -599,4 +599,39 @@ public class JSONObject {
 		if(fail != null) fail.Invoke(name);
 		return false;
 	}
-	public void GetField(string nam
+	public void GetField(string name, GetFieldResponse response, FieldNotFound fail = null) {
+		if(response != null && IsObject) {
+			int index = keys.IndexOf(name);
+			if(index >= 0) {
+				response.Invoke(list[index]);
+				return;
+			}
+		}
+		if(fail != null) fail.Invoke(name);
+	}
+	public JSONObject GetField(string name) {
+		if(IsObject)
+			for(int i = 0; i < keys.Count; i++)
+				if(keys[i] == name)
+					return list[i];
+		return null;
+	}
+	public bool HasFields(string[] names) {
+		if(!IsObject)
+			return false;
+		for(int i = 0; i < names.Length; i++)
+			if(!keys.Contains(names[i]))
+				return false;
+		return true;
+	}
+	public bool HasField(string name) {
+		if(!IsObject)
+			return false;
+		for(int i = 0; i < keys.Count; i++)
+			if(keys[i] == name)
+				return true;
+		return false;
+	}
+	public void Clear() {
+		type = Type.NULL;
+		if(
