@@ -634,4 +634,35 @@ public class JSONObject {
 	}
 	public void Clear() {
 		type = Type.NULL;
-		if(
+		if(list != null)
+			list.Clear();
+		if(keys != null)
+			keys.Clear();
+		str = "";
+		n = 0;
+		b = false;
+	}
+	/// <summary>
+	/// Copy a JSONObject. This could probably work better
+	/// </summary>
+	/// <returns></returns>
+	public JSONObject Copy() {
+		return Create(Print());
+	}
+	/*
+	 * The Merge function is experimental. Use at your own risk.
+	 */
+	public void Merge(JSONObject obj) {
+		MergeRecur(this, obj);
+	}
+	/// <summary>
+	/// Merge object right into left recursively
+	/// </summary>
+	/// <param name="left">The left (base) object</param>
+	/// <param name="right">The right (new) object</param>
+	static void MergeRecur(JSONObject left, JSONObject right) {
+		if(left.type == Type.NULL)
+			left.Absorb(right);
+		else if(left.type == Type.OBJECT && right.type == Type.OBJECT) {
+			for(int i = 0; i < right.list.Count; i++) {
+				stri
