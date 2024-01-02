@@ -665,4 +665,39 @@ public class JSONObject {
 			left.Absorb(right);
 		else if(left.type == Type.OBJECT && right.type == Type.OBJECT) {
 			for(int i = 0; i < right.list.Count; i++) {
-				stri
+				string key = right.keys[i];
+				if(right[i].isContainer) {
+					if(left.HasField(key))
+						MergeRecur(left[key], right[i]);
+					else
+						left.AddField(key, right[i]);
+				} else {
+					if(left.HasField(key))
+						left.SetField(key, right[i]);
+					else
+						left.AddField(key, right[i]);
+				}
+			}
+		} else if(left.type == Type.ARRAY && right.type == Type.ARRAY) {
+			if(right.Count > left.Count) {
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+				Debug.LogError
+#else
+				Debug.WriteLine
+#endif
+				("Cannot merge arrays when right object has more elements");
+				return;
+			}
+			for(int i = 0; i < right.list.Count; i++) {
+				if(left[i].type == right[i].type) {			//Only overwrite with the same type
+					if(left[i].isContainer)
+						MergeRecur(left[i], right[i]);
+					else {
+						left[i] = right[i];
+					}
+				}
+			}
+		}
+	}
+	public void Bake() {
+		if(type != Type.BAKE
