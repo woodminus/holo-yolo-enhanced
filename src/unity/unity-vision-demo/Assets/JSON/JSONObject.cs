@@ -799,3 +799,43 @@ public class JSONObject {
 									builder.Append("\t"); //for a bit more readability
 #endif
 							builder.AppendFormat("\"{0}\":", key);
+							foreach(IEnumerable e in obj.StringifyAsync(depth, builder, pretty))
+								yield return e;
+							builder.Append(",");
+#if(PRETTY)
+							if(pretty)
+								builder.Append(NEWLINE);
+#endif
+						}
+					}
+#if(PRETTY)
+					if(pretty)
+						builder.Length -= 2;
+					else
+#endif
+						builder.Length--;
+				}
+#if(PRETTY)
+				if(pretty && list.Count > 0) {
+					builder.Append(NEWLINE);
+					for(int j = 0; j < depth - 1; j++)
+						builder.Append("\t"); //for a bit more readability
+				}
+#endif
+				builder.Append("}");
+				break;
+			case Type.ARRAY:
+				builder.Append("[");
+				if(list.Count > 0) {
+#if(PRETTY)
+					if(pretty)
+						builder.Append(NEWLINE); //for a bit more readability
+#endif
+					for(int i = 0; i < list.Count; i++) {
+						if(list[i]) {
+#if(PRETTY)
+							if(pretty)
+								for(int j = 0; j < depth; j++)
+									builder.Append("\t"); //for a bit more readability
+#endif
+					
