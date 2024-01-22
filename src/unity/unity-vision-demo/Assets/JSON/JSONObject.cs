@@ -935,4 +935,38 @@ public class JSONObject {
 						JSONObject obj = list[i];
 						if(obj) {
 #if(PRETTY)
-							
+							if(pretty)
+								for(int j = 0; j < depth; j++)
+									builder.Append("\t"); //for a bit more readability
+#endif
+							builder.AppendFormat("\"{0}\":", key);
+							obj.Stringify(depth, builder, pretty);
+							builder.Append(",");
+#if(PRETTY)
+							if(pretty)
+								builder.Append("\n");
+#endif
+						}
+					}
+#if(PRETTY)
+					if(pretty)
+						builder.Length -= 2;
+					else
+#endif
+						builder.Length--;
+				}
+#if(PRETTY)
+				if(pretty && list.Count > 0) {
+					builder.Append("\n");
+					for(int j = 0; j < depth - 1; j++)
+						builder.Append("\t"); //for a bit more readability
+				}
+#endif
+				builder.Append("}");
+				break;
+			case Type.ARRAY:
+				builder.Append("[");
+				if(list.Count > 0) {
+#if(PRETTY)
+					if(pretty)
+						builder.Append("\n"); //for a 
