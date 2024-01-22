@@ -736,4 +736,37 @@ public class JSONObject {
 	#region STRINGIFY
 	const float maxFrameTime = 0.008f;
 	static readonly Stopwatch printWatch = new Stopwatch();
-	I
+	IEnumerable StringifyAsync(int depth, StringBuilder builder, bool pretty = false) {	//Convert the JSONObject into a string
+		//Profiler.BeginSample("JSONprint");
+		if(depth++ > MAX_DEPTH) {
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+			Debug.Log
+#else
+			Debug.WriteLine
+#endif
+			("reached max depth!");
+			yield break;
+		}
+		if(printWatch.Elapsed.TotalSeconds > maxFrameTime) {
+			printWatch.Reset();
+			yield return null;
+			printWatch.Start();
+		}
+		switch(type) {
+			case Type.BAKED:
+				builder.Append(str);
+				break;
+			case Type.STRING:
+				builder.AppendFormat("\"{0}\"", str);
+				break;
+			case Type.NUMBER:
+				if(useInt) {
+					builder.Append(i.ToString());
+				} else {
+#if USEFLOAT
+					if(float.IsInfinity(n))
+						builder.Append(INFINITY);
+					else if(float.IsNegativeInfinity(n))
+						builder.Append(NEGINFINITY);
+					else if(float.IsNaN(n))
+			
