@@ -700,4 +700,40 @@ public class JSONObject {
 		}
 	}
 	public void Bake() {
-		if(type != Type.BAKE
+		if(type != Type.BAKED) {
+			str = Print();
+			type = Type.BAKED;
+		}
+	}
+	public IEnumerable BakeAsync() {
+		if(type != Type.BAKED) {
+			foreach(string s in PrintAsync()) {
+				if(s == null)
+					yield return s;
+				else {
+					str = s;
+				}
+			}
+			type = Type.BAKED;
+		}
+	}
+#pragma warning disable 219
+	public string Print(bool pretty = false) {
+		StringBuilder builder = new StringBuilder();
+		Stringify(0, builder, pretty);
+		return builder.ToString();
+	}
+	public IEnumerable<string> PrintAsync(bool pretty = false) {
+		StringBuilder builder = new StringBuilder();
+		printWatch.Reset();
+		printWatch.Start();
+		foreach(IEnumerable e in StringifyAsync(0, builder, pretty)) {
+			yield return null;
+		}
+		yield return builder.ToString();
+	}
+#pragma warning restore 219
+	#region STRINGIFY
+	const float maxFrameTime = 0.008f;
+	static readonly Stopwatch printWatch = new Stopwatch();
+	I
