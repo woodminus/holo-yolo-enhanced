@@ -1006,4 +1006,40 @@ public class JSONObject {
 				if(b)
 					builder.Append("true");
 				else
-					builder.App
+					builder.Append("false");
+				break;
+			case Type.NULL:
+				builder.Append("null");
+				break;
+		}
+		//Profiler.EndSample();
+	}
+	#endregion
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+	public static implicit operator WWWForm(JSONObject obj) {
+		WWWForm form = new WWWForm();
+		for(int i = 0; i < obj.list.Count; i++) {
+			string key = i + "";
+			if(obj.type == Type.OBJECT)
+				key = obj.keys[i];
+			string val = obj.list[i].ToString();
+			if(obj.list[i].type == Type.STRING)
+				val = val.Replace("\"", "");
+			form.AddField(key, val);
+		}
+		return form;
+	}
+#endif
+	public JSONObject this[int index] {
+		get {
+			if(list.Count > index) return list[index];
+			return null;
+		}
+		set {
+			if(list.Count > index)
+				list[index] = value;
+		}
+	}
+	public JSONObject this[string index] {
+		get {
+			return GetField(index);
