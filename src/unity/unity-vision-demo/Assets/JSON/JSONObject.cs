@@ -1043,3 +1043,34 @@ public class JSONObject {
 	public JSONObject this[string index] {
 		get {
 			return GetField(index);
+		}
+		set {
+			SetField(index, value);
+		}
+	}
+	public override string ToString() {
+		return Print();
+	}
+	public string ToString(bool pretty) {
+		return Print(pretty);
+	}
+	public Dictionary<string, string> ToDictionary() {
+		if(type == Type.OBJECT) {
+			Dictionary<string, string> result = new Dictionary<string, string>();
+			for(int i = 0; i < list.Count; i++) {
+				JSONObject val = list[i];
+				switch(val.type) {
+					case Type.STRING: result.Add(keys[i], val.str); break;
+					case Type.NUMBER: result.Add(keys[i], val.n + ""); break;
+					case Type.BOOL: result.Add(keys[i], val.b + ""); break;
+					default:
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+						Debug.LogWarning
+#else
+						Debug.WriteLine
+#endif
+						("Omitting object: " + keys[i] + " in dictionary conversion");
+						break;
+				}
+			}
+			ret
