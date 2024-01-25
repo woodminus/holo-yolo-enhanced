@@ -1073,4 +1073,37 @@ public class JSONObject {
 						break;
 				}
 			}
-			ret
+			return result;
+		}
+#if UNITY_2 || UNITY_3 || UNITY_4 || UNITY_5
+		Debug.Log
+#else
+		Debug.WriteLine
+#endif
+		("Tried to turn non-Object JSONObject into a dictionary");
+		return null;
+	}
+	public static implicit operator bool(JSONObject o) {
+		return o != null;
+	}
+#if POOLING
+	static bool pool = true;
+	public static void ClearPool() {
+		pool = false;
+		releaseQueue.Clear();
+		pool = true;
+	}
+
+	~JSONObject() {
+		if(pool && releaseQueue.Count < MAX_POOL_SIZE) {
+			type = Type.NULL;
+			list = null;
+			keys = null;
+			str = "";
+			n = 0;
+			b = false;
+			releaseQueue.Enqueue(this);
+		}
+	}
+#endif
+}
