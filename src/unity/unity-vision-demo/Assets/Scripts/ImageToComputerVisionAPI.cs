@@ -36,4 +36,17 @@ public class ImageToComputerVisionAPI : MonoBehaviour {
     /// <returns> IEnumerator - needs to be called in a Coroutine </returns>
     IEnumerator GetVisionDataFromImages()
     {
-        byte[] byt
+        byte[] bytes = UnityEngine.Windows.File.ReadAllBytes(fileName);
+
+        var headers = new Dictionary<string, string>() {
+            { "Ocp-Apim-Subscription-Key", VISIONKEY },
+            { "Content-Type", "application/octet-stream" }
+        };
+
+        WWW www = new WWW(emotionURL, bytes, headers);
+
+        yield return www;
+        responseData = www.text; // Save the response as JSON string
+        GetComponent<ParseComputerVisionResponse>().ParseJSONData(responseData);
+    }
+}
