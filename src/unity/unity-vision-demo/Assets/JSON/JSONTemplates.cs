@@ -76,3 +76,13 @@ for(int i = 0; i < obj.Count; i++){
 				do stuff with (JSONObject)obj.list[i];
 				break;
 			case "key2":
+				do stuff with (JSONObject)obj.list[i];
+				break;		
+		}
+	}
+}
+ *
+ * LOOP THROUGH ARRAY
+foreach(JSONObject ob in obj.list)
+	do stuff with ob;
+ */
