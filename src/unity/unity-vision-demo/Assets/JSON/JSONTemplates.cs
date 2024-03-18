@@ -26,4 +26,24 @@ public static partial class JSONTemplates {
 						parms[0] = fi.GetValue(obj);
 						val = (JSONObject)info.Invoke(null, parms);
 					} else if(fi.FieldType == typeof(string))
-						val = JSONObject.CreateStringObject(fi.GetValue(obj).T
+						val = JSONObject.CreateStringObject(fi.GetValue(obj).ToString());
+					else
+						val = JSONObject.Create(fi.GetValue(obj).ToString());
+				}
+				if(val) {
+					if(val.type != JSONObject.Type.NULL)
+						result.AddField(fi.Name, val);
+					else Debug.LogWarning("Null for this non-null object, property " + fi.Name + " of class " + obj.GetType().Name + ". Object type is " + fi.FieldType.Name);
+				}
+			}
+			//Properties
+			PropertyInfo[] propertyInfo = obj.GetType().GetProperties();
+			foreach(PropertyInfo pi in propertyInfo) {
+				//This section should mirror part of AssetFactory.AddScripts()
+				JSONObject val = JSONObject.nullJO;
+				if(!pi.GetValue(obj, null).Equals(null)) {
+					MethodInfo info = typeof(JSONTemplates).GetMethod("From" + pi.PropertyType.Name);
+					if(info != null) {
+						object[] parms = new object[1];
+						parms[0] = pi.GetValue(obj, null);
+						val = (JSONObject)info.Invoke(null, 
