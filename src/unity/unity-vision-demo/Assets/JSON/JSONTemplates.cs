@@ -46,4 +46,33 @@ public static partial class JSONTemplates {
 					if(info != null) {
 						object[] parms = new object[1];
 						parms[0] = pi.GetValue(obj, null);
-						val = (JSONObject)info.Invoke(null, 
+						val = (JSONObject)info.Invoke(null, parms);
+					} else if(pi.PropertyType == typeof(string))
+						val = JSONObject.CreateStringObject(pi.GetValue(obj, null).ToString());
+					else
+						val = JSONObject.Create(pi.GetValue(obj, null).ToString());
+				}
+				if(val) {
+					if(val.type != JSONObject.Type.NULL)
+						result.AddField(pi.Name, val);
+					else Debug.LogWarning("Null for this non-null object, property " + pi.Name + " of class " + obj.GetType().Name + ". Object type is " + pi.PropertyType.Name);
+				}
+			}
+			return result;
+		} 
+		Debug.LogWarning("trying to save the same data twice");
+		return JSONObject.nullJO;
+	}
+}
+
+/*
+ * Some helpful code templates for the JSON class
+ * 
+ * LOOP THROUGH OBJECT
+for(int i = 0; i < obj.Count; i++){
+	if(obj.keys[i] != null){
+		switch((string)obj.keys[i]){
+			case "key1":
+				do stuff with (JSONObject)obj.list[i];
+				break;
+			case "key2":
