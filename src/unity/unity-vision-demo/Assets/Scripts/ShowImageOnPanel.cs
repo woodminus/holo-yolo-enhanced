@@ -27,4 +27,6 @@ public class ShowImageOnPanel : MonoBehaviour {
         string fileName = gameObject.GetComponent<ImageToComputerVisionAPI>().fileName;
         byte[] fileData = File.ReadAllBytes(fileName);
         imageTxtr.LoadImage(fileData);
-        ImageFrameObject.GetComponent<Renderer>().material.mainTexture = imageTxt
+        ImageFrameObject.GetComponent<Renderer>().material.mainTexture = imageTxtr;
+    }
+}
