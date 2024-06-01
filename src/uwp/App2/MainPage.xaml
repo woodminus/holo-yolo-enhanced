@@ -6,4 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource Ap
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="MainPage_OnLoaded">
+
+    <Grid>
+        <CaptureElement Name="CameraPreview" Stretch="Uniform"></CaptureElement>
+        <Canvas Name="Hud" Background="Transparent">
+        </Canvas>
+    </Grid>
+</Page>
